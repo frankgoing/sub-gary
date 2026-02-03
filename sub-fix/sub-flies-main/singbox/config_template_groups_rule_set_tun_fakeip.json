@@ -1,0 +1,138 @@
+{
+  "log": {
+    "level": "info",
+    "timestamp": true
+  },
+  "dns": {
+    "servers": [
+      { "tag": "dns_proxy", "address": "https://8.8.8.8/dns-query", "detour": "proxy" },
+      { "tag": "dns_direct", "address": "223.5.5.5", "detour": "direct" },
+      { "tag": "dns_fakeip", "address": "fakeip" }
+    ],
+    "rules": [
+      { "outbound": "any", "server": "dns_direct" },
+      { "clash_mode": "Direct", "server": "dns_direct" },
+      { "clash_mode": "Global", "server": "dns_proxy" },
+      { "rule_set": "geosite-cn", "server": "dns_direct" },
+      { "query_type": [ "A", "AAAA" ], "server": "dns_fakeip" }
+    ],
+    "fakeip": { "enabled": true, "inet4_range": "198.18.0.0/15" }
+  },
+  "inbounds": [
+    {
+      "type": "tun",
+      "inet4_address": "172.19.0.1/30",
+      "mtu": 9000,
+      "auto_route": true,
+      "strict_route": true,
+      "stack": "gvisor",
+      "sniff": true,
+      "sniff_override_destination": true
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "selector",
+      "tag": "proxy",
+      "outbounds": [
+        "台湾 FGCP",
+        "日本 东京 OCI",
+        "美国 洛杉矶 DC02",
+        "美国 洛杉矶 NAT",
+        "欧洲 德国 EUserv",
+        "华沙 PGCP"
+      ]
+    },
+    {
+      "tag": "台湾 FGCP",
+      "type": "vless",
+      "server": "35.206.206.61",
+      "server_port": 57090,
+      "uuid": "7412ee8c-f618-4587-a8f0-7987efff3613",
+      "flow": "xtls-rprx-vision",
+      "tls": {
+        "enabled": true,
+        "server_name": "apple.com",
+        "reality": {
+          "enabled": true,
+          "public_key": "mOYgCLVU23MrskK_ppj5o6VCxz-mRD3ENqFHi3qUSk8",
+          "short_id": "5954dc6f"
+        },
+        "utls": { "enabled": true, "fingerprint": "chrome" }
+      }
+    },
+    {
+      "tag": "日本 东京 OCI",
+      "type": "vless",
+      "server": "104.18.39.209",
+      "server_port": 2096,
+      "uuid": "97ebc2dc-8577-41bf-b615-d5f9e43e7e3d",
+      "tls": { "enabled": true, "server_name": "jpoci.666014.xyz", "utls": { "enabled": true, "fingerprint": "chrome" } },
+      "transport": { "type": "ws", "headers": { "Host": "jpoci.666014.xyz" }, "path": "/gaseghs" }
+    },
+    {
+      "tag": "美国 洛杉矶 DC02",
+      "type": "vless",
+      "server": "104.18.39.209",
+      "server_port": 2096,
+      "uuid": "1a13ed18-37a9-437b-a427-de2746d46409",
+      "tls": { "enabled": true, "server_name": "sui02.666014.xyz", "utls": { "enabled": true, "fingerprint": "chrome" } },
+      "transport": { "type": "ws", "headers": { "Host": "sui02.666014.xyz" }, "path": "/" }
+    },
+    {
+      "tag": "美国 洛杉矶 NAT",
+      "type": "vless",
+      "server": "104.18.39.209",
+      "server_port": 2096,
+      "uuid": "8bea32c9-7086-4309-cc3a-b4f154c14a30",
+      "tls": { "enabled": true, "server_name": "nats.666014.xyz", "utls": { "enabled": true, "fingerprint": "chrome" } },
+      "transport": { "type": "ws", "headers": { "Host": "nats.666014.xyz" }, "path": "/" }
+    },
+    {
+      "tag": "欧洲 德国 EUserv",
+      "type": "vless",
+      "server": "104.18.39.209",
+      "server_port": 2096,
+      "uuid": "9c70ec27-f6d7-4822-bdf9-0c5912b07ad7",
+      "tls": { "enabled": true, "server_name": "eus.666014.xyz", "utls": { "enabled": true, "fingerprint": "chrome" } },
+      "transport": { "type": "ws", "headers": { "Host": "eus.666014.xyz" }, "path": "/" }
+    },
+    {
+      "tag": "华沙 PGCP",
+      "type": "vless",
+      "server": "104.18.39.209",
+      "server_port": 2096,
+      "uuid": "38718431-844f-4441-8e3a-d6eaecf0dec4",
+      "tls": { "enabled": true, "server_name": "bl.666014.xyz", "utls": { "enabled": true, "fingerprint": "chrome" } },
+      "transport": { "type": "ws", "headers": { "Host": "bl.666014.xyz" }, "path": "/" }
+    },
+    { "type": "direct", "tag": "direct" },
+    { "type": "dns", "tag": "dns-out" }
+  ],
+  "route": {
+    "rules": [
+      { "protocol": "dns", "outbound": "dns-out" },
+      { "clash_mode": "Direct", "outbound": "direct" },
+      { "clash_mode": "Global", "outbound": "proxy" },
+      { "rule_set": [ "geosite-cn", "geoip-cn" ], "outbound": "direct" },
+      { "ip_is_private": true, "outbound": "direct" }
+    ],
+    "rule_set": [
+      {
+        "tag": "geosite-cn",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/lyc8503/sing-box-rules/rule-set-geosite/geosite-cn.srs",
+        "download_detour": "proxy"
+      },
+      {
+        "tag": "geoip-cn",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/lyc8503/sing-box-rules/rule-set-geoip/geoip-cn.srs",
+        "download_detour": "proxy"
+      }
+    ],
+    "auto_detect_interface": true
+  }
+}

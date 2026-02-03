@@ -1,0 +1,683 @@
+port: 3333
+proxies:
+  # 单个节点
+proxy-providers:
+  iFarcloud:
+    type: http
+    url: https://oooooooooooooolt?clash=1&flag=meta  #修改你的机场A订阅地址保留&flag=meta结尾
+    interval: 86400
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 300
+    override:
+      additional-prefix: "[机场A]"
+  YY:
+    type: http
+    url: https://xxxxxxxxxxxxxxxxxxxxxxxxV?clash=1&flag=meta  #修改你的机场B订阅地址保留&flag=meta结尾
+    interval: 86400
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 300
+    override:
+      additional-prefix: "[机场B]"
+  MXCloud:
+    type: http
+    url: https://oooooooooooxxxxxu?clash=1&extend=1&flag=meta  #修改你的机场C订阅地址保留&flag=meta结尾
+    interval: 86400
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 300
+    override:
+      additional-prefix: "[机场C]"       
+
+proxy-groups:
+  - name: 🔃 自动选择
+    type: url-test
+    url: http://www.apple.com/library/test/success.html
+    interval: 300
+    tolerance: 100
+    include-all: true
+
+  - name: 🤖 ChatGPT
+    type: select
+    proxies:
+      - 🔃 自动选择
+      - 🇺🇸 美国-故转
+      - 🇭🇰 香港-故转
+      - 🇯🇵 日本-故转
+      - 🇹🇼 台湾-故转
+      - 🇸🇬 新加坡-故转
+      - 🇰🇷 韩国-故转
+      - 🇬🇧 英国-故转
+      - 🌍 其他国家-故转
+      - DIRECT
+    include-all: false
+     
+  - name: 🎥 YouTube
+    type: select
+    proxies:
+      - 🔃 自动选择
+      - 🇺🇸 美国-故转
+      - 🇭🇰 香港-故转
+      - 🇯🇵 日本-故转
+      - 🇹🇼 台湾-故转
+      - 🇸🇬 新加坡-故转
+      - 🇰🇷 韩国-故转
+      - 🇬🇧 英国-故转
+      - 🌍 其他国家-故转
+      - DIRECT
+    include-all: false
+      
+  - name: 🎥 Netflix
+    type: select
+    proxies:
+      - 🔃 自动选择
+      - 🇺🇸 美国-故转
+      - 🇭🇰 香港-故转
+      - 🇯🇵 日本-故转
+      - 🇹🇼 台湾-故转
+      - 🇸🇬 新加坡-故转
+      - 🇰🇷 韩国-故转
+      - 🇬🇧 英国-故转
+      - 🌍 其他国家-故转
+      - DIRECT
+    include-all: false
+
+  - name: 🎥 Disney+
+    type: select
+    proxies:
+      - 🔃 自动选择
+      - 🇺🇸 美国-故转
+      - 🇹🇼 台湾-故转
+      - 🇭🇰 香港-故转
+      - 🇯🇵 日本-故转
+      - 🇸🇬 新加坡-故转
+      - 🇰🇷 韩国-故转
+      - 🇬🇧 英国-故转
+      - 🌍 其他国家-故转
+      - DIRECT
+    include-all: false
+
+  - name: 🎥 HBO
+    type: select
+    proxies:
+      - 🔃 自动选择
+      - 🇺🇸 美国-故转
+      - 🇭🇰 香港-故转
+      - 🇯🇵 日本-故转
+      - 🇹🇼 台湾-故转
+      - 🇸🇬 新加坡-故转
+      - 🇰🇷 韩国-故转
+      - 🇬🇧 英国-故转
+      - 🌍 其他国家-故转
+      - DIRECT
+    include-all: false    
+
+  - name: 📲 Telegram
+    type: select
+    proxies:
+      - 🔃 自动选择
+      - 🇺🇸 美国-故转
+      - 🇭🇰 香港-故转
+      - 🇯🇵 日本-故转
+      - 🇹🇼 台湾-故转
+      - 🇸🇬 新加坡-故转
+      - 🇰🇷 韩国-故转
+      - 🇬🇧 英国-故转
+      - 🌍 其他国家-故转
+      - DIRECT
+    include-all: false
+      
+  - name: 📲 Twitter
+    type: select
+    proxies:
+      - 🔃 自动选择
+      - 🇺🇸 美国-故转
+      - 🇹🇼 台湾-故转
+      - 🇭🇰 香港-故转
+      - 🇯🇵 日本-故转
+      - 🇸🇬 新加坡-故转
+      - 🇰🇷 韩国-故转
+      - 🇬🇧 英国-故转
+      - 🌍 其他国家-故转
+      - DIRECT
+    include-all: false
+
+  - name: 📲 Instagram
+    type: select
+    proxies:
+      - 🔃 自动选择
+      - 🇺🇸 美国-故转
+      - 🇹🇼 台湾-故转
+      - 🇭🇰 香港-故转
+      - 🇯🇵 日本-故转
+      - 🇸🇬 新加坡-故转
+      - 🇰🇷 韩国-故转
+      - 🇬🇧 英国-故转
+      - 🌍 其他国家-故转
+      - DIRECT
+    include-all: false
+
+  - name: 📲 Facebook
+    type: select
+    proxies:
+      - 🔃 自动选择
+      - 🇺🇸 美国-故转
+      - 🇹🇼 台湾-故转
+      - 🇭🇰 香港-故转
+      - 🇯🇵 日本-故转
+      - 🇸🇬 新加坡-故转
+      - 🇰🇷 韩国-故转
+      - 🇬🇧 英国-故转
+      - 🌍 其他国家-故转
+      - DIRECT
+    include-all: false
+
+  - name: 📲 WhatsApp
+    type: select
+    proxies:
+      - 🔃 自动选择
+      - 🇺🇸 美国-故转
+      - 🇹🇼 台湾-故转
+      - 🇭🇰 香港-故转
+      - 🇯🇵 日本-故转
+      - 🇸🇬 新加坡-故转
+      - 🇰🇷 韩国-故转
+      - 🇬🇧 英国-故转
+      - 🌍 其他国家-故转
+      - DIRECT
+    include-all: false  
+
+  - name: 🎵 Spotify
+    type: select
+    proxies:
+      - 🔃 自动选择
+      - 🇺🇸 美国-故转
+      - 🇹🇼 台湾-故转
+      - 🇭🇰 香港-故转
+      - 🇯🇵 日本-故转
+      - 🇸🇬 新加坡-故转
+      - 🇰🇷 韩国-故转
+      - 🇬🇧 英国-故转
+      - 🌍 其他国家-故转
+      - DIRECT
+    include-all: false
+
+  - name: 🔍 Google
+    type: select
+    proxies:
+      - 🔃 自动选择
+      - 🇺🇸 美国-故转
+      - 🇹🇼 台湾-故转
+      - 🇭🇰 香港-故转
+      - 🇯🇵 日本-故转
+      - 🇸🇬 新加坡-故转
+      - 🇰🇷 韩国-故转
+      - 🇬🇧 英国-故转
+      - 🌍 其他国家-故转
+      - DIRECT
+    include-all: false
+    
+  - name: 🍎 Apple
+    type: select
+    proxies:
+      - 🔃 自动选择
+      - 🇺🇸 美国-故转
+      - 🇹🇼 台湾-故转
+      - 🇭🇰 香港-故转
+      - 🇯🇵 日本-故转
+      - 🇸🇬 新加坡-故转
+      - 🇰🇷 韩国-故转
+      - 🇬🇧 英国-故转
+      - 🌍 其他国家-故转
+      - DIRECT
+    include-all: false
+
+  - name: 💻 Microsoft
+    type: select
+    proxies:
+      - 🔃 自动选择
+      - 🇺🇸 美国-故转
+      - 🇹🇼 台湾-故转
+      - 🇭🇰 香港-故转
+      - 🇯🇵 日本-故转
+      - 🇸🇬 新加坡-故转
+      - 🇰🇷 韩国-故转
+      - 🇬🇧 英国-故转
+      - 🌍 其他国家-故转
+      - DIRECT
+    include-all: false
+
+  - name: 🎮Steam
+    type: select
+    proxies:
+      - DIRECT
+      - 🔃 自动选择
+      - 🇺🇸 美国-故转
+      - 🇹🇼 台湾-故转
+      - 🇭🇰 香港-故转
+      - 🇯🇵 日本-故转
+      - 🇸🇬 新加坡-故转
+      - 🇰🇷 韩国-故转
+      - 🇬🇧 英国-故转
+      - 🌍 其他国家-故转
+    include-all: false
+
+  - name: 🎮 Xbox
+    type: select
+    proxies:
+      - DIRECT
+      - 🔃 自动选择
+      - 🇺🇸 美国-故转
+      - 🇹🇼 台湾-故转
+      - 🇭🇰 香港-故转
+      - 🇯🇵 日本-故转
+      - 🇸🇬 新加坡-故转
+      - 🇰🇷 韩国-故转
+      - 🇬🇧 英国-故转
+      - 🌍 其他国家-故转
+    include-all: false
+
+  - name: 🎮 PlayStation
+    type: select
+    proxies:
+      - DIRECT
+      - 🔃 自动选择
+      - 🇺🇸 美国-故转
+      - 🇹🇼 台湾-故转
+      - 🇭🇰 香港-故转
+      - 🇯🇵 日本-故转
+      - 🇸🇬 新加坡-故转
+      - 🇰🇷 韩国-故转
+      - 🇬🇧 英国-故转
+      - 🌍 其他国家-故转
+    include-all: false
+
+  - name: 🎮 Nintendo
+    type: select
+    proxies:
+      - DIRECT
+      - 🔃 自动选择
+      - 🇺🇸 美国-故转
+      - 🇹🇼 台湾-故转
+      - 🇭🇰 香港-故转
+      - 🇯🇵 日本-故转
+      - 🇸🇬 新加坡-故转
+      - 🇰🇷 韩国-故转
+      - 🇬🇧 英国-故转
+      - 🌍 其他国家-故转
+    include-all: false
+
+  - name: 🎮 游戏
+    type: select
+    proxies:
+      - DIRECT
+      - 🔃 自动选择
+      - 🇺🇸 美国-故转
+      - 🇹🇼 台湾-故转
+      - 🇭🇰 香港-故转
+      - 🇯🇵 日本-故转
+      - 🇸🇬 新加坡-故转
+      - 🇰🇷 韩国-故转
+      - 🇬🇧 英国-故转
+      - 🌍 其他国家-故转
+    include-all: false
+
+  - name: 🔞 Porn
+    type: select
+    proxies:
+      - 🔃 自动选择
+      - 🇺🇸 美国-故转
+      - 🇹🇼 台湾-故转
+      - 🇭🇰 香港-故转
+      - 🇯🇵 日本-故转
+      - 🇸🇬 新加坡-故转
+      - 🇰🇷 韩国-故转
+      - 🇬🇧 英国-故转
+      - 🌍 其他国家-故转
+      - DIRECT
+    include-all: false
+
+  - name: 📲 TikTok
+    type: select
+    proxies:
+      - 🔃 自动选择
+      - 🇺🇸 美国-故转
+      - 🇹🇼 台湾-故转
+      - 🇭🇰 香港-故转
+      - 🇯🇵 日本-故转
+      - 🇸🇬 新加坡-故转
+      - 🇰🇷 韩国-故转
+      - 🇬🇧 英国-故转
+      - 🌍 其他国家-故转
+      - DIRECT
+    include-all: false
+
+  - name: 💸 Crypto
+    type: select
+    proxies:
+      - 🔃 自动选择
+      - 🇺🇸 美国-故转
+      - 🇹🇼 台湾-故转
+      - 🇭🇰 香港-故转
+      - 🇯🇵 日本-故转
+      - 🇸🇬 新加坡-故转
+      - 🇰🇷 韩国-故转
+      - 🇬🇧 英国-故转
+      - 🌍 其他国家-故转
+      - DIRECT
+    include-all: false
+
+  - name: 🎥 AppleTV
+    type: select
+    proxies:
+      - 🔃 自动选择
+      - 🇺🇸 美国-故转
+      - 🇹🇼 台湾-故转
+      - 🇭🇰 香港-故转
+      - 🇯🇵 日本-故转
+      - 🇸🇬 新加坡-故转
+      - 🇰🇷 韩国-故转
+      - 🇬🇧 英国-故转
+      - 🌍 其他国家-故转
+      - DIRECT
+    include-all: false
+
+  - name: 💳 PayPal
+    type: select
+    proxies:
+      - 🔃 自动选择
+      - 🇺🇸 美国-故转
+      - 🇹🇼 台湾-故转
+      - 🇭🇰 香港-故转
+      - 🇯🇵 日本-故转
+      - 🇸🇬 新加坡-故转
+      - 🇰🇷 韩国-故转
+      - 🇬🇧 英国-故转
+      - 🌍 其他国家-故转
+      - DIRECT
+    include-all: false
+
+  - name: 🌍 国外网站
+    type: select
+    proxies:
+      - 🔃 自动选择
+      - 🇺🇸 美国-故转
+      - 🇹🇼 台湾-故转
+      - 🇭🇰 香港-故转
+      - 🇯🇵 日本-故转
+      - 🇸🇬 新加坡-故转
+      - 🇰🇷 韩国-故转
+      - 🇬🇧 英国-故转
+      - 🌍 其他国家-故转
+      - DIRECT
+    include-all: false
+
+  - name: 🐟 漏网之鱼
+    type: select
+    proxies:
+      - 🔃 自动选择
+      - 🇺🇸 美国-故转
+      - 🇹🇼 台湾-故转
+      - 🇭🇰 香港-故转
+      - 🇯🇵 日本-故转
+      - 🇸🇬 新加坡-故转
+      - 🇰🇷 韩国-故转
+      - 🇬🇧 英国-故转
+      - 🌍 其他国家-故转
+      - DIRECT
+    include-all: false
+    
+
+  - name: 🇺🇸 美国-故转
+    type: fallback
+    url: http://www.apple.com/library/test/success.html
+    interval: 300
+    tolerance: 100
+    proxies:
+      - 美国-手动
+      - 美国-自动
+  - name: 美国-手动
+    icon: https://raw.githubusercontent.com/ifanrBook/ClashConfig/refs/heads/main/icon/double-tap.png
+    type: select
+    include-all: true
+    filter: "(?=.*(广美|美|US|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|拉斯|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)).*$"
+  - name: 美国-自动
+    icon: https://raw.githubusercontent.com/ifanrBook/ClashConfig/refs/heads/main/icon/dashboard.png
+    type: url-test
+    include-all: true
+    tolerance: 50
+    interval: 300
+    filter: "(?=.*(广美|美|US|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|拉斯|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)).*$"
+
+  - name: 🇭🇰 香港-故转
+    type: fallback
+    url: http://www.apple.com/library/test/success.html
+    interval: 300
+    tolerance: 100
+    proxies:
+      - 香港-手动
+      - 香港-自动
+  - name: 香港-手动
+    icon: https://raw.githubusercontent.com/ifanrBook/ClashConfig/refs/heads/main/icon/double-tap.png
+    type: select
+    include-all: true
+    filter: "(?=.*(广港|香港|HK|Hong Kong|🇭🇰|HongKong)).*$"
+  - name: 香港-自动
+    icon: https://raw.githubusercontent.com/ifanrBook/ClashConfig/refs/heads/main/icon/dashboard.png
+    type: url-test
+    include-all: true
+    tolerance: 50
+    interval: 300
+    filter: "(?=.*(广港|香港|HK|Hong Kong|🇭🇰|HongKong)).*$"
+
+  - name: 🇯🇵 日本-故转
+    type: fallback
+    url: http://www.apple.com/library/test/success.html
+    interval: 300
+    tolerance: 100
+    proxies:
+      - 日本-手动
+      - 日本-自动
+  - name: 日本-手动
+    icon: https://raw.githubusercontent.com/ifanrBook/ClashConfig/refs/heads/main/icon/double-tap.png
+    type: select
+    include-all: true
+    filter: "(?=.*(广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan)).*$"
+  - name: 日本-自动
+    icon: https://raw.githubusercontent.com/ifanrBook/ClashConfig/refs/heads/main/icon/dashboard.png
+    type: url-test
+    include-all: true
+    tolerance: 50
+    interval: 300
+    filter: "(?=.*(广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan)).*$"
+
+  - name: 🇹🇼 台湾-故转
+    type: fallback
+    url: http://www.apple.com/library/test/success.html
+    interval: 300
+    tolerance: 100
+    proxies:
+      - 台湾-手动
+      - 台湾-自动
+  - name: 台湾-手动
+    icon: https://raw.githubusercontent.com/ifanrBook/ClashConfig/refs/heads/main/icon/double-tap.png
+    type: select
+    include-all: true
+    filter: "(?=.*(广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan)).*$"
+  - name: 台湾-自动
+    icon: https://raw.githubusercontent.com/ifanrBook/ClashConfig/refs/heads/main/icon/dashboard.png
+    type: url-test
+    include-all: true
+    tolerance: 50
+    interval: 300
+    filter: "(?=.*(广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan)).*$"
+
+  - name: 🇸🇬 新加坡-故转
+    type: fallback
+    url: http://www.apple.com/library/test/success.html
+    interval: 300
+    tolerance: 100
+    proxies:
+      - 新加坡-手动
+      - 新加坡-自动
+  - name: 新加坡-手动
+    icon: https://raw.githubusercontent.com/ifanrBook/ClashConfig/refs/heads/main/icon/double-tap.png
+    type: select
+    include-all: true
+    filter: "(?=.*(广新|新加坡|SG|坡|狮城|🇸🇬|Singapore)).*$"
+  - name: 新加坡-自动
+    icon: https://raw.githubusercontent.com/ifanrBook/ClashConfig/refs/heads/main/icon/dashboard.png
+    type: url-test
+    include-all: true
+    tolerance: 50
+    interval: 300
+    filter: "(?=.*(广新|新加坡|SG|坡|狮城|🇸🇬|Singapore)).*$"
+
+  - name: 🇰🇷 韩国-故转
+    type: fallback
+    url: http://www.apple.com/library/test/success.html
+    interval: 300
+    tolerance: 100
+    proxies:
+      - 韩国-手动
+      - 韩国-自动
+  - name: 韩国-手动
+    icon: https://raw.githubusercontent.com/ifanrBook/ClashConfig/refs/heads/main/icon/double-tap.png
+    type: select
+    include-all: true
+    filter: "(?=.*(广韩|韩国|韓國|KR|首尔|春川|🇰🇷|Korea)).*$"
+  - name: 韩国-自动
+    icon: https://raw.githubusercontent.com/ifanrBook/ClashConfig/refs/heads/main/icon/dashboard.png
+    type: url-test
+    include-all: true
+    tolerance: 50
+    interval: 300
+    filter: "(?=.*(广韩|韩国|韓國|KR|首尔|春川|🇰🇷|Korea)).*$"
+      
+  - name: 🇬🇧 英国-故转
+    type: fallback
+    url: http://www.apple.com/library/test/success.html
+    interval: 300
+    tolerance: 100
+    proxies:
+      - 英国-手动
+      - 英国-自动
+  - name: 英国-手动
+    icon: https://raw.githubusercontent.com/ifanrBook/ClashConfig/refs/heads/main/icon/double-tap.png
+    type: select
+    include-all: true
+    filter: "(?=.*(英国|英|伦敦|UK|United Kingdom|🇬🇧|London)).*$"
+  - name: 英国-自动
+    icon: https://raw.githubusercontent.com/ifanrBook/ClashConfig/refs/heads/main/icon/dashboard.png
+    type: url-test
+    include-all: true
+    tolerance: 50
+    interval: 300
+    filter: "(?=.*(英国|英|伦敦|UK|United Kingdom|🇬🇧|London)).*$"
+
+  - name: 🌍 其他国家-故转
+    type: fallback
+    url: http://www.apple.com/library/test/success.html
+    interval: 300
+    tolerance: 100
+    proxies:
+      - 其他国家-手动
+      - 其他国家-自动
+  - name: 其他国家-手动
+    icon: https://raw.githubusercontent.com/ifanrBook/ClashConfig/refs/heads/main/icon/double-tap.png
+    type: select
+    include-all: true
+    filter: "^((?!(直连|拒绝|广港|香港|HK|Hong Kong|🇭🇰|HongKong|广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|广新|新加坡|SG|坡|狮城|🇸🇬|Singapore|广韩|韩国|韓國|KR|首尔|春川|🇰🇷|Korea|广美|美|US|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|拉斯|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States|英国|UK|United Kingdom|伦敦|英|London|🇬🇧)).)*$"
+  - name: 其他国家-自动
+    icon: https://raw.githubusercontent.com/ifanrBook/ClashConfig/refs/heads/main/icon/dashboard.png
+    type: url-test
+    include-all: true
+    tolerance: 50
+    interval: 300
+    filter: "^((?!(直连|拒绝|广港|香港|HK|Hong Kong|🇭🇰|HongKong|广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|广新|新加坡|SG|坡|狮城|🇸🇬|Singapore|广韩|韩国|韓國|KR|首尔|春川|🇰🇷|Korea|广美|美|US|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|拉斯|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States|英国|UK|United Kingdom|伦敦|英|London|🇬🇧)).)*$" 
+
+rules:
+  # 国内网站
+  - GEOSITE,cn,DIRECT
+  # 🤖 ChatGPT
+  - GEOSITE,openai,🤖 ChatGPT
+  - GEOSITE,anthropic,🤖 ChatGPT
+  - GEOSITE,xai,🤖 ChatGPT
+  - DOMAIN-SUFFIX,perplexity.ai,🤖 ChatGPT
+  - DOMAIN-SUFFIX,claude.ai,🤖 ChatGPT
+  - DOMAIN-SUFFIX,gemini.google.com,🤖 ChatGPT
+  - DOMAIN-SUFFIX,aistudio.google.com,🤖 ChatGPT
+  - DOMAIN-SUFFIX,copilot.microsoft,🤖 ChatGPT
+  - DOMAIN-SUFFIX,midjourney.com,🤖 ChatGPT
+  - DOMAIN-SUFFIX,lmarena.ai,🤖 ChatGPT
+  # 🎥 Netflix
+  - GEOSITE,netflix,🎥 Netflix
+  # 🎥 Disney+
+  - GEOSITE,disney,🎥 Disney+
+  # 🎥 HBO
+  - GEOSITE,hbo,🎥 HBO
+  # 🎵 Spotify
+  - GEOSITE,spotify,🎵 Spotify
+  # 📲 Telegram
+  - GEOSITE,telegram,📲 Telegram
+  # 🎥 YouTube
+  - GEOSITE,youtube,🎥 YouTube
+  # 🔍 Google
+  - GEOSITE,google,🔍 Google
+  # 📲 Twitter
+  - GEOSITE,twitter,📲 Twitter
+  # 📲 Instagram
+  - GEOSITE,instagram,📲 Instagram
+  # 📲 Facebook
+  - GEOSITE,facebook,📲 Facebook
+  # 📲 WhatsApp
+  - GEOSITE,whatsapp,📲 Facebook
+  # 🍎 Apple
+  - GEOSITE,apple@cn,DIRECT
+  - GEOSITE,apple,🍎 Apple
+  # 💻 Microsoft
+  - GEOSITE,microsoft@cn,DIRECT
+  - GEOSITE,microsoft,💻 Microsoft
+  # 🎮Steam
+  - GEOSITE,steam@cn,DIRECT
+  - GEOSITE,steam,🎮Steam
+  # 🎮 Xbox
+  - GEOSITE,xbox,🎮 Xbox
+  # 🎮 PlayStation
+  - GEOSITE,playstation,🎮 PlayStation
+  # 🎮 Nintendo
+  - GEOSITE,nintendo@cn,DIRECT
+  - GEOSITE,nintendo,🎮 Nintendo
+  # 🎮 游戏
+  - GEOSITE,category-games@cn,DIRECT
+  - GEOSITE,category-games,🎮 游戏
+  # 🔞 Porn
+  - GEOSITE,category-porn,🔞 Porn
+  # 📲 TikTok
+  - GEOSITE,tiktok,📲 TikTok
+  # 💸 Crypto
+  - GEOSITE,category-cryptocurrency,💸 Crypto
+  # 🎥 AppleTV
+  - GEOSITE,apple-tvplus,🎥 AppleTV
+  # 💳 PayPal
+  - GEOSITE,paypal,💳 PayPal
+  # 🌍 国外网站
+  - GEOSITE,geolocation-!cn,🌍 国外网站
+  # GEOIP规则
+  - GEOIP,private,DIRECT,no-resolve
+  - GEOIP,google,🔍 Google
+  - GEOIP,telegram,📲 Telegram
+  - GEOIP,netflix,🎥 Netflix
+  - GEOIP,twitter,📲 Twitter
+  - GEOIP,CN,DIRECT
+  # 🐟 漏网之鱼
+
+  - MATCH,🐟 漏网之鱼
+
+
+
+
