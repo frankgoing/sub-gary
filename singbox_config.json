@@ -341,6 +341,22 @@
       "default": "手动选择"
     },
     {
+      "tag": "📞 TALKATONE",
+      "type": "selector",
+      "interrupt_exist_connections": true,
+      "outbounds": [
+        "🇺🇸 美国 洛杉矶 DC02",
+        "🇺🇸 美国 洛杉矶 NAT",
+        "手动选择",
+        "🇹🇼 台湾 FGCP",
+        "🇯🇵 日本 东京 OCI",
+        "🇩🇪 欧洲 德国 EUserv",
+        "华沙 PGCP",
+        "🇨🇳 全局直连"
+      ],
+      "default": "🇺🇸 美国 洛杉矶 DC02"
+    },
+    {
       "tag": "🎯 中国直连",
       "type": "selector",
       "interrupt_exist_connections": true,
@@ -644,6 +660,10 @@
         "outbound": "🍎 APPLE"
       },
       {
+        "rule_set": "talkatone-srs",
+        "outbound": "📞 TALKATONE"
+      },
+      {
         "rule_set": [
           "geoip-cn",
           "geosite-cn",
@@ -826,6 +846,13 @@
         "type": "remote",
         "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/senshinya/singbox_ruleset/main/rule/BlockHttpDNS/BlockHttpDNS.srs",
         "format": "binary",
+        "download_detour": "🎯 中国直连"
+      },
+      {
+        "tag": "talkatone-srs",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/PhantomSeaStars/Rules/main/talkatoneAPKandEXE.srs",
         "download_detour": "🎯 中国直连"
       }
     ]
