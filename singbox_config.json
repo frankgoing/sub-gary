@@ -144,7 +144,8 @@
         "🇺🇸 美国 洛杉矶 DC02",
         "🇺🇸 美国 洛杉矶 NAT",
         "🇩🇪 欧洲 德国 EUserv",
-        "华沙 PGCP"
+        "华沙 PGCP",
+        "🇨🇳 全局直连"
       ],
       "default": "自动选择"
     },
@@ -169,13 +170,6 @@
       "interrupt_exist_connections": true,
       "outbounds": [
         "手动选择",
-        "🇭🇰 香港自动",
-        "🇨🇳 台湾自动",
-        "🇸🇬 新加坡自动",
-        "🇯🇵 日本自动",
-        "🇰🇷 韩国自动",
-        "🇺🇸 美国自动",
-        "🌐 全球自动",
         "🇹🇼 台湾 FGCP",
         "🇯🇵 日本 东京 OCI",
         "🇺🇸 美国 洛杉矶 DC02",
@@ -184,7 +178,7 @@
         "华沙 PGCP",
         "🇨🇳 全局直连"
       ],
-      "default": "🇺🇸 美国自动"
+      "default": "🇺🇸 美国 洛杉矶 DC02"
     },
     {
       "tag": "📲 TELEGRAM",
@@ -192,13 +186,6 @@
       "interrupt_exist_connections": true,
       "outbounds": [
         "手动选择",
-        "🇭🇰 香港自动",
-        "🇨🇳 台湾自动",
-        "🇸🇬 新加坡自动",
-        "🇯🇵 日本自动",
-        "🇰🇷 韩国自动",
-        "🇺🇸 美国自动",
-        "🌐 全球自动",
         "🇹🇼 台湾 FGCP",
         "🇯🇵 日本 东京 OCI",
         "🇺🇸 美国 洛杉矶 DC02",
@@ -215,13 +202,6 @@
       "interrupt_exist_connections": true,
       "outbounds": [
         "手动选择",
-        "🇭🇰 香港自动",
-        "🇨🇳 台湾自动",
-        "🇸🇬 新加坡自动",
-        "🇯🇵 日本自动",
-        "🇰🇷 韩国自动",
-        "🇺🇸 美国自动",
-        "🌐 全球自动",
         "🇹🇼 台湾 FGCP",
         "🇯🇵 日本 东京 OCI",
         "🇺🇸 美国 洛杉矶 DC02",
@@ -238,13 +218,6 @@
       "interrupt_exist_connections": true,
       "outbounds": [
         "手动选择",
-        "🇭🇰 香港自动",
-        "🇨🇳 台湾自动",
-        "🇸🇬 新加坡自动",
-        "🇯🇵 日本自动",
-        "🇰🇷 韩国自动",
-        "🇺🇸 美国自动",
-        "🌐 全球自动",
         "🇹🇼 台湾 FGCP",
         "🇯🇵 日本 东京 OCI",
         "🇺🇸 美国 洛杉矶 DC02",
@@ -253,7 +226,7 @@
         "华沙 PGCP",
         "🇨🇳 全局直连"
       ],
-      "default": "🇸🇬 新加坡自动"
+      "default": "手动选择"
     },
     {
       "tag": "📺 YOUTUBE",
@@ -261,13 +234,6 @@
       "interrupt_exist_connections": true,
       "outbounds": [
         "手动选择",
-        "🇭🇰 香港自动",
-        "🇨🇳 台湾自动",
-        "🇸🇬 新加坡自动",
-        "🇯🇵 日本自动",
-        "🇰🇷 韩国自动",
-        "🇺🇸 美国自动",
-        "🌐 全球自动",
         "🇹🇼 台湾 FGCP",
         "🇯🇵 日本 东京 OCI",
         "🇺🇸 美国 洛杉矶 DC02",
@@ -284,13 +250,6 @@
       "interrupt_exist_connections": true,
       "outbounds": [
         "手动选择",
-        "🇭🇰 香港自动",
-        "🇨🇳 台湾自动",
-        "🇸🇬 新加坡自动",
-        "🇯🇵 日本自动",
-        "🇰🇷 韩国自动",
-        "🇺🇸 美国自动",
-        "🌐 全球自动",
         "🇹🇼 台湾 FGCP",
         "🇯🇵 日本 东京 OCI",
         "🇺🇸 美国 洛杉矶 DC02",
@@ -299,7 +258,7 @@
         "华沙 PGCP",
         "🇨🇳 全局直连"
       ],
-      "default": "🇭🇰 香港自动"
+      "default": "手动选择"
     },
     {
       "tag": "🌵 LINE",
@@ -307,13 +266,6 @@
       "interrupt_exist_connections": true,
       "outbounds": [
         "手动选择",
-        "🇭🇰 香港自动",
-        "🇨🇳 台湾自动",
-        "🇸🇬 新加坡自动",
-        "🇯🇵 日本自动",
-        "🇰🇷 韩国自动",
-        "🇺🇸 美国自动",
-        "🌐 全球自动",
         "🇹🇼 台湾 FGCP",
         "🇯🇵 日本 东京 OCI",
         "🇺🇸 美国 洛杉矶 DC02",
@@ -330,13 +282,6 @@
       "interrupt_exist_connections": true,
       "outbounds": [
         "手动选择",
-        "🇭🇰 香港自动",
-        "🇨🇳 台湾自动",
-        "🇸🇬 新加坡自动",
-        "🇯🇵 日本自动",
-        "🇰🇷 韩国自动",
-        "🇺🇸 美国自动",
-        "🌐 全球自动",
         "🇹🇼 台湾 FGCP",
         "🇯🇵 日本 东京 OCI",
         "🇺🇸 美国 洛杉矶 DC02",
@@ -353,13 +298,6 @@
       "interrupt_exist_connections": true,
       "outbounds": [
         "手动选择",
-        "🇭🇰 香港自动",
-        "🇨🇳 台湾自动",
-        "🇸🇬 新加坡自动",
-        "🇯🇵 日本自动",
-        "🇰🇷 韩国自动",
-        "🇺🇸 美国自动",
-        "🌐 全球自动",
         "🇹🇼 台湾 FGCP",
         "🇯🇵 日本 东京 OCI",
         "🇺🇸 美国 洛杉矶 DC02",
@@ -376,13 +314,6 @@
       "interrupt_exist_connections": true,
       "outbounds": [
         "手动选择",
-        "🇭🇰 香港自动",
-        "🇨🇳 台湾自动",
-        "🇸🇬 新加坡自动",
-        "🇯🇵 日本自动",
-        "🇰🇷 韩国自动",
-        "🇺🇸 美国自动",
-        "🌐 全球自动",
         "🇹🇼 台湾 FGCP",
         "🇯🇵 日本 东京 OCI",
         "🇺🇸 美国 洛杉矶 DC02",
@@ -399,13 +330,6 @@
       "interrupt_exist_connections": true,
       "outbounds": [
         "手动选择",
-        "🇭🇰 香港自动",
-        "🇨🇳 台湾自动",
-        "🇸🇬 新加坡自动",
-        "🇯🇵 日本自动",
-        "🇰🇷 韩国自动",
-        "🇺🇸 美国自动",
-        "🌐 全球自动",
         "🇹🇼 台湾 FGCP",
         "🇯🇵 日本 东京 OCI",
         "🇺🇸 美国 洛杉矶 DC02",
@@ -421,7 +345,6 @@
       "type": "selector",
       "interrupt_exist_connections": true,
       "outbounds": [
-        "🌐 全球自动",
         "手动选择",
         "🇨🇳 全局直连"
       ],
@@ -456,71 +379,6 @@
         "🎯 中国直连",
         "手动选择"
       ]
-    },
-    {
-      "tag": "🇭🇰 香港自动",
-      "type": "selector",
-      "interrupt_exist_connections": true,
-      "outbounds": [
-        "手动选择"
-      ],
-      "default": "手动选择"
-    },
-    {
-      "tag": "🇨🇳 台湾自动",
-      "type": "selector",
-      "interrupt_exist_connections": true,
-      "outbounds": [
-        "🇹🇼 台湾 FGCP"
-      ],
-      "default": "🇹🇼 台湾 FGCP"
-    },
-    {
-      "tag": "🇸🇬 新加坡自动",
-      "type": "selector",
-      "interrupt_exist_connections": true,
-      "outbounds": [
-        "手动选择"
-      ],
-      "default": "手动选择"
-    },
-    {
-      "tag": "🇯🇵 日本自动",
-      "type": "selector",
-      "interrupt_exist_connections": true,
-      "outbounds": [
-        "🇯🇵 日本 东京 OCI"
-      ],
-      "default": "🇯🇵 日本 东京 OCI"
-    },
-    {
-      "tag": "🇰🇷 韩国自动",
-      "type": "selector",
-      "interrupt_exist_connections": true,
-      "outbounds": [
-        "手动选择"
-      ],
-      "default": "手动选择"
-    },
-    {
-      "tag": "🇺🇸 美国自动",
-      "type": "selector",
-      "interrupt_exist_connections": true,
-      "outbounds": [
-        "🇺🇸 美国 洛杉矶 DC02",
-        "🇺🇸 美国 洛杉矶 NAT"
-      ],
-      "default": "🇺🇸 美国 洛杉矶 DC02"
-    },
-    {
-      "tag": "🌐 全球自动",
-      "type": "selector",
-      "interrupt_exist_connections": true,
-      "outbounds": [
-        "🇩🇪 欧洲 德国 EUserv",
-        "华沙 PGCP"
-      ],
-      "default": "🇩🇪 欧洲 德国 EUserv"
     },
     {
       "tag": "🇹🇼 台湾 FGCP",
