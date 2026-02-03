@@ -1,0 +1,860 @@
+{
+  "log": {
+    "disabled": false,
+    "level": "info",
+    "output": "",
+    "timestamp": true
+  },
+  "experimental": {
+    "clash_api": {
+      "external_controller": "0.0.0.0:20123",
+      "external_ui": "ui",
+      "secret": "",
+      "default_mode": "rule",
+      "external_ui_download_url": "https://v6.gh-proxy.org/https://github.com/Zephyruso/zashboard/archive/refs/heads/gh-pages.zip",
+      "external_ui_download_detour": "中国直连",
+      "access_control_allow_origin": [
+        "http://127.0.0.1",
+        "http://localhost",
+        "https://yacd.metacubex.one",
+        "https://d.metacubex.one",
+        "https://board.zash.run.place"
+      ]
+    },
+    "cache_file": {
+      "enabled": true,
+      "path": "cache.db",
+      "store_fakeip": true
+    }
+  },
+  "dns": {
+    "fakeip": {
+      "enabled": true,
+      "inet4_range": "198.18.0.0/15",
+      "inet6_range": "fc00::/18"
+    },
+    "servers": [
+      {
+        "tag": "local",
+        "address": "local",
+        "detour": "中国直连"
+      },
+      {
+        "tag": "DIRECT-DNS",
+        "address_resolver": "local",
+        "address": "https://dns.alidns.com/dns-query",
+        "detour": "中国直连"
+      },
+      {
+        "tag": "PROXY-DNS",
+        "address_resolver": "local",
+        "address": "https://dns.google/dns-query",
+        "detour": "手动选择"
+      },
+      {
+        "tag": "FAKEIP-DNS",
+        "address": "fakeip"
+      }
+    ],
+    "rules": [
+      {
+        "outbound": "any",
+        "server": "DIRECT-DNS"
+      },
+      {
+        "clash_mode": "direct",
+        "server": "DIRECT-DNS"
+      },
+      {
+        "clash_mode": "global",
+        "server": "PROXY-DNS"
+      },
+      {
+        "rule_set": [
+          "geosite-cn",
+          "geosite-private"
+        ],
+        "server": "DIRECT-DNS"
+      },
+      {
+        "query_type": [
+          "A",
+          "AAAA"
+        ],
+        "server": "FAKEIP-DNS",
+        "rewrite_ttl": 1
+      }
+    ],
+    "disable_cache": true,
+    "disable_expire": true,
+    "independent_cache": true,
+    "final": "PROXY-DNS",
+    "strategy": "prefer_ipv4"
+  },
+  "inbounds": [
+    {
+      "tag": "tun-in",
+      "type": "tun",
+      "address": [
+        "172.19.0.0/30"
+      ],
+      "mtu": 9000,
+      "auto_route": true,
+      "strict_route": true,
+      "stack": "system",
+      "platform": {
+        "http_proxy": {
+          "enabled": true,
+          "server": "127.0.0.1",
+          "server_port": 2080
+        }
+      }
+    },
+    {
+      "tag": "mixed-in",
+      "type": "mixed",
+      "listen": "127.0.0.1",
+      "listen_port": 2080
+    }
+  ],
+  "outbounds": [
+    {
+      "tag": "全局直连",
+      "type": "direct"
+    },
+    {
+      "tag": "拒绝连接",
+      "type": "socks",
+      "server": "127.0.0.1",
+      "server_port": 1024,
+      "version": "5",
+      "username": "sekai",
+      "password": "admin",
+      "network": "udp",
+      "udp_over_tcp": false
+    },
+    {
+      "tag": "手动选择",
+      "type": "selector",
+      "interrupt_exist_connections": true,
+      "outbounds": [
+        "自动选择",
+        "台湾-FGCP",
+        "日本-东京-OCI",
+        "美国-洛杉矶-DC02",
+        "美国-洛杉矶-NAT",
+        "欧洲-德国-EUserv",
+        "华沙-PGCP",
+        "全局直连"
+      ],
+      "default": "自动选择"
+    },
+    {
+      "tag": "自动选择",
+      "type": "urltest",
+      "outbounds": [
+        "台湾-FGCP",
+        "日本-东京-OCI",
+        "美国-洛杉矶-DC02",
+        "美国-洛杉矶-NAT",
+        "欧洲-德国-EUserv",
+        "华沙-PGCP"
+      ],
+      "url": "http://www.msftconnecttest.com/connecttest.txt",
+      "interval": "3m",
+      "tolerance": 50
+    },
+    {
+      "tag": "AI",
+      "type": "selector",
+      "interrupt_exist_connections": true,
+      "outbounds": [
+        "手动选择",
+        "台湾-FGCP",
+        "日本-东京-OCI",
+        "美国-洛杉矶-DC02",
+        "美国-洛杉矶-NAT",
+        "欧洲-德国-EUserv",
+        "华沙-PGCP",
+        "全局直连"
+      ],
+      "default": "美国-洛杉矶-DC02"
+    },
+    {
+      "tag": "TELEGRAM",
+      "type": "selector",
+      "interrupt_exist_connections": true,
+      "outbounds": [
+        "手动选择",
+        "台湾-FGCP",
+        "日本-东京-OCI",
+        "美国-洛杉矶-DC02",
+        "美国-洛杉矶-NAT",
+        "欧洲-德国-EUserv",
+        "华沙-PGCP",
+        "全局直连"
+      ],
+      "default": "手动选择"
+    },
+    {
+      "tag": "X",
+      "type": "selector",
+      "interrupt_exist_connections": true,
+      "outbounds": [
+        "手动选择",
+        "台湾-FGCP",
+        "日本-东京-OCI",
+        "美国-洛杉矶-DC02",
+        "美国-洛杉矶-NAT",
+        "欧洲-德国-EUserv",
+        "华沙-PGCP",
+        "全局直连"
+      ],
+      "default": "手动选择"
+    },
+    {
+      "tag": "TIKTOK",
+      "type": "selector",
+      "interrupt_exist_connections": true,
+      "outbounds": [
+        "手动选择",
+        "台湾-FGCP",
+        "日本-东京-OCI",
+        "美国-洛杉矶-DC02",
+        "美国-洛杉矶-NAT",
+        "欧洲-德国-EUserv",
+        "华沙-PGCP",
+        "全局直连"
+      ],
+      "default": "手动选择"
+    },
+    {
+      "tag": "YOUTUBE",
+      "type": "selector",
+      "interrupt_exist_connections": true,
+      "outbounds": [
+        "手动选择",
+        "台湾-FGCP",
+        "日本-东京-OCI",
+        "美国-洛杉矶-DC02",
+        "美国-洛杉矶-NAT",
+        "欧洲-德国-EUserv",
+        "华沙-PGCP",
+        "全局直连"
+      ],
+      "default": "手动选择"
+    },
+    {
+      "tag": "SPOTIFY",
+      "type": "selector",
+      "interrupt_exist_connections": true,
+      "outbounds": [
+        "手动选择",
+        "台湾-FGCP",
+        "日本-东京-OCI",
+        "美国-洛杉矶-DC02",
+        "美国-洛杉矶-NAT",
+        "欧洲-德国-EUserv",
+        "华沙-PGCP",
+        "全局直连"
+      ],
+      "default": "手动选择"
+    },
+    {
+      "tag": "LINE",
+      "type": "selector",
+      "interrupt_exist_connections": true,
+      "outbounds": [
+        "手动选择",
+        "台湾-FGCP",
+        "日本-东京-OCI",
+        "美国-洛杉矶-DC02",
+        "美国-洛杉矶-NAT",
+        "欧洲-德国-EUserv",
+        "华沙-PGCP",
+        "全局直连"
+      ],
+      "default": "手动选择"
+    },
+    {
+      "tag": "NETFLIX",
+      "type": "selector",
+      "interrupt_exist_connections": true,
+      "outbounds": [
+        "手动选择",
+        "台湾-FGCP",
+        "日本-东京-OCI",
+        "美国-洛杉矶-DC02",
+        "美国-洛杉矶-NAT",
+        "欧洲-德国-EUserv",
+        "华沙-PGCP",
+        "全局直连"
+      ],
+      "default": "手动选择"
+    },
+    {
+      "tag": "GOOGLE",
+      "type": "selector",
+      "interrupt_exist_connections": true,
+      "outbounds": [
+        "手动选择",
+        "台湾-FGCP",
+        "日本-东京-OCI",
+        "美国-洛杉矶-DC02",
+        "美国-洛杉矶-NAT",
+        "欧洲-德国-EUserv",
+        "华沙-PGCP",
+        "全局直连"
+      ],
+      "default": "手动选择"
+    },
+    {
+      "tag": "MICROSOFT",
+      "type": "selector",
+      "interrupt_exist_connections": true,
+      "outbounds": [
+        "手动选择",
+        "台湾-FGCP",
+        "日本-东京-OCI",
+        "美国-洛杉矶-DC02",
+        "美国-洛杉矶-NAT",
+        "欧洲-德国-EUserv",
+        "华沙-PGCP",
+        "全局直连"
+      ],
+      "default": "手动选择"
+    },
+    {
+      "tag": "APPLE",
+      "type": "selector",
+      "interrupt_exist_connections": true,
+      "outbounds": [
+        "手动选择",
+        "台湾-FGCP",
+        "日本-东京-OCI",
+        "美国-洛杉矶-DC02",
+        "美国-洛杉矶-NAT",
+        "欧洲-德国-EUserv",
+        "华沙-PGCP",
+        "全局直连"
+      ],
+      "default": "手动选择"
+    },
+    {
+      "tag": "TALKATONE",
+      "type": "selector",
+      "interrupt_exist_connections": true,
+      "outbounds": [
+        "美国-洛杉矶-DC02",
+        "美国-洛杉矶-NAT",
+        "手动选择",
+        "台湾-FGCP",
+        "日本-东京-OCI",
+        "欧洲-德国-EUserv",
+        "华沙-PGCP",
+        "全局直连"
+      ],
+      "default": "美国-洛杉矶-DC02"
+    },
+    {
+      "tag": "中国直连",
+      "type": "selector",
+      "interrupt_exist_connections": true,
+      "outbounds": [
+        "手动选择",
+        "全局直连"
+      ],
+      "default": "全局直连"
+    },
+    {
+      "tag": "广告拦截",
+      "type": "selector",
+      "interrupt_exist_connections": true,
+      "outbounds": [
+        "拒绝连接",
+        "中国直连",
+        "手动选择"
+      ]
+    },
+    {
+      "tag": "泄漏拦截",
+      "type": "selector",
+      "interrupt_exist_connections": true,
+      "outbounds": [
+        "拒绝连接",
+        "中国直连",
+        "手动选择"
+      ]
+    },
+    {
+      "tag": "HTTPDNS",
+      "type": "selector",
+      "interrupt_exist_connections": true,
+      "outbounds": [
+        "拒绝连接",
+        "中国直连",
+        "手动选择"
+      ]
+    },
+    {
+      "tag": "台湾-FGCP",
+      "type": "vless",
+      "server": "35.206.206.61",
+      "server_port": 57090,
+      "uuid": "7412ee8c-f618-4587-a8f0-7987efff3613",
+      "flow": "xtls-rprx-vision",
+      "tls": {
+        "enabled": true,
+        "server_name": "apple.com",
+        "reality": {
+          "enabled": true,
+          "public_key": "mOYgCLVU23MrskK_ppj5o6VCxz-mRD3ENqFHi3qUSk8",
+          "short_id": "5954dc6f"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      }
+    },
+    {
+      "tag": "日本-东京-OCI",
+      "type": "vless",
+      "server": "104.18.39.209",
+      "server_port": 2096,
+      "uuid": "97ebc2dc-8577-41bf-b615-d5f9e43e7e3d",
+      "tls": {
+        "enabled": true,
+        "server_name": "jpoci.666014.xyz",
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "headers": {
+          "Host": "jpoci.666014.xyz"
+        },
+        "path": "/gaseghs"
+      }
+    },
+    {
+      "tag": "美国-洛杉矶-DC02",
+      "type": "vless",
+      "server": "104.18.39.209",
+      "server_port": 2096,
+      "uuid": "1a13ed18-37a9-437b-a427-de2746d46409",
+      "tls": {
+        "enabled": true,
+        "server_name": "sui02.666014.xyz",
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "headers": {
+          "Host": "sui02.666014.xyz"
+        },
+        "path": "/"
+      }
+    },
+    {
+      "tag": "美国-洛杉矶-NAT",
+      "type": "vless",
+      "server": "104.18.39.209",
+      "server_port": 2096,
+      "uuid": "8bea32c9-7086-4309-cc3a-b4f154c14a30",
+      "tls": {
+        "enabled": true,
+        "server_name": "nats.666014.xyz",
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "headers": {
+          "Host": "nats.666014.xyz"
+        },
+        "path": "/"
+      }
+    },
+    {
+      "tag": "欧洲-德国-EUserv",
+      "type": "vless",
+      "server": "104.18.39.209",
+      "server_port": 2096,
+      "uuid": "9c70ec27-f6d7-4822-bdf9-0c5912b07ad7",
+      "tls": {
+        "enabled": true,
+        "server_name": "eus.666014.xyz",
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "headers": {
+          "Host": "eus.666014.xyz"
+        },
+        "path": "/"
+      }
+    },
+    {
+      "tag": "华沙-PGCP",
+      "type": "vless",
+      "server": "104.18.39.209",
+      "server_port": 2096,
+      "uuid": "38718431-844f-4441-8e3a-d6eaecf0dec4",
+      "tls": {
+        "enabled": true,
+        "server_name": "bl.666014.xyz",
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "headers": {
+          "Host": "bl.666014.xyz"
+        },
+        "path": "/"
+      }
+    }
+  ],
+  "route": {
+    "auto_detect_interface": true,
+    "final": "手动选择",
+    "rules": [
+      {
+        "action": "sniff"
+      },
+      {
+        "protocol": "dns",
+        "action": "hijack-dns"
+      },
+      {
+        "ip_is_private": true,
+        "outbound": "中国直连"
+      },
+      {
+        "clash_mode": "direct",
+        "outbound": "中国直连"
+      },
+      {
+        "domain": [
+          "cdn.jsdmirror.com"
+        ],
+        "outbound": "中国直连"
+      },
+      {
+        "rule_set": "geosite-category-ads-all",
+        "action": "reject"
+      },
+      {
+        "type": "logical",
+        "mode": "or",
+        "rules": [
+          {
+            "port": [
+              3478
+            ]
+          },
+          {
+            "network": [
+              "tcp"
+            ],
+            "port": [
+              5349
+            ]
+          },
+          {
+            "network": [
+              "udp"
+            ],
+            "port": [
+              5350,
+              5351,
+              19302
+            ]
+          },
+          {
+            "rule_set": [
+              "STUN"
+            ]
+          }
+        ],
+        "outbound": "泄漏拦截"
+      },
+      {
+        "rule_set": [
+          "BlockHttpDNS"
+        ],
+        "outbound": "HTTPDNS"
+      },
+      {
+        "rule_set": [
+          "geoip-google",
+          "geosite-google",
+          "geosite-facebook",
+          "geosite-instagram",
+          "geosite-threads"
+        ],
+        "outbound": "GOOGLE"
+      },
+      {
+        "rule_set": "geosite-ai",
+        "outbound": "AI"
+      },
+      {
+        "rule_set": "geosite-youtube",
+        "outbound": "YOUTUBE"
+      },
+      {
+        "rule_set": "geosite-tiktok",
+        "outbound": "TIKTOK"
+      },
+      {
+        "rule_set": "geosite-line",
+        "outbound": "LINE"
+      },
+      {
+        "rule_set": "geosite-twitter",
+        "outbound": "X"
+      },
+      {
+        "rule_set": "geosite-spotify",
+        "outbound": "SPOTIFY"
+      },
+      {
+        "rule_set": [
+          "geoip-telegram",
+          "geosite-telegram"
+        ],
+        "outbound": "TELEGRAM"
+      },
+      {
+        "rule_set": [
+          "geoip-netflix",
+          "geosite-netflix"
+        ],
+        "outbound": "NETFLIX"
+      },
+      {
+        "rule_set": [
+          "geosite-microsoft"
+        ],
+        "outbound": "MICROSOFT"
+      },
+      {
+        "rule_set": [
+          "geoip-apple",
+          "geosite-apple"
+        ],
+        "outbound": "APPLE"
+      },
+      {
+        "rule_set": "talkatone-srs",
+        "outbound": "TALKATONE"
+      },
+      {
+        "rule_set": [
+          "geoip-cn",
+          "geosite-cn",
+          "geosite-private"
+        ],
+        "outbound": "中国直连"
+      }
+    ],
+    "rule_set": [
+      {
+        "tag": "geosite-private",
+        "type": "remote",
+        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/private.srs",
+        "format": "binary",
+        "download_detour": "中国直连"
+      },
+      {
+        "tag": "geosite-cn",
+        "type": "remote",
+        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/cn.srs",
+        "format": "binary",
+        "download_detour": "中国直连"
+      },
+      {
+        "tag": "geosite-category-ads-all",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ads-all.srs",
+        "download_detour": "中国直连"
+      },
+      {
+        "tag": "geosite-ai",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ai-!cn.srs",
+        "download_detour": "中国直连"
+      },
+      {
+        "tag": "geosite-youtube",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/youtube.srs",
+        "download_detour": "中国直连"
+      },
+      {
+        "tag": "geosite-google",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/google.srs",
+        "download_detour": "中国直连"
+      },
+      {
+        "tag": "geosite-telegram",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/telegram.srs",
+        "download_detour": "中国直连"
+      },
+      {
+        "tag": "geosite-tiktok",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/tiktok.srs",
+        "download_detour": "中国直连"
+      },
+      {
+        "tag": "geosite-line",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://v6.gh-proxy.org/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geosite/line.srs",
+        "download_detour": "中国直连"
+      },
+      {
+        "tag": "geosite-netflix",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/netflix.srs",
+        "download_detour": "中国直连"
+      },
+      {
+        "tag": "geosite-apple",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/apple.srs",
+        "download_detour": "中国直连"
+      },
+      {
+        "tag": "geosite-microsoft",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/microsoft.srs",
+        "download_detour": "中国直连"
+      },
+      {
+        "tag": "geoip-private",
+        "type": "remote",
+        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/private.srs",
+        "format": "binary",
+        "download_detour": "中国直连"
+      },
+      {
+        "tag": "geoip-google",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geoip/google.srs",
+        "download_detour": "中国直连"
+      },
+      {
+        "tag": "geoip-telegram",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geoip/telegram.srs",
+        "download_detour": "中国直连"
+      },
+      {
+        "tag": "geosite-twitter",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://v6.gh-proxy.org/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geoip/twitter.srs",
+        "download_detour": "中国直连"
+      },
+      {
+        "tag": "geosite-facebook",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://v6.gh-proxy.org/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geosite/facebook.srs",
+        "download_detour": "中国直连"
+      },
+      {
+        "tag": "geosite-instagram",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://v6.gh-proxy.org/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geosite/instagram.srs",
+        "download_detour": "中国直连"
+      },
+      {
+        "tag": "geosite-threads",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://v6.gh-proxy.org/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geosite/threads.srs",
+        "download_detour": "中国直连"
+      },
+      {
+        "tag": "geosite-spotify",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://v6.gh-proxy.org/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geosite/spotify.srs",
+        "download_detour": "中国直连"
+      },
+      {
+        "tag": "geoip-netflix",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geoip/netflix.srs",
+        "download_detour": "中国直连"
+      },
+      {
+        "tag": "geoip-apple",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geoip/apple.srs",
+        "download_detour": "中国直连"
+      },
+      {
+        "tag": "geoip-cn",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geoip/cn.srs",
+        "download_detour": "中国直连"
+      },
+      {
+        "tag": "STUN",
+        "type": "remote",
+        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/senshinya/singbox_ruleset/main/rule/STUN/STUN.srs",
+        "format": "binary",
+        "download_detour": "中国直连"
+      },
+      {
+        "tag": "BlockHttpDNS",
+        "type": "remote",
+        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/senshinya/singbox_ruleset/main/rule/BlockHttpDNS/BlockHttpDNS.srs",
+        "format": "binary",
+        "download_detour": "中国直连"
+      },
+      {
+        "tag": "talkatone-srs",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/PhantomSeaStars/Rules/main/talkatoneAPKandEXE.srs",
+        "download_detour": "中国直连"
+      }
+    ]
+  }
+}
