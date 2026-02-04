@@ -37,7 +37,7 @@
       "outbounds": [
         "香港 CF",
         "台湾 FGCP",
-        "日本 东京 OCI",
+        "东京 OCI",
         "俄勒冈 GGCP",
         "洛杉矶 DC02",
         "洛杉矶 NAT",
@@ -87,7 +87,7 @@
       }
     },
     {
-      "tag": "日本 东京 OCI",
+      "tag": "东京 OCI",
       "type": "vless",
       "server": "104.18.39.209",
       "server_port": 2096,
