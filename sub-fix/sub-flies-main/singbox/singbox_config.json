@@ -139,12 +139,13 @@
       "interrupt_exist_connections": true,
       "outbounds": [
         "自动选择",
+        "🇭🇰 香港 CF",
         "🇹🇼 台湾 FGCP",
         "🇯🇵 日本 东京 OCI",
         "🇺🇸 美国 洛杉矶 DC02",
         "🇺🇸 美国 洛杉矶 NAT",
+        "🇷🇺 俄勒冈 GGCP",
         "🇩🇪 欧洲 德国 EUserv",
-        "华沙 PGCP",
         "🇨🇳 全局直连"
       ],
       "default": "自动选择"
@@ -153,12 +154,13 @@
       "tag": "自动选择",
       "type": "urltest",
       "outbounds": [
+        "🇭🇰 香港 CF",
         "🇹🇼 台湾 FGCP",
         "🇯🇵 日本 东京 OCI",
         "🇺🇸 美国 洛杉矶 DC02",
         "🇺🇸 美国 洛杉矶 NAT",
-        "🇩🇪 欧洲 德国 EUserv",
-        "华沙 PGCP"
+        "🇷🇺 俄勒冈 GGCP",
+        "🇩🇪 欧洲 德国 EUserv"
       ],
       "url": "http://www.msftconnecttest.com/connecttest.txt",
       "interval": "3m",
@@ -170,12 +172,13 @@
       "interrupt_exist_connections": true,
       "outbounds": [
         "手动选择",
+        "🇭🇰 香港 CF",
         "🇹🇼 台湾 FGCP",
         "🇯🇵 日本 东京 OCI",
         "🇺🇸 美国 洛杉矶 DC02",
         "🇺🇸 美国 洛杉矶 NAT",
+        "🇷🇺 俄勒冈 GGCP",
         "🇩🇪 欧洲 德国 EUserv",
-        "华沙 PGCP",
         "🇨🇳 全局直连"
       ],
       "default": "🇺🇸 美国 洛杉矶 DC02"
@@ -186,12 +189,13 @@
       "interrupt_exist_connections": true,
       "outbounds": [
         "手动选择",
+        "🇭🇰 香港 CF",
         "🇹🇼 台湾 FGCP",
         "🇯🇵 日本 东京 OCI",
         "🇺🇸 美国 洛杉矶 DC02",
         "🇺🇸 美国 洛杉矶 NAT",
+        "🇷🇺 俄勒冈 GGCP",
         "🇩🇪 欧洲 德国 EUserv",
-        "华沙 PGCP",
         "🇨🇳 全局直连"
       ],
       "default": "手动选择"
@@ -202,12 +206,13 @@
       "interrupt_exist_connections": true,
       "outbounds": [
         "手动选择",
+        "🇭🇰 香港 CF",
         "🇹🇼 台湾 FGCP",
         "🇯🇵 日本 东京 OCI",
         "🇺🇸 美国 洛杉矶 DC02",
         "🇺🇸 美国 洛杉矶 NAT",
+        "🇷🇺 俄勒冈 GGCP",
         "🇩🇪 欧洲 德国 EUserv",
-        "华沙 PGCP",
         "🇨🇳 全局直连"
       ],
       "default": "手动选择"
@@ -218,12 +223,13 @@
       "interrupt_exist_connections": true,
       "outbounds": [
         "手动选择",
+        "🇭🇰 香港 CF",
         "🇹🇼 台湾 FGCP",
         "🇯🇵 日本 东京 OCI",
         "🇺🇸 美国 洛杉矶 DC02",
         "🇺🇸 美国 洛杉矶 NAT",
+        "🇷🇺 俄勒冈 GGCP",
         "🇩🇪 欧洲 德国 EUserv",
-        "华沙 PGCP",
         "🇨🇳 全局直连"
       ],
       "default": "手动选择"
@@ -234,12 +240,13 @@
       "interrupt_exist_connections": true,
       "outbounds": [
         "手动选择",
+        "🇭🇰 香港 CF",
         "🇹🇼 台湾 FGCP",
         "🇯🇵 日本 东京 OCI",
         "🇺🇸 美国 洛杉矶 DC02",
         "🇺🇸 美国 洛杉矶 NAT",
+        "🇷🇺 俄勒冈 GGCP",
         "🇩🇪 欧洲 德国 EUserv",
-        "华沙 PGCP",
         "🇨🇳 全局直连"
       ],
       "default": "手动选择"
@@ -250,12 +257,13 @@
       "interrupt_exist_connections": true,
       "outbounds": [
         "手动选择",
+        "🇭🇰 香港 CF",
         "🇹🇼 台湾 FGCP",
         "🇯🇵 日本 东京 OCI",
         "🇺🇸 美国 洛杉矶 DC02",
         "🇺🇸 美国 洛杉矶 NAT",
+        "🇷🇺 俄勒冈 GGCP",
         "🇩🇪 欧洲 德国 EUserv",
-        "华沙 PGCP",
         "🇨🇳 全局直连"
       ],
       "default": "手动选择"
@@ -266,12 +274,13 @@
       "interrupt_exist_connections": true,
       "outbounds": [
         "手动选择",
+        "🇭🇰 香港 CF",
         "🇹🇼 台湾 FGCP",
         "🇯🇵 日本 东京 OCI",
         "🇺🇸 美国 洛杉矶 DC02",
         "🇺🇸 美国 洛杉矶 NAT",
+        "🇷🇺 俄勒冈 GGCP",
         "🇩🇪 欧洲 德国 EUserv",
-        "华沙 PGCP",
         "🇨🇳 全局直连"
       ],
       "default": "手动选择"
@@ -282,12 +291,13 @@
       "interrupt_exist_connections": true,
       "outbounds": [
         "手动选择",
+        "🇭🇰 香港 CF",
         "🇹🇼 台湾 FGCP",
         "🇯🇵 日本 东京 OCI",
         "🇺🇸 美国 洛杉矶 DC02",
         "🇺🇸 美国 洛杉矶 NAT",
+        "🇷🇺 俄勒冈 GGCP",
         "🇩🇪 欧洲 德国 EUserv",
-        "华沙 PGCP",
         "🇨🇳 全局直连"
       ],
       "default": "手动选择"
@@ -298,12 +308,13 @@
       "interrupt_exist_connections": true,
       "outbounds": [
         "手动选择",
+        "🇭🇰 香港 CF",
         "🇹🇼 台湾 FGCP",
         "🇯🇵 日本 东京 OCI",
         "🇺🇸 美国 洛杉矶 DC02",
         "🇺🇸 美国 洛杉矶 NAT",
+        "🇷🇺 俄勒冈 GGCP",
         "🇩🇪 欧洲 德国 EUserv",
-        "华沙 PGCP",
         "🇨🇳 全局直连"
       ],
       "default": "手动选择"
@@ -314,12 +325,13 @@
       "interrupt_exist_connections": true,
       "outbounds": [
         "手动选择",
+        "🇭🇰 香港 CF",
         "🇹🇼 台湾 FGCP",
         "🇯🇵 日本 东京 OCI",
         "🇺🇸 美国 洛杉矶 DC02",
         "🇺🇸 美国 洛杉矶 NAT",
+        "🇷🇺 俄勒冈 GGCP",
         "🇩🇪 欧洲 德国 EUserv",
-        "华沙 PGCP",
         "🇨🇳 全局直连"
       ],
       "default": "手动选择"
@@ -330,12 +342,13 @@
       "interrupt_exist_connections": true,
       "outbounds": [
         "手动选择",
+        "🇭🇰 香港 CF",
         "🇹🇼 台湾 FGCP",
         "🇯🇵 日本 东京 OCI",
         "🇺🇸 美国 洛杉矶 DC02",
         "🇺🇸 美国 洛杉矶 NAT",
+        "🇷🇺 俄勒冈 GGCP",
         "🇩🇪 欧洲 德国 EUserv",
-        "华沙 PGCP",
         "🇨🇳 全局直连"
       ],
       "default": "手动选择"
@@ -348,10 +361,11 @@
         "🇺🇸 美国 洛杉矶 DC02",
         "🇺🇸 美国 洛杉矶 NAT",
         "手动选择",
+        "🇭🇰 香港 CF",
         "🇹🇼 台湾 FGCP",
         "🇯🇵 日本 东京 OCI",
+        "🇷🇺 俄勒冈 GGCP",
         "🇩🇪 欧洲 德国 EUserv",
-        "华沙 PGCP",
         "🇨🇳 全局直连"
       ],
       "default": "🇺🇸 美国 洛杉矶 DC02"
@@ -395,6 +409,28 @@
         "🎯 中国直连",
         "手动选择"
       ]
+    },
+    {
+      "tag": "🇭🇰 香港 CF",
+      "type": "vless",
+      "server": "104.18.39.209",
+      "server_port": 443,
+      "uuid": "79a95971-a99c-4f4c-b2c8-d67bafc09a5b",
+      "tls": {
+        "enabled": true,
+        "server_name": "super.frankgoing.us.kg",
+        "utls": {
+          "enabled": true,
+          "fingerprint": "random"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "headers": {
+          "Host": "super.frankgoing.us.kg"
+        },
+        "path": "/?ed=2560"
+      }
     },
     {
       "tag": "🇹🇼 台湾 FGCP",
@@ -506,25 +542,20 @@
       }
     },
     {
-      "tag": "华沙 PGCP",
-      "type": "vless",
-      "server": "104.18.39.209",
-      "server_port": 2096,
-      "uuid": "38718431-844f-4441-8e3a-d6eaecf0dec4",
+      "tag": "🇷🇺 俄勒冈 GGCP",
+      "type": "tuic",
+      "server": "gcp.666014.xyz",
+      "server_port": 19883,
+      "uuid": "074d7993-87a5-4609-bc1b-6a51479d3549",
+      "password": "Twkv9pxglS",
+      "congestion_control": "bbr",
       "tls": {
         "enabled": true,
-        "server_name": "bl.666014.xyz",
-        "utls": {
-          "enabled": true,
-          "fingerprint": "chrome"
-        }
-      },
-      "transport": {
-        "type": "ws",
-        "headers": {
-          "Host": "bl.666014.xyz"
-        },
-        "path": "/"
+        "server_name": "www.bing.com",
+        "insecure": true,
+        "alpn": [
+          "h3"
+        ]
       }
     }
   ],
@@ -542,6 +573,31 @@
       {
         "ip_is_private": true,
         "outbound": "🎯 中国直连"
+      },
+      {
+        "rule_set": [
+          "geoip-apple",
+          "geosite-apple"
+        ],
+        "outbound": "🍎 APPLE"
+      },
+      {
+        "rule_set": "geosite-ai",
+        "outbound": "🤖 AI"
+      },
+      {
+        "rule_set": "geosite-youtube",
+        "outbound": "📺 YOUTUBE"
+      },
+      {
+        "rule_set": [
+          "geoip-google",
+          "geosite-google",
+          "geosite-facebook",
+          "geosite-instagram",
+          "geosite-threads"
+        ],
+        "outbound": "🔍 GOOGLE"
       },
       {
         "clash_mode": "direct",
@@ -599,24 +655,6 @@
         "outbound": "🔎 HTTPDNS"
       },
       {
-        "rule_set": [
-          "geoip-google",
-          "geosite-google",
-          "geosite-facebook",
-          "geosite-instagram",
-          "geosite-threads"
-        ],
-        "outbound": "🔍 GOOGLE"
-      },
-      {
-        "rule_set": "geosite-ai",
-        "outbound": "🤖 AI"
-      },
-      {
-        "rule_set": "geosite-youtube",
-        "outbound": "📺 YOUTUBE"
-      },
-      {
         "rule_set": "geosite-tiktok",
         "outbound": "🎥 TIKTOK"
       },
@@ -651,13 +689,6 @@
           "geosite-microsoft"
         ],
         "outbound": "📖 MICROSOFT"
-      },
-      {
-        "rule_set": [
-          "geoip-apple",
-          "geosite-apple"
-        ],
-        "outbound": "🍎 APPLE"
       },
       {
         "rule_set": "talkatone-srs",
