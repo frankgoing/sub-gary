@@ -334,7 +334,7 @@
         "🇩🇪 德国 EUserv",
         "🇨🇳 全局直连"
       ],
-      "default": "手动选择"
+      "default": "🇨🇳 全局直连"
     },
     {
       "tag": "🍎 APPLE",
@@ -351,19 +351,19 @@
         "🇩🇪 德国 EUserv",
         "🇨🇳 全局直连"
       ],
-      "default": "手动选择"
+      "default": "🇨🇳 全局直连"
     },
     {
       "tag": "📞 TALKATONE",
       "type": "selector",
       "interrupt_exist_connections": true,
-      "outbounds": [
-        "🇺🇸 洛杉矶 DC02",
-        "🇺🇸 洛杉矶 NAT",
+      "outbounds": [        
         "手动选择",
         "🇭🇰 香港 CF",
         "🇹🇼 台湾 FGCP",
         "🇯🇵 东京 OCI",
+        "🇺🇸 洛杉矶 DC02",
+        "🇺🇸 洛杉矶 NAT",
         "🇺🇸 俄勒冈 GGCP",
         "🇩🇪 德国 EUserv",
         "🇨🇳 全局直连"
