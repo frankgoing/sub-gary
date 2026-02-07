@@ -3,5 +3,5 @@ vless://1ad237b3-d6aa-4c44-b56e-25b5c8e64863@tw.666014.xyz:51173?encryption=none
 vless://97ebc2dc-8577-41bf-b615-d5f9e43e7e3d@104.18.39.209:2096?encryption=none&security=tls&alpn=h2%2Chttp%2F1.1&insecure=0&allowInsecure=0&type=ws&host=jpoci.666014.xyz&path=%2Fgaseghs#%E4%B8%9C%E4%BA%AC%20OCI
 vless://1a13ed18-37a9-437b-a427-de2746d46409@104.18.39.209:2096?encryption=none&security=tls&sni=sui02.666014.xyz&insecure=0&allowInsecure=0&type=ws&host=sui02.666014.xyz&path=%2F#%E6%B4%9B%E6%9D%89%E7%9F%B6%20DC02
 vless://8bea32c9-7086-4309-cc3a-b4f154c14a30@104.18.39.209:2096?encryption=none&security=tls&alpn=h2%2Chttp%2F1.1&insecure=0&allowInsecure=0&type=ws&host=nats.666014.xyz&path=%2F#%E6%B4%9B%E6%9D%89%E7%9F%B6%20NAT
-tuic://074d7993-87a5-4609-bc1b-6a51479d3549%3ATwkv9pxglS@gcp.666014.xyz:19883?sni=www.bing.com&alpn=h3&insecure=1&allowInsecure=1&congestion_control=bbr#%E4%BF%84%E5%8B%92%E5%86%88%
+tuic://074d7993-87a5-4609-bc1b-6a51479d3549:Twkv9pxglS@gcp.666014.xyz:19883?security=tls&insecure=1&sni=www.bing.com&alpn=h3&congestion_control=bbr#%E4%BF%84%E5%8B%92%E5%86%88%20GGCP
 vless://9c70ec27-f6d7-4822-bdf9-0c5912b07ad7@104.18.39.209:2096?encryption=none&security=tls&sni=eus.666014.xyz&insecure=0&allowInsecure=0&type=ws&host=eus.666014.xyz&path=%2F#%E5%BE%B7%E5%9B%BD%20EUserv
