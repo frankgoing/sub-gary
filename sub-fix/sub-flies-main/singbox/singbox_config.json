@@ -547,7 +547,7 @@
       "server": "gcp.666014.xyz",
       "server_port": 19883,
       "uuid": "074d7993-87a5-4609-bc1b-6a51479d3549",
-      "password": "Twkv9pxglS",
+      "password": "074d7993-87a5-4609-bc1b-6a51479d3549",
       "congestion_control": "bbr",
       "tls": {
         "enabled": true,
