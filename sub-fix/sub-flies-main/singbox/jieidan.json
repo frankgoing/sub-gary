@@ -72,19 +72,23 @@
     {
       "tag": "台湾 FGCP",
       "type": "vless",
-      "server": "35.206.206.61",
-      "server_port": 57090,
-      "uuid": "7412ee8c-f618-4587-a8f0-7987efff3613",
+      "server": "35.206.230.162",
+      "server_port": 38208,
+      "uuid": "adf43e06-d617-401f-bb87-d06d3efa8830",
       "flow": "xtls-rprx-vision",
+      "packet_encoding": "xudp",
       "tls": {
         "enabled": true,
         "server_name": "apple.com",
         "reality": {
           "enabled": true,
-          "public_key": "mOYgCLVU23MrskK_ppj5o6VCxz-mRD3ENqFHi3qUSk8",
-          "short_id": "5954dc6f"
+          "public_key": "O-AyvMwHRWZT6nK36nxIpb3WNsRf-qpwP2PORZJSyD4",
+          "short_id": "f9cf84"
         },
-        "utls": { "enabled": true, "fingerprint": "chrome" }
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
       }
     },
     {
