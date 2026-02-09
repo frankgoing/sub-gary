@@ -141,6 +141,7 @@
         "自动选择",
         "🇭🇰 香港 CF",
         "🇹🇼 台湾 FGCP",
+        "🇹🇼 台湾 PGCP",
         "🇯🇵 东京 OCI",
         "🇺🇸 洛杉矶 DC02",
         "🇺🇸 洛杉矶 NAT",
@@ -156,6 +157,7 @@
       "outbounds": [
         "🇭🇰 香港 CF",
         "🇹🇼 台湾 FGCP",
+        "🇹🇼 台湾 PGCP",
         "🇯🇵 东京 OCI",
         "🇺🇸 洛杉矶 DC02",
         "🇺🇸 洛杉矶 NAT",
@@ -174,6 +176,7 @@
         "手动选择",
         "🇭🇰 香港 CF",
         "🇹🇼 台湾 FGCP",
+        "🇹🇼 台湾 PGCP",
         "🇯🇵 东京 OCI",
         "🇺🇸 洛杉矶 DC02",
         "🇺🇸 洛杉矶 NAT",
@@ -191,6 +194,7 @@
         "手动选择",
         "🇭🇰 香港 CF",
         "🇹🇼 台湾 FGCP",
+        "🇹🇼 台湾 PGCP",
         "🇯🇵 东京 OCI",
         "🇺🇸 洛杉矶 DC02",
         "🇺🇸 洛杉矶 NAT",
@@ -208,6 +212,7 @@
         "手动选择",
         "🇭🇰 香港 CF",
         "🇹🇼 台湾 FGCP",
+        "🇹🇼 台湾 PGCP",
         "🇯🇵 东京 OCI",
         "🇺🇸 洛杉矶 DC02",
         "🇺🇸 洛杉矶 NAT",
@@ -225,6 +230,7 @@
         "手动选择",
         "🇭🇰 香港 CF",
         "🇹🇼 台湾 FGCP",
+        "🇹🇼 台湾 PGCP",
         "🇯🇵 东京 OCI",
         "🇺🇸 洛杉矶 DC02",
         "🇺🇸 洛杉矶 NAT",
@@ -242,6 +248,7 @@
         "手动选择",
         "🇭🇰 香港 CF",
         "🇹🇼 台湾 FGCP",
+        "🇹🇼 台湾 PGCP",
         "🇯🇵 东京 OCI",
         "🇺🇸 洛杉矶 DC02",
         "🇺🇸 洛杉矶 NAT",
@@ -259,6 +266,7 @@
         "手动选择",
         "🇭🇰 香港 CF",
         "🇹🇼 台湾 FGCP",
+        "🇹🇼 台湾 PGCP",
         "🇯🇵 东京 OCI",
         "🇺🇸 洛杉矶 DC02",
         "🇺🇸 洛杉矶 NAT",
@@ -276,6 +284,7 @@
         "手动选择",
         "🇭🇰 香港 CF",
         "🇹🇼 台湾 FGCP",
+        "🇹🇼 台湾 PGCP",
         "🇯🇵 东京 OCI",
         "🇺🇸 洛杉矶 DC02",
         "🇺🇸 洛杉矶 NAT",
@@ -293,6 +302,7 @@
         "手动选择",
         "🇭🇰 香港 CF",
         "🇹🇼 台湾 FGCP",
+        "🇹🇼 台湾 PGCP",
         "🇯🇵 东京 OCI",
         "🇺🇸 洛杉矶 DC02",
         "🇺🇸 洛杉矶 NAT",
@@ -310,6 +320,7 @@
         "手动选择",
         "🇭🇰 香港 CF",
         "🇹🇼 台湾 FGCP",
+        "🇹🇼 台湾 PGCP",
         "🇯🇵 东京 OCI",
         "🇺🇸 洛杉矶 DC02",
         "🇺🇸 洛杉矶 NAT",
@@ -327,6 +338,7 @@
         "手动选择",
         "🇭🇰 香港 CF",
         "🇹🇼 台湾 FGCP",
+        "🇹🇼 台湾 PGCP",
         "🇯🇵 东京 OCI",
         "🇺🇸 洛杉矶 DC02",
         "🇺🇸 洛杉矶 NAT",
@@ -344,6 +356,7 @@
         "手动选择",
         "🇭🇰 香港 CF",
         "🇹🇼 台湾 FGCP",
+        "🇹🇼 台湾 PGCP",
         "🇯🇵 东京 OCI",
         "🇺🇸 洛杉矶 DC02",
         "🇺🇸 洛杉矶 NAT",
@@ -357,10 +370,11 @@
       "tag": "📞 TALKATONE",
       "type": "selector",
       "interrupt_exist_connections": true,
-      "outbounds": [        
+      "outbounds": [
         "手动选择",
         "🇭🇰 香港 CF",
         "🇹🇼 台湾 FGCP",
+        "🇹🇼 台湾 PGCP",
         "🇯🇵 东京 OCI",
         "🇺🇸 洛杉矶 DC02",
         "🇺🇸 洛杉矶 NAT",
@@ -450,6 +464,28 @@
         "utls": {
           "enabled": true,
           "fingerprint": "chrome"
+        }
+      }
+    },
+    {
+      "tag": "🇹🇼 台湾 PGCP",
+      "type": "vless",
+      "server": "35.206.245.251",
+      "server_port": 34486,
+      "uuid": "10c8e944-30e3-4740-a367-d09a852dae0e",
+      "flow": "xtls-rprx-vision",
+      "packet_encoding": "xudp",
+      "tls": {
+        "enabled": true,
+        "server_name": "apple.com",
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "reality": {
+          "enabled": true,
+          "public_key": "_AiTppzf44DCwm9CdvgDy_OYrCxBvDoq60qGTGni318",
+          "short_id": "3487d991"
         }
       }
     },
