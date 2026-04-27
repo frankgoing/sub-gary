@@ -1,0 +1,247 @@
+function initMusicClient() {
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+  const analyser = audioCtx.createAnalyser()
+  const dataArray = new Uint8Array(analyser.frequencyBinCount)
+  const audio = new Audio()
+  audio.crossOrigin = 'anonymous'
+  audio.preload = 'auto'
+
+  const src = audioCtx.createMediaElementSource(audio)
+  src.connect(analyser)
+  analyser.connect(audioCtx.destination)
+
+  const { ref, computed } = Vue
+  const playList = ref([]), playing = ref(false), index = ref(0), percent = ref(0)
+  const title = ref('歌曲列表'), currentLrc = ref(''), nextLrc = ref(''), lrcData = ref([]), lrcDuration = ref(0)
+  const loopMode = ref(0), currentTimeStr = ref('00:00'), durationStr = ref('00:00'), currentLrcIndex = ref(-1)
+
+  const formatTime = (time) => {
+    if (isNaN(time)) return '00:00'
+    const min = Math.floor(time / 60).toString().padStart(2, '0')
+    const sec = Math.floor(time % 60).toString().padStart(2, '0')
+    return `${min}:${sec}`
+  }
+
+  const parseLrc = async (url) => {
+    lrcData.value = []; currentLrc.value = ''; nextLrc.value = ''; currentLrcIndex.value = -1;
+    try {
+      const res = await fetch(url)
+      if (!res.ok) return
+      const text = await res.text()
+      const lines = text.split('\n')
+      const timeExp = /\[(\d{2}):(\d{2})[:\.](\d{2,3})\]/
+      const parsed = []
+      lines.forEach(line => {
+        const m = timeExp.exec(line)
+        if (m) {
+          const time = parseInt(m[1]) * 60 + parseInt(m[2]) + parseInt(m[3]) / (m[3].length === 3 ? 1000 : 100)
+          parsed.push({ time, content: line.replace(timeExp, '').trim() })
+        }
+      })
+      lrcData.value = parsed.filter(i => i.content).sort((a, b) => a.time - b.time)
+    } catch (e) {}
+  }
+
+  audio.onplay = () => { playing.value = true; if (audioCtx.state === 'suspended') audioCtx.resume() }
+  audio.onpause = () => { playing.value = false }
+  audio.onended = () => { 
+    if (loopMode.value === 1) { audio.currentTime = 0; audio.play() } 
+    else if (playList.value.length) { index.value = (index.value + 1) % playList.value.length; play() }
+  }
+  
+  audio.ontimeupdate = (e) => {
+    const cur = e.target.currentTime, dur = e.target.duration
+    percent.value = (cur / dur) * 100 || 0
+    currentTimeStr.value = formatTime(cur); durationStr.value = formatTime(dur)
+    const idx = [...lrcData.value].map((item, i) => ({ item, i })).reverse().find(({ item }) => cur >= item.time)
+    if (idx) {
+      const { item: hit, i } = idx
+      if (currentLrcIndex.value !== i) {
+        currentLrcIndex.value = i
+        currentLrc.value = hit.content
+        const next = lrcData.value[i + 1]
+        nextLrc.value = next ? next.content : ''
+        lrcDuration.value = next ? (next.time - hit.time) : 5
+      }
+    }
+  }
+
+  const play = () => {
+    const s = playList.value[index.value]
+    if (s) {
+      title.value = s.displayName; audio.src = s.url
+      parseLrc(s.url.substring(0, s.url.lastIndexOf('.')) + '.lrc')
+      audio.play().catch(() => { audio.muted = true; audio.play().then(() => audio.muted = false) })
+    }
+  }
+
+  return {
+    playList, isPlaying: computed(() => playing.value), index, percent, title,
+    analyser, dataArray, currentLrc, nextLrc, currentLrcIndex, lrcDuration, loopMode, currentTimeStr, durationStr, play,
+    seek: (val) => { if (audio.duration) audio.currentTime = (val / 100) * audio.duration },
+    toggle: () => { if (!audio.src) play(); else audio.paused ? audio.play() : audio.pause() },
+    prev: () => { if (playList.value.length) { index.value = (index.value - 1 + playList.value.length) % playList.value.length; play() } },
+    next: () => { if (playList.value.length) { index.value = (index.value + 1) % playList.value.length; play() } },
+    toggleLoop: () => { loopMode.value = loopMode.value === 0 ? 1 : 0 },
+    refreshPlayList: async () => {
+      try {
+        const fs = await Plugins.ReadDir("C:/Users/zhaow/Music")
+        playList.value = fs.filter(f => !f.isDir && /\.(mp3|flac|wav|m4a)$/i.test(f.name))
+          .map(f => ({ name: f.name, displayName: f.name.replace(/\.[^/.]+$/, ""), url: `http://127.0.0.1:53421/static/${encodeURIComponent(f.name)}` }))
+      } catch (e) { title.value = "文件夹读取失败" }
+    },
+    destroy: () => { audio.pause(); audio.src = ''; audioCtx.close(); }
+  }
+}
+
+window[Plugin.id] = window[Plugin.id] || initMusicClient()
+
+const onRun = async () => {
+  await stopMusicServer().catch(() => {})
+  await Plugins.StartServer('127.0.0.1:53421', Plugin.id, (req, res) => { res.end('Running') }, {
+    StaticPath: "C:/Users/zhaow/Music",
+    StaticHeaders: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*' }
+  })
+
+  await window[Plugin.id].refreshPlayList()
+
+  const modal = Plugins.modal({
+    title: Plugin.name, width: '90', height: '90', submit: false, cancelText: '退出',
+    afterClose() { if (window[Plugin.id]) window[Plugin.id].destroy(); window[Plugin.id] = null; stopMusicServer() }
+  })
+
+  modal.setContent({
+    template: `
+    <div class="relative flex flex-col h-full justify-end overflow-hidden">
+      <style>
+        @keyframes lyric-fill { 0% { background-position: 100% 0; } 100% { background-position: 0% 0; } }
+        .karaoke-text { background: linear-gradient(to right, #3a5cff 50%, #000000 50%); background-size: 200% 100%; background-position: 100% 0; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .karaoke-active { animation: lyric-fill v-bind('lrcDuration + "s"') linear forwards; }
+        
+        .music-slider { 
+          -webkit-appearance: none; 
+          width: 100%; 
+          height: 4px; 
+          background: rgba(0, 0, 0, 0.1); 
+          border-radius: 2px; 
+          outline: none; 
+          cursor: pointer;
+          min-width: 0;
+        }
+        .music-slider::-webkit-slider-thumb { 
+          -webkit-appearance: none; 
+          width: 12px; 
+          height: 12px; 
+          background: #3a5cff; 
+          border-radius: 50%; 
+          border: 2px solid white; 
+        }
+        
+        .mode-btn-square {
+          width: 28px; height: 28px;
+          background: transparent;
+          display: flex; align-items: center; justify-content: center;
+          border-radius: 4px;
+          margin-left: 10px;
+          flex-shrink: 0;
+          cursor: pointer;
+          -webkit-text-fill-color: initial;
+        }
+      </style>
+      
+      <canvas ref="canvas" class="absolute inset-0 w-full h-full"></canvas>
+      
+      <div v-if="currentLrc" class="absolute inset-x-0 flex flex-col items-center z-50 px-6 pointer-events-none" style="top: 5%;">
+        <div :key="currentLrc" class="karaoke-text karaoke-active text-4xl font-black text-center">{{ currentLrc }}</div>
+      </div>
+
+      <div class="absolute left-8 right-8 flex justify-between items-center z-20" style="top: 50%; transform: translateY(-50%)">
+        <Button type="text" size="large" icon="backward" @click="prev" />
+        <Button type="text" class="flex items-center justify-center w-128 h-128 rounded-full" @click="toggle">
+          <Icon :icon="isPlaying ? 'pause' : 'play'" :size="80" color="var(--color)" />
+        </Button>
+        <Button type="text" size="large" icon="forward" @click="next" />
+      </div>
+
+      <div class="absolute w-full bottom-6 z-20 flex flex-col items-center px-4" style="box-sizing: border-box;">
+        <div class="text-xs font-bold mb-4 truncate w-full text-center" style="color: var(--color); opacity: 0.8">{{ title }}</div>
+        
+        <div class="flex items-center w-full px-2" style="box-sizing: border-box; min-width: 0;">
+          <span class="text-xs tabular-nums flex-shrink-0" style="color: var(--color); opacity: 0.6; white-space: nowrap;">{{ currentTimeStr }}</span>
+          
+          <input type="range" class="music-slider flex-1 mx-2" min="0" max="100" :value="percent" @input="e => seek(e.target.value)" />
+          
+          <span class="text-xs tabular-nums flex-shrink-0" style="color: var(--color); opacity: 0.6; white-space: nowrap;">{{ durationStr }}</span>
+          
+          <div class="mode-btn-square" @click="toggleLoop">
+            <svg v-if="loopMode === 1" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3a5cff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="17 1 21 5 17 9"></polyline>
+              <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+              <polyline points="7 23 3 19 7 15"></polyline>
+              <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+              <text x="9" y="14" font-size="7" fill="#3a5cff" stroke="none" font-weight="bold">1</text>
+            </svg>
+            <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3a5cff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="4" y1="12" x2="18" y2="12"></line>
+              <polyline points="13 7 18 12 13 17"></polyline>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    `,
+    setup(_, { expose }) {
+      const client = window[Plugin.id]
+      const { h, ref, resolveComponent, onMounted, onUnmounted } = Vue
+      const canvas = ref(), appSettings = Plugins.useAppSettingsStore()
+      let animationId
+
+      onMounted(() => {
+        const ctx = canvas.value.getContext('2d')
+        const resize = () => { canvas.value.width = canvas.value.clientWidth; canvas.value.height = canvas.value.clientHeight }
+        window.addEventListener('resize', resize); resize()
+        let t = 0, rot = 0
+        function draw() {
+          animationId = requestAnimationFrame(draw); client.analyser.getByteFrequencyData(client.dataArray)
+          rot += 0.001; t += 0.005
+          ctx.fillStyle = appSettings.themeMode === 'light' ? '#F6F6F6' : '#343434'
+          ctx.fillRect(0, 0, canvas.value.width, canvas.value.height)
+          const cx = canvas.value.width / 2, cy = canvas.value.height / 2
+          const style = getComputedStyle(document.documentElement)
+          const primaryColor = style.getPropertyValue('--primary-color') || '#d6f0ff', secondaryColor = style.getPropertyValue('--secondary-color') || '#3a5cff'
+          let energy = 0; for (let i = 0; i < 50; i++) energy += client.dataArray[i]; energy = energy / 50 / 255
+          let planet = 80 + energy * 50 + Math.sin(t) * 8
+          let grad = ctx.createRadialGradient(cx-40, cy-40, 20, cx, cy, planet)
+          grad.addColorStop(0, primaryColor); grad.addColorStop(1, secondaryColor)
+          ctx.beginPath(); ctx.fillStyle = grad; ctx.arc(cx, cy, planet, 0, Math.PI * 2); ctx.fill()
+          for (let i = 0; i < 200; i++) {
+            let angle = (i / 200) * Math.PI * 2 + rot, r = planet + 30 + (client.dataArray[i % 128] / 255) * 40 + Math.sin(angle * 3 + t * 5) * 12
+            ctx.fillStyle = secondaryColor; ctx.fillRect(cx + Math.cos(angle) * r, cy + Math.sin(angle) * r, 2, 2)
+          }
+        }
+        draw()
+      })
+
+      onUnmounted(() => { cancelAnimationFrame(animationId) })
+
+      const Dropdown = resolveComponent('Dropdown'), Button = resolveComponent('Button')
+      expose({
+        modalSlots: {
+          toolbar: () => h(Button, { type: 'text', onClick() { modal.close() } }, () => '最小化'),
+          action: () => h('div', { class: 'mr-auto' }, h(Dropdown, { placement: 'top' }, {
+            overlay: () => h('div', { class: 'flex flex-col gap-2 min-w-64 p-2 overflow-y-auto max-h-96' },
+              client.playList.value.map((v, i) => h(Button, {
+                type: client.index.value === i ? 'link' : 'text',
+                onClick() { client.index.value = i; client.play() }
+              }, () => v.displayName))),
+            default: () => h(Button, { type: 'link' }, () => client.title.value)
+          }))
+        }
+      })
+      return { canvas, ...client }
+    }
+  })
+  modal.open()
+}
+
+const stopMusicServer = async () => { await Plugins.StopServer(Plugin.id).catch(() => {}) }
