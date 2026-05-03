@@ -12,7 +12,7 @@
             "secret": "",
             "default_mode": "rule",
             "external_ui_download_url": "https://ghfast.top/https://github.com/Zephyruso/zashboard/archive/refs/heads/gh-pages.zip",
-            "external_ui_download_detour": "🇨🇦 中国直连",
+            "external_ui_download_detour": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde",
             "access_control_allow_origin": [
                 "http://127.0.0.1",
                 "http://localhost",
@@ -37,19 +37,19 @@
             {
                 "tag": "local",
                 "address": "local",
-                "detour": "🇨🇦 中国直连"
+                "detour": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde"
             },
             {
                 "tag": "DIRECT-DNS",
                 "address_resolver": "local",
                 "address": "https://dns.alidns.com/dns-query",
-                "detour": "🇨🇦 中国直连"
+                "detour": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde"
             },
             {
                 "tag": "PROXY-DNS",
                 "address_resolver": "local",
                 "address": "https://dns.google/dns-query",
-                "detour": "手动选择"
+                "detour": "\u624b\u52a8\u9009\u62e9"
             },
             {
                 "tag": "FAKEIP-DNS",
@@ -119,11 +119,11 @@
     ],
     "outbounds": [
         {
-            "tag": "🇨🇦 全局直连",
+            "tag": "\ud83c\udde8\ud83c\uddf3 \u5168\u5c40\u76f4\u8fde",
             "type": "direct"
         },
         {
-            "tag": "🚫 拒绝连接",
+            "tag": "\ud83d\udeab \u62d2\u7edd\u8fde\u63a5",
             "type": "socks",
             "server": "127.0.0.1",
             "server_port": 1024,
@@ -134,312 +134,312 @@
             "udp_over_tcp": false
         },
         {
-            "tag": "手动选择",
+            "tag": "\u624b\u52a8\u9009\u62e9",
             "type": "selector",
             "interrupt_exist_connections": true,
             "outbounds": [
-                "自动选择",
-                "🇨🇦 香港 CF",
-                "🇺🇸 洛杉矶 NAT",
-                "🇺🇸 洛杉矶 DC02",
-                "🇺🇸 洛杉矶 DC02 TUIC",
-                "🇺🇸 洛杉矶 DC02 HY2",
-                "🇺🇸 俄勒冈 GCP TUIC",
-                "🇺🇸 俄勒冈 GCP HY2",
-                "🇩🇪 德国 EUserv",
-                "🇩🇪 德国 EUserv TUIC",
-                "🇨🇦 全局直连"
+                "\u81ea\u52a8\u9009\u62e9",
+                "\ud83c\udded\ud83c\uddf0 \u9999\u6e2f CF",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 NAT",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02 TUIC",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02 HY2",
+                "\ud83c\uddfa\ud83c\uddf8 \u4fc4\u52d2\u5188 GCP TUIC",
+                "\ud83c\uddfa\ud83c\uddf8 \u4fc4\u52d2\u5188 GCP HY2",
+                "\ud83c\udde9\ud83c\uddea \u5fb7\u56fd EUserv",
+                "\ud83c\udde9\ud83c\uddea \u5fb7\u56fd EUserv TUIC",
+                "\ud83c\udde8\ud83c\uddf3 \u5168\u5c40\u76f4\u8fde"
             ],
-            "default": "自动选择"
+            "default": "\u81ea\u52a8\u9009\u62e9"
         },
         {
-            "tag": "自动选择",
+            "tag": "\u81ea\u52a8\u9009\u62e9",
             "type": "urltest",
             "outbounds": [
-                "🇨🇦 香港 CF",
-                "🇺🇸 洛杉矶 NAT",
-                "🇺🇸 洛杉矶 DC02",
-                "🇺🇸 洛杉矶 DC02 TUIC",
-                "🇺🇸 洛杉矶 DC02 HY2",
-                "🇺🇸 俄勒冈 GCP TUIC",
-                "🇺🇸 俄勒冈 GCP HY2",
-                "🇩🇪 德国 EUserv",
-                "🇩🇪 德国 EUserv TUIC"
+                "\ud83c\udded\ud83c\uddf0 \u9999\u6e2f CF",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 NAT",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02 TUIC",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02 HY2",
+                "\ud83c\uddfa\ud83c\uddf8 \u4fc4\u52d2\u5188 GCP TUIC",
+                "\ud83c\uddfa\ud83c\uddf8 \u4fc4\u52d2\u5188 GCP HY2",
+                "\ud83c\udde9\ud83c\uddea \u5fb7\u56fd EUserv",
+                "\ud83c\udde9\ud83c\uddea \u5fb7\u56fd EUserv TUIC"
             ],
             "url": "http://www.msftconnecttest.com/connecttest.txt",
             "interval": "3m",
             "tolerance": 50
         },
         {
-            "tag": "🤖 AI",
+            "tag": "\ud83e\udd16 AI",
             "type": "selector",
             "interrupt_exist_connections": true,
             "outbounds": [
-                "手动选择",
-                "🇨🇦 香港 CF",
-                "🇺🇸 洛杉矶 NAT",
-                "🇺🇸 洛杉矶 DC02",
-                "🇺🇸 洛杉矶 DC02 TUIC",
-                "🇺🇸 洛杉矶 DC02 HY2",
-                "🇺🇸 俄勒冈 GCP TUIC",
-                "🇺🇸 俄勒冈 GCP HY2",
-                "🇩🇪 德国 EUserv",
-                "🇩🇪 德国 EUserv TUIC",
-                "🇨🇦 全局直连"
+                "\u624b\u52a8\u9009\u62e9",
+                "\ud83c\udded\ud83c\uddf0 \u9999\u6e2f CF",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 NAT",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02 TUIC",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02 HY2",
+                "\ud83c\uddfa\ud83c\uddf8 \u4fc4\u52d2\u5188 GCP TUIC",
+                "\ud83c\uddfa\ud83c\uddf8 \u4fc4\u52d2\u5188 GCP HY2",
+                "\ud83c\udde9\ud83c\uddea \u5fb7\u56fd EUserv",
+                "\ud83c\udde9\ud83c\uddea \u5fb7\u56fd EUserv TUIC",
+                "\ud83c\udde8\ud83c\uddf3 \u5168\u5c40\u76f4\u8fde"
             ],
-            "default": "🇺🇸 洛杉矶 NAT"
+            "default": "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 NAT"
         },
         {
-            "tag": "💬 TELEGRAM",
+            "tag": "\ud83d\udcf2 TELEGRAM",
             "type": "selector",
             "interrupt_exist_connections": true,
             "outbounds": [
-                "手动选择",
-                "🇨🇦 香港 CF",
-                "🇺🇸 洛杉矶 NAT",
-                "🇺🇸 洛杉矶 DC02",
-                "🇺🇸 洛杉矶 DC02 TUIC",
-                "🇺🇸 洛杉矶 DC02 HY2",
-                "🇺🇸 俄勒冈 GCP TUIC",
-                "🇺🇸 俄勒冈 GCP HY2",
-                "🇩🇪 德国 EUserv",
-                "🇩🇪 德国 EUserv TUIC",
-                "🇨🇦 全局直连"
+                "\u624b\u52a8\u9009\u62e9",
+                "\ud83c\udded\ud83c\uddf0 \u9999\u6e2f CF",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 NAT",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02 TUIC",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02 HY2",
+                "\ud83c\uddfa\ud83c\uddf8 \u4fc4\u52d2\u5188 GCP TUIC",
+                "\ud83c\uddfa\ud83c\uddf8 \u4fc4\u52d2\u5188 GCP HY2",
+                "\ud83c\udde9\ud83c\uddea \u5fb7\u56fd EUserv",
+                "\ud83c\udde9\ud83c\uddea \u5fb7\u56fd EUserv TUIC",
+                "\ud83c\udde8\ud83c\uddf3 \u5168\u5c40\u76f4\u8fde"
             ],
-            "default": "🇨🇦 香港 CF"
+            "default": "\ud83c\udded\ud83c\uddf0 \u9999\u6e2f CF"
         },
         {
-            "tag": "🐦 X",
+            "tag": "\ud83d\udc26 X",
             "type": "selector",
             "interrupt_exist_connections": true,
             "outbounds": [
-                "手动选择",
-                "🇨🇦 香港 CF",
-                "🇺🇸 洛杉矶 NAT",
-                "🇺🇸 洛杉矶 DC02",
-                "🇺🇸 洛杉矶 DC02 TUIC",
-                "🇺🇸 洛杉矶 DC02 HY2",
-                "🇺🇸 俄勒冈 GCP TUIC",
-                "🇺🇸 俄勒冈 GCP HY2",
-                "🇩🇪 德国 EUserv",
-                "🇩🇪 德国 EUserv TUIC",
-                "🇨🇦 全局直连"
+                "\u624b\u52a8\u9009\u62e9",
+                "\ud83c\udded\ud83c\uddf0 \u9999\u6e2f CF",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 NAT",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02 TUIC",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02 HY2",
+                "\ud83c\uddfa\ud83c\uddf8 \u4fc4\u52d2\u5188 GCP TUIC",
+                "\ud83c\uddfa\ud83c\uddf8 \u4fc4\u52d2\u5188 GCP HY2",
+                "\ud83c\udde9\ud83c\uddea \u5fb7\u56fd EUserv",
+                "\ud83c\udde9\ud83c\uddea \u5fb7\u56fd EUserv TUIC",
+                "\ud83c\udde8\ud83c\uddf3 \u5168\u5c40\u76f4\u8fde"
             ],
-            "default": "🇺🇸 洛杉矶 NAT"
+            "default": "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 NAT"
         },
         {
-            "tag": "🎥 TIKTOK",
+            "tag": "\ud83c\udfa5 TIKTOK",
             "type": "selector",
             "interrupt_exist_connections": true,
             "outbounds": [
-                "手动选择",
-                "🇨🇦 香港 CF",
-                "🇺🇸 洛杉矶 NAT",
-                "🇺,🇸 洛杉矶 DC02",
-                "🇺🇸 洛杉矶 DC02 TUIC",
-                "🇺🇸 洛杉矶 DC02 HY2",
-                "🇺🇸 俄勒冈 GCP TUIC",
-                "🇺🇸 俄勒冈 GCP HY2",
-                "🇩🇪 德国 EUserv",
-                "🇩🇪 德国 EUserv TUIC",
-                "🇨🇦 全局直连"
+                "\u624b\u52a8\u9009\u62e9",
+                "\ud83c\udded\ud83c\uddf0 \u9999\u6e2f CF",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 NAT",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02 TUIC",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02 HY2",
+                "\ud83c\uddfa\ud83c\uddf8 \u4fc4\u52d2\u5188 GCP TUIC",
+                "\ud83c\uddfa\ud83c\uddf8 \u4fc4\u52d2\u5188 GCP HY2",
+                "\ud83c\udde9\ud83c\uddea \u5fb7\u56fd EUserv",
+                "\ud83c\udde9\ud83c\uddea \u5fb7\u56fd EUserv TUIC",
+                "\ud83c\udde8\ud83c\uddf3 \u5168\u5c40\u76f4\u8fde"
             ],
-            "default": "🇺🇸 洛杉矶 NAT"
+            "default": "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 NAT"
         },
         {
-            "tag": "📺 YOUTUBE",
+            "tag": "\ud83d\udcfa YOUTUBE",
             "type": "selector",
             "interrupt_exist_connections": true,
             "outbounds": [
-                "手动选择",
-                "🇨🇦 香港 CF",
-                "🇺🇸 洛杉矶 NAT",
-                "🇺🇸 洛杉矶 DC02",
-                "🇺🇸 洛杉矶 DC02 TUIC",
-                "🇺🇸 洛杉矶 DC02 HY2",
-                "🇺🇸 俄勒冈 GCP TUIC",
-                "🇺🇸 俄勒冈 GCP HY2",
-                "🇩🇪 德国 EUserv",
-                "🇩🇪 德国 EUserv TUIC",
-                "🇨🇦 全局直连"
+                "\u624b\u52a8\u9009\u62e9",
+                "\ud83c\udded\ud83c\uddf0 \u9999\u6e2f CF",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 NAT",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02 TUIC",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02 HY2",
+                "\ud83c\uddfa\ud83c\uddf8 \u4fc4\u52d2\u5188 GCP TUIC",
+                "\ud83c\uddfa\ud83c\uddf8 \u4fc4\u52d2\u5188 GCP HY2",
+                "\ud83c\udde9\ud83c\uddea \u5fb7\u56fd EUserv",
+                "\ud83c\udde9\ud83c\uddea \u5fb7\u56fd EUserv TUIC",
+                "\ud83c\udde8\ud83c\uddf3 \u5168\u5c40\u76f4\u8fde"
             ],
-            "default": "🇨🇦 香港 CF"
+            "default": "\ud83c\udded\ud83c\uddf0 \u9999\u6e2f CF"
         },
         {
-            "tag": "🎵 SPOTIFY",
+            "tag": "\ud83c\udfb5 SPOTIFY",
             "type": "selector",
             "interrupt_exist_connections": true,
             "outbounds": [
-                "手动选择",
-                "🇨🇦 香港 CF",
-                "🇺🇸 洛杉矶 NAT",
-                "🇺🇸 洛杉矶 DC02",
-                "🇺🇸 洛杉矶 DC02 TUIC",
-                "🇺🇸 洛杉矶 DC02 HY2",
-                "🇺🇸 俄勒冈 GCP TUIC",
-                "🇺🇸 俄勒冈 GCP HY2",
-                "🇩🇪 德国 EUserv",
-                "🇩🇪 德国 EUserv TUIC",
-                "🇨🇦 全局直连"
+                "\u624b\u52a8\u9009\u62e9",
+                "\ud83c\udded\ud83c\uddf0 \u9999\u6e2f CF",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 NAT",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02 TUIC",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02 HY2",
+                "\ud83c\uddfa\ud83c\uddf8 \u4fc4\u52d2\u5188 GCP TUIC",
+                "\ud83c\uddfa\ud83c\uddf8 \u4fc4\u52d2\u5188 GCP HY2",
+                "\ud83c\udde9\ud83c\uddea \u5fb7\u56fd EUserv",
+                "\ud83c\udde9\ud83c\uddea \u5fb7\u56fd EUserv TUIC",
+                "\ud83c\udde8\ud83c\uddf3 \u5168\u5c40\u76f4\u8fde"
             ],
-            "default": "🇺🇸 洛杉矶 NAT"
+            "default": "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 NAT"
         },
         {
-            "tag": "🌵 LINE",
+            "tag": "\ud83c\udf35 LINE",
             "type": "selector",
             "interrupt_exist_connections": true,
             "outbounds": [
-                "手动选择",
-                "🇨🇦 香港 CF",
-                "🇺🇸 洛杉矶 NAT",
-                "🇺🇸 洛杉矶 DC02",
-                "🇺🇸 洛杉矶 DC02 TUIC",
-                "🇺🇸 洛杉矶 DC02 HY2",
-                "🇺🇸 俄勒冈 GCP TUIC",
-                "🇺🇸 俄勒冈 GCP HY2",
-                "🇩🇪 德国 EUserv",
-                "🇩🇪 德国 EUserv TUIC",
-                "🇨🇦 全局直连"
+                "\u624b\u52a8\u9009\u62e9",
+                "\ud83c\udded\ud83c\uddf0 \u9999\u6e2f CF",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 NAT",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02 TUIC",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02 HY2",
+                "\ud83c\uddfa\ud83c\uddf8 \u4fc4\u52d2\u5188 GCP TUIC",
+                "\ud83c\uddfa\ud83c\uddf8 \u4fc4\u52d2\u5188 GCP HY2",
+                "\ud83c\udde9\ud83c\uddea \u5fb7\u56fd EUserv",
+                "\ud83c\udde9\ud83c\uddea \u5fb7\u56fd EUserv TUIC",
+                "\ud83c\udde8\ud83c\uddf3 \u5168\u5c40\u76f4\u8fde"
             ],
-            "default": "手动选择"
+            "default": "\u624b\u52a8\u9009\u62e9"
         },
         {
-            "tag": "📼 NETFLIX",
+            "tag": "\ud83d\udcf9 NETFLIX",
             "type": "selector",
             "interrupt_exist_connections": true,
             "outbounds": [
-                "手动选择",
-                "🇨🇦 香港 CF",
-                "🇺🇸 洛杉矶 NAT",
-                "🇺🇸 洛杉矶 DC02",
-                "🇺🇸 洛杉矶 DC02 TUIC",
-                "🇺🇸 洛杉矶 DC02 HY2",
-                "🇺🇸 俄勒冈 GCP TUIC",
-                "🇺🇸 俄勒冈 GCP HY2",
-                "🇩🇪 德国 EUserv",
-                "🇩🇪 德国 EUserv TUIC",
-                "🇨🇦 全局直连"
+                "\u624b\u52a8\u9009\u62e9",
+                "\ud83c\udded\ud83c\uddf0 \u9999\u6e2f CF",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 NAT",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02 TUIC",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02 HY2",
+                "\ud83c\uddfa\ud83c\uddf8 \u4fc4\u52d2\u5188 GCP TUIC",
+                "\ud83c\uddfa\ud83c\uddf8 \u4fc4\u52d2\u5188 GCP HY2",
+                "\ud83c\udde9\ud83c\uddea \u5fb7\u56fd EUserv",
+                "\ud83c\udde9\ud83c\uddea \u5fb7\u56fd EUserv TUIC",
+                "\ud83c\udde8\ud83c\uddf3 \u5168\u5c40\u76f4\u8fde"
             ],
-            "default": "🇺🇸 洛杉矶 NAT"
+            "default": "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 NAT"
         },
         {
-            "tag": "🔍 GOOGLE",
+            "tag": "\ud83d\udd0d GOOGLE",
             "type": "selector",
             "interrupt_exist_connections": true,
             "outbounds": [
-                "手动选择",
-                "🇨🇦 香港 CF",
-                "🇺🇸 洛杉矶 NAT",
-                "🇺🇸 洛杉矶 DC02",
-                "🇺🇸 洛杉矶 DC02 TUIC",
-                "🇺🇸 洛杉矶 DC02 HY2",
-                "🇺🇸 俄勒冈 GCP TUIC",
-                "🇺🇸 俄勒冈 GCP HY2",
-                "🇩🇪 德国 EUserv",
-                "🇩🇪 德国 EUserv TUIC",
-                "🇨🇦 全局直连"
+                "\u624b\u52a8\u9009\u62e9",
+                "\ud83c\udded\ud83c\uddf0 \u9999\u6e2f CF",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 NAT",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02 TUIC",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02 HY2",
+                "\ud83c\uddfa\ud83c\uddf8 \u4fc4\u52d2\u5188 GCP TUIC",
+                "\ud83c\uddfa\ud83c\uddf8 \u4fc4\u52d2\u5188 GCP HY2",
+                "\ud83c\udde9\ud83c\uddea \u5fb7\u56fd EUserv",
+                "\ud83c\udde9\ud83c\uddea \u5fb7\u56fd EUserv TUIC",
+                "\ud83c\udde8\ud83c\uddf3 \u5168\u5c40\u76f4\u8fde"
             ],
-            "default": "🇺🇸 洛杉矶 NAT"
+            "default": "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 NAT"
         },
         {
-            "tag": "📖 MICROSOFT",
+            "tag": "\ud83d\udcd6 MICROSOFT",
             "type": "selector",
             "interrupt_exist_connections": true,
             "outbounds": [
-                "手动选择",
-                "🇨🇦 香港 CF",
-                "🇺🇸 洛杉矶 NAT",
-                "🇺🇸 洛杉矶 DC02",
-                "🇺5 洛杉矶 DC02 TUIC",
-                "🇺🇸 洛杉矶 DC02 HY2",
-                "🇺🇸 俄勒冈 GCP TUIC",
-                "🇺🇸 俄勒冈 GCP HY2",
-                "🇩🇪 德国 EUserv",
-                "🇩🇪 德国 EUserv TUIC",
-                "🇨🇦 全局直连"
+                "\u624b\u52a8\u9009\u62e9",
+                "\ud83c\udded\ud83c\uddf0 \u9999\u6e2f CF",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 NAT",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02 TUIC",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02 HY2",
+                "\ud83c\uddfa\ud83c\uddf8 \u4fc4\u52d2\u5188 GCP TUIC",
+                "\ud83c\uddfa\ud83c\uddf8 \u4fc4\u52d2\u5188 GCP HY2",
+                "\ud83c\udde9\ud83c\uddea \u5fb7\u56fd EUserv",
+                "\ud83c\udde9\ud83c\uddea \u5fb7\u56fd EUserv TUIC",
+                "\ud83c\udde8\ud83c\uddf3 \u5168\u5c40\u76f4\u8fde"
             ],
-            "default": "🇨🇦 全局直连"
+            "default": "\ud83c\udde8\ud83c\uddf3 \u5168\u5c40\u76f4\u8fde"
         },
         {
-            "tag": "🍎 APPLE",
+            "tag": "\ud83c\udf4e APPLE",
             "type": "selector",
             "interrupt_exist_connections": true,
             "outbounds": [
-                "手动选择",
-                "🇨🇦 香港 CF",
-                "🇺🇸 洛杉矶 NAT",
-                "🇺🇸 洛杉矶 DC02",
-                "🇺🇸 洛杉矶 DC02 TUIC",
-                "🇺🇸 洛杉矶 DC02 HY2",
-                "🇺🇸 俄勒冈 GCP TUIC",
-                "🇺🇸 俄勒冈 GCP HY2",
-                "🇩🇪 德国 EUserv",
-                "🇩🇪 德国 EUserv TUIC",
-                "🇨🇦 全局直连"
+                "\u624b\u52a8\u9009\u62e9",
+                "\ud83c\udded\ud83c\uddf0 \u9999\u6e2f CF",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 NAT",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02 TUIC",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02 HY2",
+                "\ud83c\uddfa\ud83c\uddf8 \u4fc4\u52d2\u5188 GCP TUIC",
+                "\ud83c\uddfa\ud83c\uddf8 \u4fc4\u52d2\u5188 GCP HY2",
+                "\ud83c\udde9\ud83c\uddea \u5fb7\u56fd EUserv",
+                "\ud83c\udde9\ud83c\uddea \u5fb7\u56fd EUserv TUIC",
+                "\ud83c\udde8\ud83c\uddf3 \u5168\u5c40\u76f4\u8fde"
             ],
-            "default": "🇨🇦 全局直连"
+            "default": "\ud83c\udde8\ud83c\uddf3 \u5168\u5c40\u76f4\u8fde"
         },
         {
-            "tag": "📞 TALKATONE",
+            "tag": "\ud83d\udcde TALKATONE",
             "type": "selector",
             "interrupt_exist_connections": true,
             "outbounds": [
-                "手动选择",
-                "🇨🇦 香港 CF",
-                "🇺🇸 洛杉矶 NAT",
-                "🇺🇸 洛杉矶 DC02",
-                "🇺🇸 洛杉矶 DC02 TUIC",
-                "🇺🇸 洛杉矶 DC02 HY2",
-                "🇺🇸 俄勒冈 GCP TUIC",
-                "🇺🇸 俄勒冈 GCP HY2",
-                "🇩🇪 德国 EUserv",
-                "🇩🇪 德国 EUserv TUIC",
-                "🇨🇦 全局直连"
+                "\u624b\u52a8\u9009\u62e9",
+                "\ud83c\udded\ud83c\uddf0 \u9999\u6e2f CF",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 NAT",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02 TUIC",
+                "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02 HY2",
+                "\ud83c\uddfa\ud83c\uddf8 \u4fc4\u52d2\u5188 GCP TUIC",
+                "\ud83c\uddfa\ud83c\uddf8 \u4fc4\u52d2\u5188 GCP HY2",
+                "\ud83c\udde9\ud83c\uddea \u5fb7\u56fd EUserv",
+                "\ud83c\udde9\ud83c\uddea \u5fb7\u56fd EUserv TUIC",
+                "\ud83c\udde8\ud83c\uddf3 \u5168\u5c40\u76f4\u8fde"
             ],
-            "default": "手动选择"
+            "default": "\u624b\u52a8\u9009\u62e9"
         },
         {
-            "tag": "🇨🇦 中国直连",
+            "tag": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde",
             "type": "selector",
             "interrupt_exist_connections": true,
             "outbounds": [
-                "手动选择",
-                "🇨🇦 全局直连"
+                "\u624b\u52a8\u9009\u62e9",
+                "\ud83c\udde8\ud83c\uddf3 \u5168\u5c40\u76f4\u8fde"
             ],
-            "default": "🇨🇦 全局直连"
+            "default": "\ud83c\udde8\ud83c\uddf3 \u5168\u5c40\u76f4\u8fde"
         },
         {
-            "tag": "🔊 广告拦截",
+            "tag": "\ud83d\udd08 \u5e7f\u544a\u62e6\u622a",
             "type": "selector",
             "interrupt_exist_connections": true,
             "outbounds": [
-                "🚫 拒绝连接",
-                "🇨🇦 中国直连",
-                "手动选择"
+                "\ud83d\udeab \u62d2\u7edd\u8fde\u63a5",
+                "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde",
+                "\u624b\u52a8\u9009\u62e9"
             ]
         },
         {
-            "tag": "💧 泄露拦截",
+            "tag": "\ud83d\udca7 \u6cc4\u6f0f\u62e6\u622a",
             "type": "selector",
             "interrupt_exist_connections": true,
             "outbounds": [
-                "🚫 拒绝连接",
-                "🇨🇦 中国直连",
-                "手动选择"
+                "\ud83d\udeab \u62d2\u7edd\u8fde\u63a5",
+                "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde",
+                "\u624b\u52a8\u9009\u62e9"
             ]
         },
         {
-            "tag": "🔎 HTTPDNS",
+            "tag": "\ud83d\udd0e HTTPDNS",
             "type": "selector",
             "interrupt_exist_connections": true,
             "outbounds": [
-                "🚫 拒绝连接",
-                "🇨🇦 中国直连",
-                "手动选择"
+                "\ud83d\udeab \u62d2\u7edd\u8fde\u63a5",
+                "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde",
+                "\u624b\u52a8\u9009\u62e9"
             ]
         },
         {
-            "tag": "🇨🇦 香港 CF",
+            "tag": "\ud83c\udded\ud83c\uddf0 \u9999\u6e2f CF",
             "type": "vless",
             "server": "104.18.39.209",
             "server_port": 443,
@@ -461,7 +461,7 @@
             }
         },
         {
-            "tag": "🇺🇸 洛杉矶 NAT",
+            "tag": "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 NAT",
             "type": "vless",
             "server": "104.18.39.209",
             "server_port": 2083,
@@ -479,7 +479,7 @@
             }
         },
         {
-            "tag": "🇺🇸 洛杉矶 DC02",
+            "tag": "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02",
             "type": "vless",
             "server": "104.18.39.209",
             "server_port": 2096,
@@ -501,7 +501,7 @@
             }
         },
         {
-            "tag": "🇺🇸 洛杉矶 DC02 TUIC",
+            "tag": "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02 TUIC",
             "type": "tuic",
             "server": "sui02.666014.xyz",
             "server_port": 41322,
@@ -518,7 +518,7 @@
             }
         },
         {
-            "tag": "🇺🇸 洛杉矶 DC02 HY2",
+            "tag": "\ud83c\uddfa\ud83c\uddf8 \u6d1b\u6749\u77f6 DC02 HY2",
             "type": "hysteria2",
             "server": "sui02.666014.xyz",
             "server_port": 42648,
@@ -537,7 +537,7 @@
             }
         },
         {
-            "tag": "🇺🇸 俄勒冈 GCP TUIC",
+            "tag": "\ud83c\uddfa\ud83c\uddf8 \u4fc4\u52d2\u5188 GCP TUIC",
             "type": "tuic",
             "server": "35.212.135.196",
             "server_port": 55318,
@@ -554,7 +554,7 @@
             }
         },
         {
-            "tag": "🇺🇸 俄勒冈 GCP HY2",
+            "tag": "\ud83c\uddfa\ud83c\uddf8 \u4fc4\u52d2\u5188 GCP HY2",
             "type": "hysteria2",
             "server": "35.212.135.196",
             "server_port": 33159,
@@ -571,7 +571,7 @@
             }
         },
         {
-            "tag": "🇩🇪 德国 EUserv",
+            "tag": "\ud83c\udde9\ud83c\uddea \u5fb7\u56fd EUserv",
             "type": "vless",
             "server": "104.18.39.209",
             "server_port": 2096,
@@ -593,7 +593,7 @@
             }
         },
         {
-            "tag": "🇩🇪 德国 EUserv TUIC",
+            "tag": "\ud83c\udde9\ud83c\uddea \u5fb7\u56fd EUserv TUIC",
             "type": "tuic",
             "server": "eus.666014.xyz",
             "server_port": 33500,
@@ -612,7 +612,7 @@
     ],
     "route": {
         "auto_detect_interface": true,
-        "final": "手动选择",
+        "final": "\u624b\u52a8\u9009\u62e9",
         "rules": [
             {
                 "action": "sniff"
@@ -623,22 +623,22 @@
             },
             {
                 "ip_is_private": true,
-                "outbound": "🇨🇦 中国直连"
+                "outbound": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde"
             },
             {
                 "rule_set": [
                     "geoip-apple",
                     "geosite-apple"
                 ],
-                "outbound": "🍎 APPLE"
+                "outbound": "\ud83c\udf4e APPLE"
             },
             {
                 "rule_set": "geosite-ai",
-                "outbound": "🤖 AI"
+                "outbound": "\ud83e\udd16 AI"
             },
             {
                 "rule_set": "geosite-youtube",
-                "outbound": "📺 YOUTUBE"
+                "outbound": "\ud83d\udcfa YOUTUBE"
             },
             {
                 "rule_set": [
@@ -648,17 +648,17 @@
                     "geosite-instagram",
                     "geosite-threads"
                 ],
-                "outbound": "🔍 GOOGLE"
+                "outbound": "\ud83d\udd0d GOOGLE"
             },
             {
                 "clash_mode": "direct",
-                "outbound": "🇨🇦 中国直连"
+                "outbound": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde"
             },
             {
                 "domain": [
                     "cdn.jsdmirror.com"
                 ],
-                "outbound": "🇨🇦 中国直连"
+                "outbound": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde"
             },
             {
                 "rule_set": "geosite-category-ads-all",
@@ -686,7 +686,6 @@
                             "udp"
                         ],
                         "port": [
-                            5349,
                             5350,
                             5351,
                             19302
@@ -698,53 +697,49 @@
                         ]
                     }
                 ],
-                "outbound": "💧 泄露拦截"
+                "outbound": "\ud83d\udca7 \u6cc4\u6f0f\u62e6\u622a"
             },
             {
                 "rule_set": [
                     "BlockHttpDNS"
                 ],
-                "outbound": "🔎 HTTPDNS"
+                "outbound": "\ud83d\udd0e HTTPDNS"
             },
             {
                 "rule_set": "geosite-tiktok",
-                "outbound": "🎥 TIKTOK"
+                "outbound": "\ud83c\udfa5 TIKTOK"
             },
             {
                 "rule_set": "geosite-line",
-                "outbound": "🌵 LINE"
+                "outbound": "\ud83c\udf35 LINE"
             },
             {
                 "rule_set": "geosite-twitter",
-                "outbound": "🐦 X"
+                "outbound": "\ud83d\udc26 X"
             },
             {
                 "rule_set": "geosite-spotify",
-                "outbound": "🎵 SPOTIFY"
+                "outbound": "\ud83c\udfb5 SPOTIFY"
             },
             {
                 "rule_set": [
                     "geoip-telegram",
                     "geosite-telegram"
                 ],
-                "outbound": "💬 TELEGRAM"
+                "outbound": "\ud83d\udcf2 TELEGRAM"
             },
             {
                 "rule_set": [
                     "geoip-netflix",
                     "geosite-netflix"
                 ],
-                "outbound": "📼 NETFLIX"
+                "outbound": "\ud83d\udcf9 NETFLIX"
             },
             {
                 "rule_set": [
                     "geosite-microsoft"
                 ],
-                "outbound": "📖 MICROSOFT"
-            },
-            {
-                "rule_set": "geosite-talkatone",
-                "outbound": "📞 TALKATONE"
+                "outbound": "\ud83d\udcd6 MICROSOFT"
             },
             {
                 "rule_set": [
@@ -752,7 +747,7 @@
                     "geosite-cn",
                     "geosite-private"
                 ],
-                "outbound": "🇨🇦 中国直连"
+                "outbound": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde"
             }
         ],
         "rule_set": [
@@ -761,182 +756,175 @@
                 "type": "remote",
                 "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/private.srs",
                 "format": "binary",
-                "download_detour": "🇨🇦 中国直连"
+                "download_detour": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde"
             },
             {
                 "tag": "geosite-cn",
                 "type": "remote",
                 "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/cn.srs",
                 "format": "binary",
-                "download_detour": "🇨🇦 中国直连"
+                "download_detour": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde"
             },
             {
                 "tag": "geosite-category-ads-all",
                 "type": "remote",
                 "format": "binary",
                 "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ads-all.srs",
-                "download_detour": "🇨🇦 中国直连"
+                "download_detour": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde"
             },
             {
                 "tag": "geosite-ai",
                 "type": "remote",
                 "format": "binary",
                 "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ai-!cn.srs",
-                "download_detour": "🇨🇦 中国直连"
+                "download_detour": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde"
             },
             {
                 "tag": "geosite-youtube",
                 "type": "remote",
                 "format": "binary",
                 "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/youtube.srs",
-                "download_detour": "🇨🇦 中国直连"
+                "download_detour": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde"
             },
             {
                 "tag": "geosite-google",
                 "type": "remote",
                 "format": "binary",
                 "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/google.srs",
-                "download_detour": "🇨🇦 中国直连"
+                "download_detour": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde"
             },
             {
                 "tag": "geosite-telegram",
                 "type": "remote",
                 "format": "binary",
                 "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/telegram.srs",
-                "download_detour": "🇨🇦 中国直连"
+                "download_detour": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde"
             },
             {
                 "tag": "geosite-tiktok",
                 "type": "remote",
                 "format": "binary",
                 "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/tiktok.srs",
-                "download_detour": "🇨🇦 中国直连"
+                "download_detour": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde"
             },
             {
                 "tag": "geosite-line",
                 "type": "remote",
                 "format": "binary",
                 "url": "https://ghfast.top/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geosite/line.srs",
-                "download_detour": "🇨🇦 中国直连"
+                "download_detour": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde"
             },
             {
                 "tag": "geosite-netflix",
                 "type": "remote",
                 "format": "binary",
                 "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/netflix.srs",
-                "download_detour": "🇨🇦 中国直连"
+                "download_detour": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde"
             },
             {
                 "tag": "geosite-apple",
                 "type": "remote",
                 "format": "binary",
                 "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/apple.srs",
-                "download_detour": "🇨🇦 中国直连"
+                "download_detour": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde"
             },
             {
                 "tag": "geosite-microsoft",
                 "type": "remote",
                 "format": "binary",
                 "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/microsoft.srs",
-                "download_detour": "🇨🇦 中国直连"
-            },
-            {
-                "tag": "geosite-talkatone",
-                "type": "remote",
-                "format": "source",
-                "url": "https://raw.githubusercontent.com/frankgoing/sub-gary/refs/heads/main/sub-fix/sub-flies-main/singbox/talkatone",
-                "download_detour": "🇨🇦 中国直连"
+                "download_detour": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde"
             },
             {
                 "tag": "geoip-private",
                 "type": "remote",
                 "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/private.srs",
                 "format": "binary",
-                "download_detour": "🇨🇦 中国直连"
+                "download_detour": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde"
             },
             {
                 "tag": "geoip-google",
                 "type": "remote",
                 "format": "binary",
                 "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geoip/google.srs",
-                "download_detour": "🇨🇦 中国直连"
+                "download_detour": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde"
             },
             {
                 "tag": "geoip-telegram",
                 "type": "remote",
                 "format": "binary",
                 "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geoip/telegram.srs",
-                "download_detour": "🇨🇦 中国直连"
+                "download_detour": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde"
             },
             {
                 "tag": "geosite-twitter",
                 "type": "remote",
                 "format": "binary",
-                "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geoip/twitter.srs",
-                "download_detour": "🇨🇦 中国直连"
+                "url": "https://ghfast.top/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geoip/twitter.srs",
+                "download_detour": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde"
             },
             {
                 "tag": "geosite-facebook",
                 "type": "remote",
                 "format": "binary",
-                "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geosite/facebook.srs",
-                "download_detour": "🇨🇦 中国直连"
+                "url": "https://ghfast.top/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geosite/facebook.srs",
+                "download_detour": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde"
             },
             {
                 "tag": "geosite-instagram",
                 "type": "remote",
                 "format": "binary",
-                "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geosite/instagram.srs",
-                "download_detour": "🇨🇦 中国直连"
+                "url": "https://ghfast.top/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geosite/instagram.srs",
+                "download_detour": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde"
             },
             {
                 "tag": "geosite-threads",
                 "type": "remote",
                 "format": "binary",
-                "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geosite/threads.srs",
-                "download_detour": "🇨🇦 中国直连"
+                "url": "https://ghfast.top/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geosite/threads.srs",
+                "download_detour": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde"
             },
             {
                 "tag": "geosite-spotify",
                 "type": "remote",
                 "format": "binary",
-                "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geosite/spotify.srs",
-                "download_detour": "🇨🇦 中国直连"
+                "url": "https://ghfast.top/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geosite/spotify.srs",
+                "download_detour": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde"
             },
             {
                 "tag": "geoip-netflix",
                 "type": "remote",
                 "format": "binary",
                 "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geoip/netflix.srs",
-                "download_detour": "🇨🇦 中国直连"
+                "download_detour": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde"
             },
             {
                 "tag": "geoip-apple",
                 "type": "remote",
                 "format": "binary",
                 "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geoip/apple.srs",
-                "download_detour": "🇨🇦 中国直连"
+                "download_detour": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde"
             },
             {
                 "tag": "geoip-cn",
                 "type": "remote",
                 "format": "binary",
                 "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geoip/cn.srs",
-                "download_detour": "🇨🇦 中国直连"
+                "download_detour": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde"
             },
             {
                 "tag": "STUN",
                 "type": "remote",
                 "url": "https://ghfast.top/https://raw.githubusercontent.com/senshinya/singbox_ruleset/main/rule/STUN/STUN.srs",
                 "format": "binary",
-                "download_detour": "🇨🇦 中国直连"
+                "download_detour": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde"
             },
             {
                 "tag": "BlockHttpDNS",
                 "type": "remote",
                 "url": "https://ghfast.top/https://raw.githubusercontent.com/senshinya/singbox_ruleset/main/rule/BlockHttpDNS/BlockHttpDNS.srs",
                 "format": "binary",
-                "download_detour": "🇨🇦 中国直连"
+                "download_detour": "\ud83c\udfaf \u4e2d\u56fd\u76f4\u8fde"
             }
         ]
     }
