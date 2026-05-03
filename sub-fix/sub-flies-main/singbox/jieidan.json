@@ -87,8 +87,7 @@
       "uuid": "1a13ed18-37a9-437b-a427-de2746d46409",
       "tls": {
         "enabled": true,
-        "server_name": "sui02.666014.xyz",
-        "utls": { "enabled": true, "fingerprint": "chrome" }
+        "server_name": "sui02.666014.xyz"
       },
       "transport": {
         "type": "ws",
