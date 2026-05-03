@@ -742,6 +742,10 @@
         "outbound": "📖 MICROSOFT"
       },
       {
+        "rule_set": "talkatone-srs",
+        "outbound": "📞 TALKATONE"
+      },
+      {
         "rule_set": [
           "geoip-cn",
           "geosite-cn",
