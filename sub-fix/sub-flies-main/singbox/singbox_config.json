@@ -11,7 +11,7 @@
       "external_ui": "ui",
       "secret": "",
       "default_mode": "rule",
-      "external_ui_download_url": "https://v6.gh-proxy.org/https://github.com/Zephyruso/zashboard/archive/refs/heads/gh-pages.zip",
+      "external_ui_download_url": "https://ghfast.top/https://github.com/Zephyruso/zashboard/archive/refs/heads/gh-pages.zip",
       "external_ui_download_detour": "🎯 中国直连",
       "access_control_allow_origin": [
         "http://127.0.0.1",
@@ -140,13 +140,14 @@
       "outbounds": [
         "自动选择",
         "🇭🇰 香港 CF",
-        "🇹🇼 台湾 FGCP",
-        "🇹🇼 台湾 PGCP",
-        "🇯🇵 东京 OCI",
-        "🇺🇸 洛杉矶 DC02",
         "🇺🇸 洛杉矶 NAT",
-        "🇺🇸 俄勒冈 GGCP",
+        "🇺🇸 洛杉矶 DC02",
+        "🇺🇸 洛杉矶 DC02 TUIC",
+        "🇺🇸 洛杉矶 DC02 HY2",
+        "🇺🇸 俄勒冈 GCP TUIC",
+        "🇺🇸 俄勒冈 GCP HY2",
         "🇩🇪 德国 EUserv",
+        "🇩🇪 德国 EUserv TUIC",
         "🇨🇳 全局直连"
       ],
       "default": "自动选择"
@@ -156,13 +157,14 @@
       "type": "urltest",
       "outbounds": [
         "🇭🇰 香港 CF",
-        "🇹🇼 台湾 FGCP",
-        "🇹🇼 台湾 PGCP",
-        "🇯🇵 东京 OCI",
-        "🇺🇸 洛杉矶 DC02",
         "🇺🇸 洛杉矶 NAT",
-        "🇺🇸 俄勒冈 GGCP",
-        "🇩🇪 德国 EUserv"
+        "🇺🇸 洛杉矶 DC02",
+        "🇺🇸 洛杉矶 DC02 TUIC",
+        "🇺🇸 洛杉矶 DC02 HY2",
+        "🇺🇸 俄勒冈 GCP TUIC",
+        "🇺🇸 俄勒冈 GCP HY2",
+        "🇩🇪 德国 EUserv",
+        "🇩🇪 德国 EUserv TUIC"
       ],
       "url": "http://www.msftconnecttest.com/connecttest.txt",
       "interval": "3m",
@@ -175,13 +177,14 @@
       "outbounds": [
         "手动选择",
         "🇭🇰 香港 CF",
-        "🇹🇼 台湾 FGCP",
-        "🇹🇼 台湾 PGCP",
-        "🇯🇵 东京 OCI",
-        "🇺🇸 洛杉矶 DC02",
         "🇺🇸 洛杉矶 NAT",
-        "🇺🇸 俄勒冈 GGCP",
+        "🇺🇸 洛杉矶 DC02",
+        "🇺🇸 洛杉矶 DC02 TUIC",
+        "🇺🇸 洛杉矶 DC02 HY2",
+        "🇺🇸 俄勒冈 GCP TUIC",
+        "🇺🇸 俄勒冈 GCP HY2",
         "🇩🇪 德国 EUserv",
+        "🇩🇪 德国 EUserv TUIC",
         "🇨🇳 全局直连"
       ],
       "default": "🇺🇸 洛杉矶 NAT"
@@ -193,13 +196,14 @@
       "outbounds": [
         "手动选择",
         "🇭🇰 香港 CF",
-        "🇹🇼 台湾 FGCP",
-        "🇹🇼 台湾 PGCP",
-        "🇯🇵 东京 OCI",
-        "🇺🇸 洛杉矶 DC02",
         "🇺🇸 洛杉矶 NAT",
-        "🇺🇸 俄勒冈 GGCP",
+        "🇺🇸 洛杉矶 DC02",
+        "🇺🇸 洛杉矶 DC02 TUIC",
+        "🇺🇸 洛杉矶 DC02 HY2",
+        "🇺🇸 俄勒冈 GCP TUIC",
+        "🇺🇸 俄勒冈 GCP HY2",
         "🇩🇪 德国 EUserv",
+        "🇩🇪 德国 EUserv TUIC",
         "🇨🇳 全局直连"
       ],
       "default": "🇭🇰 香港 CF"
@@ -211,13 +215,14 @@
       "outbounds": [
         "手动选择",
         "🇭🇰 香港 CF",
-        "🇹🇼 台湾 FGCP",
-        "🇹🇼 台湾 PGCP",
-        "🇯🇵 东京 OCI",
-        "🇺🇸 洛杉矶 DC02",
         "🇺🇸 洛杉矶 NAT",
-        "🇺🇸 俄勒冈 GGCP",
+        "🇺🇸 洛杉矶 DC02",
+        "🇺🇸 洛杉矶 DC02 TUIC",
+        "🇺🇸 洛杉矶 DC02 HY2",
+        "🇺🇸 俄勒冈 GCP TUIC",
+        "🇺🇸 俄勒冈 GCP HY2",
         "🇩🇪 德国 EUserv",
+        "🇩🇪 德国 EUserv TUIC",
         "🇨🇳 全局直连"
       ],
       "default": "🇺🇸 洛杉矶 NAT"
@@ -229,13 +234,14 @@
       "outbounds": [
         "手动选择",
         "🇭🇰 香港 CF",
-        "🇹🇼 台湾 FGCP",
-        "🇹🇼 台湾 PGCP",
-        "🇯🇵 东京 OCI",
-        "🇺🇸 洛杉矶 DC02",
         "🇺🇸 洛杉矶 NAT",
-        "🇺🇸 俄勒冈 GGCP",
+        "🇺🇸 洛杉矶 DC02",
+        "🇺🇸 洛杉矶 DC02 TUIC",
+        "🇺🇸 洛杉矶 DC02 HY2",
+        "🇺🇸 俄勒冈 GCP TUIC",
+        "🇺🇸 俄勒冈 GCP HY2",
         "🇩🇪 德国 EUserv",
+        "🇩🇪 德国 EUserv TUIC",
         "🇨🇳 全局直连"
       ],
       "default": "🇺🇸 洛杉矶 NAT"
@@ -247,13 +253,14 @@
       "outbounds": [
         "手动选择",
         "🇭🇰 香港 CF",
-        "🇹🇼 台湾 FGCP",
-        "🇹🇼 台湾 PGCP",
-        "🇯🇵 东京 OCI",
-        "🇺🇸 洛杉矶 DC02",
         "🇺🇸 洛杉矶 NAT",
-        "🇺🇸 俄勒冈 GGCP",
+        "🇺🇸 洛杉矶 DC02",
+        "🇺🇸 洛杉矶 DC02 TUIC",
+        "🇺🇸 洛杉矶 DC02 HY2",
+        "🇺🇸 俄勒冈 GCP TUIC",
+        "🇺🇸 俄勒冈 GCP HY2",
         "🇩🇪 德国 EUserv",
+        "🇩🇪 德国 EUserv TUIC",
         "🇨🇳 全局直连"
       ],
       "default": "🇭🇰 香港 CF"
@@ -265,13 +272,14 @@
       "outbounds": [
         "手动选择",
         "🇭🇰 香港 CF",
-        "🇹🇼 台湾 FGCP",
-        "🇹🇼 台湾 PGCP",
-        "🇯🇵 东京 OCI",
-        "🇺🇸 洛杉矶 DC02",
         "🇺🇸 洛杉矶 NAT",
-        "🇺🇸 俄勒冈 GGCP",
+        "🇺🇸 洛杉矶 DC02",
+        "🇺🇸 洛杉矶 DC02 TUIC",
+        "🇺🇸 洛杉矶 DC02 HY2",
+        "🇺🇸 俄勒冈 GCP TUIC",
+        "🇺🇸 俄勒冈 GCP HY2",
         "🇩🇪 德国 EUserv",
+        "🇩🇪 德国 EUserv TUIC",
         "🇨🇳 全局直连"
       ],
       "default": "🇺🇸 洛杉矶 NAT"
@@ -283,13 +291,14 @@
       "outbounds": [
         "手动选择",
         "🇭🇰 香港 CF",
-        "🇹🇼 台湾 FGCP",
-        "🇹🇼 台湾 PGCP",
-        "🇯🇵 东京 OCI",
-        "🇺🇸 洛杉矶 DC02",
         "🇺🇸 洛杉矶 NAT",
-        "🇺🇸 俄勒冈 GGCP",
+        "🇺🇸 洛杉矶 DC02",
+        "🇺🇸 洛杉矶 DC02 TUIC",
+        "🇺🇸 洛杉矶 DC02 HY2",
+        "🇺🇸 俄勒冈 GCP TUIC",
+        "🇺🇸 俄勒冈 GCP HY2",
         "🇩🇪 德国 EUserv",
+        "🇩🇪 德国 EUserv TUIC",
         "🇨🇳 全局直连"
       ],
       "default": "手动选择"
@@ -301,13 +310,14 @@
       "outbounds": [
         "手动选择",
         "🇭🇰 香港 CF",
-        "🇹🇼 台湾 FGCP",
-        "🇹🇼 台湾 PGCP",
-        "🇯🇵 东京 OCI",
-        "🇺🇸 洛杉矶 DC02",
         "🇺🇸 洛杉矶 NAT",
-        "🇺🇸 俄勒冈 GGCP",
+        "🇺🇸 洛杉矶 DC02",
+        "🇺🇸 洛杉矶 DC02 TUIC",
+        "🇺🇸 洛杉矶 DC02 HY2",
+        "🇺🇸 俄勒冈 GCP TUIC",
+        "🇺🇸 俄勒冈 GCP HY2",
         "🇩🇪 德国 EUserv",
+        "🇩🇪 德国 EUserv TUIC",
         "🇨🇳 全局直连"
       ],
       "default": "🇺🇸 洛杉矶 NAT"
@@ -319,13 +329,14 @@
       "outbounds": [
         "手动选择",
         "🇭🇰 香港 CF",
-        "🇹🇼 台湾 FGCP",
-        "🇹🇼 台湾 PGCP",
-        "🇯🇵 东京 OCI",
-        "🇺🇸 洛杉矶 DC02",
         "🇺🇸 洛杉矶 NAT",
-        "🇺🇸 俄勒冈 GGCP",
+        "🇺🇸 洛杉矶 DC02",
+        "🇺🇸 洛杉矶 DC02 TUIC",
+        "🇺🇸 洛杉矶 DC02 HY2",
+        "🇺🇸 俄勒冈 GCP TUIC",
+        "🇺🇸 俄勒冈 GCP HY2",
         "🇩🇪 德国 EUserv",
+        "🇩🇪 德国 EUserv TUIC",
         "🇨🇳 全局直连"
       ],
       "default": "🇺🇸 洛杉矶 NAT"
@@ -337,13 +348,14 @@
       "outbounds": [
         "手动选择",
         "🇭🇰 香港 CF",
-        "🇹🇼 台湾 FGCP",
-        "🇹🇼 台湾 PGCP",
-        "🇯🇵 东京 OCI",
-        "🇺🇸 洛杉矶 DC02",
         "🇺🇸 洛杉矶 NAT",
-        "🇺🇸 俄勒冈 GGCP",
+        "🇺🇸 洛杉矶 DC02",
+        "🇺🇸 洛杉矶 DC02 TUIC",
+        "🇺🇸 洛杉矶 DC02 HY2",
+        "🇺🇸 俄勒冈 GCP TUIC",
+        "🇺🇸 俄勒冈 GCP HY2",
         "🇩🇪 德国 EUserv",
+        "🇩🇪 德国 EUserv TUIC",
         "🇨🇳 全局直连"
       ],
       "default": "🇨🇳 全局直连"
@@ -355,13 +367,14 @@
       "outbounds": [
         "手动选择",
         "🇭🇰 香港 CF",
-        "🇹🇼 台湾 FGCP",
-        "🇹🇼 台湾 PGCP",
-        "🇯🇵 东京 OCI",
-        "🇺🇸 洛杉矶 DC02",
         "🇺🇸 洛杉矶 NAT",
-        "🇺🇸 俄勒冈 GGCP",
+        "🇺🇸 洛杉矶 DC02",
+        "🇺🇸 洛杉矶 DC02 TUIC",
+        "🇺🇸 洛杉矶 DC02 HY2",
+        "🇺🇸 俄勒冈 GCP TUIC",
+        "🇺🇸 俄勒冈 GCP HY2",
         "🇩🇪 德国 EUserv",
+        "🇩🇪 德国 EUserv TUIC",
         "🇨🇳 全局直连"
       ],
       "default": "🇨🇳 全局直连"
@@ -373,16 +386,17 @@
       "outbounds": [
         "手动选择",
         "🇭🇰 香港 CF",
-        "🇹🇼 台湾 FGCP",
-        "🇹🇼 台湾 PGCP",
-        "🇯🇵 东京 OCI",
-        "🇺🇸 洛杉矶 DC02",
         "🇺🇸 洛杉矶 NAT",
-        "🇺🇸 俄勒冈 GGCP",
+        "🇺🇸 洛杉矶 DC02",
+        "🇺🇸 洛杉矶 DC02 TUIC",
+        "🇺🇸 洛杉矶 DC02 HY2",
+        "🇺🇸 俄勒冈 GCP TUIC",
+        "🇺🇸 俄勒冈 GCP HY2",
         "🇩🇪 德国 EUserv",
+        "🇩🇪 德国 EUserv TUIC",
         "🇨🇳 全局直连"
       ],
-      "default": "🇺🇸 洛杉矶 NAT"
+      "default": "手动选择"
     },
     {
       "tag": "🎯 中国直连",
@@ -447,69 +461,21 @@
       }
     },
     {
-      "tag": "🇹🇼 台湾 FGCP",
-      "type": "vless",
-      "server": "35.206.230.162",
-      "server_port": 38208,
-      "uuid": "adf43e06-d617-401f-bb87-d06d3efa8830",
-      "flow": "xtls-rprx-vision",
-      "packet_encoding": "xudp",
-      "tls": {
-        "enabled": true,
-        "server_name": "apple.com",
-        "reality": {
-          "enabled": true,
-          "public_key": "O-AyvMwHRWZT6nK36nxIpb3WNsRf-qpwP2PORZJSyD4",
-          "short_id": "f9cf84"
-        },
-        "utls": {
-          "enabled": true,
-          "fingerprint": "chrome"
-        }
-      }
-    },
-    {
-      "tag": "🇹🇼 台湾 PGCP",
-      "type": "vless",
-      "server": "35.206.245.251",
-      "server_port": 34486,
-      "uuid": "10c8e944-30e3-4740-a367-d09a852dae0e",
-      "flow": "xtls-rprx-vision",
-      "packet_encoding": "xudp",
-      "tls": {
-        "enabled": true,
-        "server_name": "apple.com",
-        "utls": {
-          "enabled": true,
-          "fingerprint": "chrome"
-        },
-        "reality": {
-          "enabled": true,
-          "public_key": "_AiTppzf44DCwm9CdvgDy_OYrCxBvDoq60qGTGni318",
-          "short_id": "3487d991"
-        }
-      }
-    },
-    {
-      "tag": "🇯🇵 东京 OCI",
+      "tag": "🇺🇸 洛杉矶 NAT",
       "type": "vless",
       "server": "104.18.39.209",
-      "server_port": 2096,
-      "uuid": "97ebc2dc-8577-41bf-b615-d5f9e43e7e3d",
+      "server_port": 2083,
+      "uuid": "ddd7aead-152c-45cb-a213-40e8de5bae52",
       "tls": {
         "enabled": true,
-        "server_name": "jpoci.666014.xyz",
-        "utls": {
-          "enabled": true,
-          "fingerprint": "chrome"
-        }
+        "server_name": "nats.666014.xyz"
       },
       "transport": {
         "type": "ws",
         "headers": {
-          "Host": "jpoci.666014.xyz"
+          "Host": "nats.666014.xyz"
         },
-        "path": "/gaseghs"
+        "path": "/"
       }
     },
     {
@@ -535,25 +501,73 @@
       }
     },
     {
-      "tag": "🇺🇸 洛杉矶 NAT",
-      "type": "vless",
-      "server": "104.18.39.209",
-      "server_port": 2096,
-      "uuid": "8bea32c9-7086-4309-cc3a-b4f154c14a30",
+      "tag": "🇺🇸 洛杉矶 DC02 TUIC",
+      "type": "tuic",
+      "server": "sui02.666014.xyz",
+      "server_port": 41322,
+      "uuid": "1a13ed18-37a9-437b-a427-de2746d46409",
+      "password": "1a13ed18-37a9-437b-a427-de2746d46409",
+      "congestion_control": "bbr",
       "tls": {
         "enabled": true,
-        "server_name": "nats.666014.xyz",
-        "utls": {
-          "enabled": true,
-          "fingerprint": "chrome"
-        }
+        "server_name": "www.bing.com",
+        "alpn": [
+          "h3"
+        ],
+        "insecure": true
+      }
+    },
+    {
+      "tag": "🇺🇸 洛杉矶 DC02 HY2",
+      "type": "hysteria2",
+      "server": "sui02.666014.xyz",
+      "server_port": 42648,
+      "password": "1a13ed18-37a9-437b-a427-de2746d46409",
+      "obfs": {
+        "type": "salamander",
+        "password": "K8704Qzh5xvdb3Rv93yutJH7D7jh+NuTo3v70PG3tXs="
       },
-      "transport": {
-        "type": "ws",
-        "headers": {
-          "Host": "nats.666014.xyz"
-        },
-        "path": "/"
+      "tls": {
+        "enabled": true,
+        "server_name": "www.bing.com",
+        "alpn": [
+          "h3"
+        ],
+        "insecure": true
+      }
+    },
+    {
+      "tag": "🇺🇸 俄勒冈 GCP TUIC",
+      "type": "tuic",
+      "server": "35.212.135.196",
+      "server_port": 55318,
+      "uuid": "92a4658e-9bbb-47f4-bd3c-1ea31a6ee84b",
+      "password": "gMpt0UKundefinedxG",
+      "congestion_control": "bbr",
+      "tls": {
+        "enabled": true,
+        "server_name": "www.bing.com",
+        "alpn": [
+          "h3"
+        ],
+        "insecure": true
+      }
+    },
+    {
+      "tag": "🇺🇸 俄勒冈 GCP HY2",
+      "type": "hysteria2",
+      "server": "35.212.135.196",
+      "server_port": 33159,
+      "password": "gMpt0UKundefinedxG",
+      "up_mbps": 100,
+      "down_mbps": 200,
+      "tls": {
+        "enabled": true,
+        "server_name": "www.bing.com",
+        "alpn": [
+          "h3"
+        ],
+        "insecure": true
       }
     },
     {
@@ -579,20 +593,20 @@
       }
     },
     {
-      "tag": "🇺🇸 俄勒冈 GGCP",
+      "tag": "🇩🇪 德国 EUserv TUIC",
       "type": "tuic",
-      "server": "gcp.666014.xyz",
-      "server_port": 19883,
-      "uuid": "074d7993-87a5-4609-bc1b-6a51479d3549",
-      "password": "074d7993-87a5-4609-bc1b-6a51479d3549",
+      "server": "eus.666014.xyz",
+      "server_port": 33500,
+      "uuid": "9c70ec27-f6d7-4822-bdf9-0c5912b07ad7",
+      "password": "9c70ec27-f6d7-4822-bdf9-0c5912b07ad7",
       "congestion_control": "bbr",
       "tls": {
         "enabled": true,
         "server_name": "www.bing.com",
-        "insecure": true,
         "alpn": [
           "h3"
-        ]
+        ],
+        "insecure": true
       }
     }
   ],
@@ -728,10 +742,6 @@
         "outbound": "📖 MICROSOFT"
       },
       {
-        "rule_set": "talkatone-srs",
-        "outbound": "📞 TALKATONE"
-      },
-      {
         "rule_set": [
           "geoip-cn",
           "geosite-cn",
@@ -744,14 +754,14 @@
       {
         "tag": "geosite-private",
         "type": "remote",
-        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/private.srs",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/private.srs",
         "format": "binary",
         "download_detour": "🎯 中国直连"
       },
       {
         "tag": "geosite-cn",
         "type": "remote",
-        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/cn.srs",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/cn.srs",
         "format": "binary",
         "download_detour": "🎯 中国直连"
       },
@@ -759,76 +769,76 @@
         "tag": "geosite-category-ads-all",
         "type": "remote",
         "format": "binary",
-        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ads-all.srs",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ads-all.srs",
         "download_detour": "🎯 中国直连"
       },
       {
         "tag": "geosite-ai",
         "type": "remote",
         "format": "binary",
-        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ai-!cn.srs",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ai-!cn.srs",
         "download_detour": "🎯 中国直连"
       },
       {
         "tag": "geosite-youtube",
         "type": "remote",
         "format": "binary",
-        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/youtube.srs",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/youtube.srs",
         "download_detour": "🎯 中国直连"
       },
       {
         "tag": "geosite-google",
         "type": "remote",
         "format": "binary",
-        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/google.srs",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/google.srs",
         "download_detour": "🎯 中国直连"
       },
       {
         "tag": "geosite-telegram",
         "type": "remote",
         "format": "binary",
-        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/telegram.srs",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/telegram.srs",
         "download_detour": "🎯 中国直连"
       },
       {
         "tag": "geosite-tiktok",
         "type": "remote",
         "format": "binary",
-        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/tiktok.srs",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/tiktok.srs",
         "download_detour": "🎯 中国直连"
       },
       {
         "tag": "geosite-line",
         "type": "remote",
         "format": "binary",
-        "url": "https://v6.gh-proxy.org/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geosite/line.srs",
+        "url": "https://ghfast.top/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geosite/line.srs",
         "download_detour": "🎯 中国直连"
       },
       {
         "tag": "geosite-netflix",
         "type": "remote",
         "format": "binary",
-        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/netflix.srs",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/netflix.srs",
         "download_detour": "🎯 中国直连"
       },
       {
         "tag": "geosite-apple",
         "type": "remote",
         "format": "binary",
-        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/apple.srs",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/apple.srs",
         "download_detour": "🎯 中国直连"
       },
       {
         "tag": "geosite-microsoft",
         "type": "remote",
         "format": "binary",
-        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/microsoft.srs",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/microsoft.srs",
         "download_detour": "🎯 中国直连"
       },
       {
         "tag": "geoip-private",
         "type": "remote",
-        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/private.srs",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/private.srs",
         "format": "binary",
         "download_detour": "🎯 中国直连"
       },
@@ -836,91 +846,84 @@
         "tag": "geoip-google",
         "type": "remote",
         "format": "binary",
-        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geoip/google.srs",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geoip/google.srs",
         "download_detour": "🎯 中国直连"
       },
       {
         "tag": "geoip-telegram",
         "type": "remote",
         "format": "binary",
-        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geoip/telegram.srs",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geoip/telegram.srs",
         "download_detour": "🎯 中国直连"
       },
       {
         "tag": "geosite-twitter",
         "type": "remote",
         "format": "binary",
-        "url": "https://v6.gh-proxy.org/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geoip/twitter.srs",
+        "url": "https://ghfast.top/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geoip/twitter.srs",
         "download_detour": "🎯 中国直连"
       },
       {
         "tag": "geosite-facebook",
         "type": "remote",
         "format": "binary",
-        "url": "https://v6.gh-proxy.org/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geosite/facebook.srs",
+        "url": "https://ghfast.top/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geosite/facebook.srs",
         "download_detour": "🎯 中国直连"
       },
       {
         "tag": "geosite-instagram",
         "type": "remote",
         "format": "binary",
-        "url": "https://v6.gh-proxy.org/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geosite/instagram.srs",
+        "url": "https://ghfast.top/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geosite/instagram.srs",
         "download_detour": "🎯 中国直连"
       },
       {
         "tag": "geosite-threads",
         "type": "remote",
         "format": "binary",
-        "url": "https://v6.gh-proxy.org/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geosite/threads.srs",
+        "url": "https://ghfast.top/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geosite/threads.srs",
         "download_detour": "🎯 中国直连"
       },
       {
         "tag": "geosite-spotify",
         "type": "remote",
         "format": "binary",
-        "url": "https://v6.gh-proxy.org/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geosite/spotify.srs",
+        "url": "https://ghfast.top/https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geosite/spotify.srs",
         "download_detour": "🎯 中国直连"
       },
       {
         "tag": "geoip-netflix",
         "type": "remote",
         "format": "binary",
-        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geoip/netflix.srs",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geoip/netflix.srs",
         "download_detour": "🎯 中国直连"
       },
       {
         "tag": "geoip-apple",
         "type": "remote",
         "format": "binary",
-        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geoip/apple.srs",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geoip/apple.srs",
         "download_detour": "🎯 中国直连"
       },
       {
         "tag": "geoip-cn",
         "type": "remote",
         "format": "binary",
-        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geoip/cn.srs",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geoip/cn.srs",
         "download_detour": "🎯 中国直连"
       },
       {
         "tag": "STUN",
         "type": "remote",
-        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/senshinya/singbox_ruleset/main/rule/STUN/STUN.srs",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/senshinya/singbox_ruleset/main/rule/STUN/STUN.srs",
         "format": "binary",
         "download_detour": "🎯 中国直连"
       },
       {
         "tag": "BlockHttpDNS",
         "type": "remote",
-        "url": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/senshinya/singbox_ruleset/main/rule/BlockHttpDNS/BlockHttpDNS.srs",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/senshinya/singbox_ruleset/main/rule/BlockHttpDNS/BlockHttpDNS.srs",
         "format": "binary",
-        "download_detour": "🎯 中国直连"
-      },
-      {
-        "tag": "talkatone-srs",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://raw.githubusercontent.com/PhantomSeaStars/Rules/main/talkatoneAPKandEXE.srs",
         "download_detour": "🎯 中国直连"
       }
     ]
