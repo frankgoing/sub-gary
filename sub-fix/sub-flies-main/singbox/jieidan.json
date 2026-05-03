@@ -166,7 +166,6 @@
       "tls": {
         "enabled": true,
         "server_name": "eus.666014.xyz",
-        "utls": { "enabled": true, "fingerprint": "chrome" }
       },
       "transport": {
         "type": "ws",
