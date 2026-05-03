@@ -925,6 +925,13 @@
         "url": "https://ghfast.top/https://raw.githubusercontent.com/senshinya/singbox_ruleset/main/rule/BlockHttpDNS/BlockHttpDNS.srs",
         "format": "binary",
         "download_detour": "🎯 中国直连"
+      },
+      {
+        "tag": "talkatone-srs",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/frankgoing/sub-gary/refs/heads/main/sub-fix/sub-flies-main/singbox/talkatone",
+        "download_detour": "🎯 中国直连"
       }
     ]
   }
