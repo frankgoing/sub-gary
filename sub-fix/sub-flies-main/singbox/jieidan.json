@@ -71,8 +71,7 @@
   "uuid": "ddd7aead-152c-45cb-a213-40e8de5bae52",
   "tls": {
     "enabled": true,
-    "server_name": "nats.666014.xyz",
-    "alpn": [ "h2", "http/1.1" ]
+    "server_name": "nats.666014.xyz"
   },
   "transport": {
     "type": "ws",
