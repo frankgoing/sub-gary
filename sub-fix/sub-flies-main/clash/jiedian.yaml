@@ -1,8 +1,125 @@
 proxies:
-  - {"type":"vless","name":"香港 CF","server":"104.18.39.209","port":443,"uuid":"79a95971-a99c-4f4c-b2c8-d67bafc09a5b","tls":true,"skip-cert-verify":false,"network":"ws","ws-opts":{"headers":{"Host":"super.frankgoing.us.kg"},"path":"/?ed=2560"},"encryption":"none","client-fingerprint":"random","servername":"super.frankgoing.us.kg"}
-  - {"type":"vless","name":"台湾 FGCP","server":"35.206.206.61","port":57090,"uuid":"7412ee8c-f618-4587-a8f0-7987efff3613","tls":true,"flow":"xtls-rprx-vision","client-fingerprint":"chrome","skip-cert-verify":false,"reality-opts":{"public-key":"mOYgCLVU23MrskK_ppj5o6VCxz-mRD3ENqFHi3qUSk8","short-id":"5954dc6f"},"network":"tcp","encryption":"none","servername":"apple.com"}
-  - {"type":"vless","name":"东京 OCI","server":"104.18.39.209","port":2096,"uuid":"97ebc2dc-8577-41bf-b615-d5f9e43e7e3d","tls":true,"alpn":["h2","http/1.1"],"skip-cert-verify":false,"network":"ws","ws-opts":{"headers":{"Host":"jpoci.666014.xyz"},"path":"/gaseghs"},"encryption":"none","client-fingerprint":"chrome","servername":"jpoci.666014.xyz"}
-  - {"type":"vless","name":"洛杉矶 DC02","server":"104.18.39.209","port":2096,"uuid":"1a13ed18-37a9-437b-a427-de2746d46409","tls":true,"skip-cert-verify":false,"network":"ws","ws-opts":{"headers":{"Host":"sui02.666014.xyz"},"path":"/"},"encryption":"none","client-fingerprint":"chrome","servername":"sui02.666014.xyz"}
-  - {"type":"vless","name":"洛杉矶 NAT","server":"104.18.39.209","port":2096,"uuid":"8bea32c9-7086-4309-cc3a-b4f154c14a30","tls":true,"alpn":["h2","http/1.1"],"skip-cert-verify":false,"network":"ws","ws-opts":{"headers":{"Host":"nats.666014.xyz"},"path":"/"},"encryption":"none","client-fingerprint":"chrome","servername":"nats.666014.xyz"}
-  - {"type":"tuic","name":"俄勒冈 GGCP","server":"gcp.666014.xyz","port":19883,"uuid":"074d7993-87a5-4609-bc1b-6a51479d3549","password":"074d7993-87a5-4609-bc1b-6a51479d3549","alpn":["h3"],"skip-cert-verify":true,"congestion-control":"bbr","sni":"www.bing.com"}
-  - {"type":"vless","name":"德国 EUserv","server":"104.18.39.209","port":2096,"uuid":"9c70ec27-f6d7-4822-bdf9-0c5912b07ad7","tls":true,"skip-cert-verify":false,"network":"ws","ws-opts":{"headers":{"Host":"eus.666014.xyz"},"path":"/"},"encryption":"none","client-fingerprint":"chrome","servername":"eus.666014.xyz"}
+  # 1. 香港 CF
+  - name: "香港 CF"
+    type: vless
+    server: 104.18.39.209
+    port: 443
+    uuid: 79a95971-a99c-4f4c-b2c8-d67bafc09a5b
+    network: ws
+    tls: true
+    udp: true
+    client-fingerprint: random
+    servername: super.frankgoing.us.kg
+    ws-opts:
+      path: "/?ed=2560"
+      headers:
+        Host: super.frankgoing.us.kg
+
+  # 2. 洛杉矶 NAT
+  - name: "洛杉矶 NAT"
+    type: vless
+    server: 104.18.39.209
+    port: 2096
+    uuid: e5c7446a-9c54-4f57-f862-6056ad9b8d17
+    network: xhttp
+    tls: true
+    udp: true
+    servername: nats.666014.xyz
+    xhttp-opts:
+      host: nats.666014.xyz
+      path: "/"
+      mode: auto
+
+  # 3. 洛杉矶 DC02
+  - name: "洛杉矶 DC02"
+    type: vless
+    server: 104.18.39.209
+    port: 2096
+    uuid: 1a13ed18-37a9-437b-a427-de2746d46409
+    network: ws
+    tls: true
+    udp: true
+    servername: sui02.666014.xyz
+    ws-opts:
+      path: "/"
+      headers:
+        Host: sui02.666014.xyz
+
+  # 4. 洛杉矶 dc02 hy2
+  - name: "洛杉矶 dc02 hy2"
+    type: hysteria2
+    server: sui02.666014.xyz
+    port: 42648
+    password: K8704Qzh5xvdb3Rv93yutJH7D7jh+NuTo3v70PG3tXs=
+    sni: www.bing.com
+    alpn:
+      - h3
+    insecure: true
+    obfs:
+      type: salamander
+      password: K8704Qzh5xvdb3Rv93yutJH7D7jh+NuTo3v70PG3tXs=
+
+  # 5. 洛杉矶 dc02 tuic
+  - name: "洛杉矶 dc02 tuic"
+    type: tuic
+    server: sui02.666014.xyz
+    port: 41322
+    uuid: 1a13ed18-37a9-437b-a427-de2746d46409
+    password: 1a13ed18-37a9-437b-a427-de2746d46409
+    sni: www.bing.com
+    alpn:
+      - h3
+    insecure: true
+    congestion_control: bbr
+
+  # 6. 俄勒冈 HY2
+  - name: "俄勒冈 HY2"
+    type: hysteria2
+    server: nz.666014.xyz
+    port: 33159
+    password: gMpt0UKundefinedxG
+    sni: www.bing.com
+    alpn:
+      - h3
+    insecure: true
+
+  # 7. 俄勒冈 TUIC
+  - name: "俄勒冈 TUIC"
+    type: tuic
+    server: nz.666014.xyz
+    port: 55318
+    uuid: 92a4658e-9bbb-47f4-bd3c-1ea31a6ee84b
+    password: gMpt0UKundefinedxG
+    sni: www.bing.com
+    alpn:
+      - h3
+    insecure: true
+    congestion_control: bbr
+
+  # 8. 德国 EUserv
+  - name: "德国 EUserv"
+    type: vless
+    server: 104.18.39.209
+    port: 2096
+    uuid: 9c70ec27-f6d7-4822-bdf9-0c5912b07ad7
+    network: ws
+    tls: true
+    udp: true
+    servername: eus.666014.xyz
+    ws-opts:
+      path: "/"
+      headers:
+        Host: eus.666014.xyz
+
+  # 9. 德国 EUserv TUIC
+  - name: "德国 EUserv TUIC"
+    type: tuic
+    server: eus.666014.xyz
+    port: 33500
+    uuid: 9c70ec27-f6d7-4822-bdf9-0c5912b07ad7
+    password: 9c70ec27-f6d7-4822-bdf9-0c5912b07ad7
+    sni: www.bing.com
+    alpn:
+      - h3
+    insecure: true
+    congestion_control: bbr
