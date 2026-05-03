@@ -742,7 +742,7 @@
         "outbound": "📖 MICROSOFT"
       },
       {
-        "rule_set": "https://raw.githubusercontent.com/frankgoing/sub-gary/refs/heads/main/sub-fix/sub-flies-main/singbox/talkatone",
+        "rule_set": "talkatone-geosite.json",
         "outbound": "📞 TALKATONE"
       },
       {
