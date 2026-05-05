@@ -37,6 +37,8 @@
       "outbounds": [
         "香港 CF",
         "洛杉矶 NAT",
+        "洛杉矶 NAT TUIC",
+        "洛杉矶 NAT HY2",
         "洛杉矶 DC02",
         "洛杉矶 dc02 tuic",
         "洛杉矶 dc02 hy2",
@@ -64,21 +66,49 @@
       }
     },
     {
-  "tag": "洛杉矶 NAT",
-  "type": "vless",
-  "server": "104.18.39.209",
-  "server_port": 2083,
-  "uuid": "ddd7aead-152c-45cb-a213-40e8de5bae52",
-  "tls": {
-    "enabled": true,
-    "server_name": "nats.666014.xyz"
-  },
-  "transport": {
-    "type": "ws",
-    "headers": { "Host": "nats.666014.xyz" },
-    "path": "/"
-  }
-},
+      "tag": "洛杉矶 NAT",
+      "type": "vless",
+      "server": "104.18.39.209",
+      "server_port": 2083,
+      "uuid": "ddd7aead-152c-45cb-a213-40e8de5bae52",
+      "tls": {
+        "enabled": true,
+        "server_name": "nats.666014.xyz"
+      },
+      "transport": {
+        "type": "ws",
+        "headers": { "Host": "nats.666014.xyz" },
+        "path": "/"
+      }
+    },
+    {
+      "tag": "洛杉矶 NAT TUIC",
+      "type": "tuic",
+      "server": "nats.666014.xyz",
+      "server_port": 59989,
+      "uuid": "4dccdb02-dfc4-4a00-afc8-5c789ced3623",
+      "password": "4dccdb02-dfc4-4a00-afc8-5c789ced3623",
+      "congestion_control": "bbr",
+      "tls": {
+        "enabled": true,
+        "server_name": "nats.666014.xyz",
+        "alpn": [ "h3" ],
+        "insecure": false
+      }
+    },
+    {
+      "tag": "洛杉矶 NAT HY2",
+      "type": "hysteria2",
+      "server": "nats.666014.xyz",
+      "server_port": 40187,
+      "password": "4dccdb02-dfc4-4a00-afc8-5c789ced3623",
+      "tls": {
+        "enabled": true,
+        "server_name": "nats.666014.xyz",
+        "alpn": [ "h3" ],
+        "insecure": false
+      }
+    },
     {
       "tag": "洛杉矶 DC02",
       "type": "vless",
@@ -165,7 +195,7 @@
       "uuid": "9c70ec27-f6d7-4822-bdf9-0c5912b07ad7",
       "tls": {
         "enabled": true,
-        "server_name": "eus.666014.xyz",
+        "server_name": "eus.666014.xyz"
       },
       "transport": {
         "type": "ws",
