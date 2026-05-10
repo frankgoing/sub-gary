@@ -85,9 +85,9 @@
       "tag": "洛杉矶 NAT TUIC",
       "type": "tuic",
       "server": "nats.666014.xyz",
-      "server_port": 59989,
-      "uuid": "4dccdb02-dfc4-4a00-afc8-5c789ced3623",
-      "password": "4dccdb02-dfc4-4a00-afc8-5c789ced3623",
+      "server_port": 44019,
+      "uuid": "789852e0-7006-4032-8e58-93875c5e4a41",
+      "password": "ge3BK5FaQK",
       "congestion_control": "bbr",
       "tls": {
         "enabled": true,
@@ -100,8 +100,8 @@
       "tag": "洛杉矶 NAT HY2",
       "type": "hysteria2",
       "server": "nats.666014.xyz",
-      "server_port": 40187,
-      "password": "4dccdb02-dfc4-4a00-afc8-5c789ced3623",
+      "server_port": 17091,
+      "password": "ge3BK5FaQK",
       "tls": {
         "enabled": true,
         "server_name": "nats.666014.xyz",
