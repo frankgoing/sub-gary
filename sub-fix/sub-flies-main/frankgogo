@@ -28,8 +28,8 @@ proxies:
       path: "/?ed=2560"
     skip-cert-verify: false
 
-  # 2. Reality 节点 (VLESS+TCP+REALITY)
-  - name: "reality"
+  # 2. 台湾 (VLESS+TCP+REALITY)
+  - name: "台湾"
     type: vless
     server: 35.206.255.170
     port: 52695
@@ -37,6 +37,7 @@ proxies:
     network: tcp
     tls: true
     servername: apple.com
+    fingerprint: chrome
     reality-opts:
       public-key: f-gXueUiR1mRPzygBhQ0k_Vf7cbQk_ZW79hXd3sWwVg
       short-id: 90e67883
@@ -55,7 +56,7 @@ proxies:
     ws-opts:
       host: sg.frankgo.eu.cc
       path: "/"
-    skip-cert-verify: false
+    skip-cert-verify: true
 
   # 4. 新加坡 TUIC
   - name: "新加坡 TUIC"
@@ -165,7 +166,7 @@ proxy-groups:
       - "♻️ 自动选择"
       - "🔯 故障转移"
       - "香港 CF"
-      - "reality"
+      - "台湾"
       - "新加坡"
       - "新加坡 TUIC"
       - "新加坡 Hysteria2"
@@ -181,7 +182,7 @@ proxy-groups:
     type: url-test
     proxies:
       - "香港 CF"
-      - "reality"
+      - "台湾"
       - "新加坡"
       - "新加坡 TUIC"
       - "新加坡 Hysteria2"
@@ -202,7 +203,7 @@ proxy-groups:
       - "新加坡"
       - "洛杉矶 DC02"
       - "洛杉矶 NAT"
-      - "reality"
+      - "台湾"
     url: "http://www.gstatic.com/generate_204"
     interval: 300
 
