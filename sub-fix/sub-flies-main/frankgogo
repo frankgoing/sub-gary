@@ -14,51 +14,7 @@ dns:
   fake-ip-range: 198.18.0.1/16
 
 proxies:
-  # 1. 香港 CF (VLESS+WS+TLS via Cloudflare)
-  - name: "香港 CF"
-    type: vless
-    server: super.frankgoing.us.kg
-    port: 443
-    uuid: 79a95971-a99c-4f4c-b2c8-d67bafc09a5b
-    network: ws
-    tls: true
-    servername: super.frankgoing.us.kg
-    ws-opts:
-      host: super.frankgoing.us.kg
-      path: "/?ed=2560"
-    skip-cert-verify: false
-
-  # 2. 台湾 (VLESS+TCP+REALITY)
-  - name: "台湾"
-    type: vless
-    server: 35.206.255.170
-    port: 56000
-    uuid: c1f46eac-b03f-451a-b8f9-98bccb090c91
-    network: tcp
-    tls: true
-    servername: apple.com
-    fingerprint: chrome
-    reality-opts:
-      public-key: qFbMwGPcMHgKtzxVLNqEycuXHXCMJOj3IE7K4dE_CDc
-      short-id: e4070505
-    flow: xtls-rprx-vision
-    skip-cert-verify: false
-
-  # 3. 新加坡 (VLESS+WS+TLS via Cloudflare)
-  - name: "新加坡"
-    type: vless
-    server: sg.frankgo.eu.cc
-    port: 2096
-    uuid: 3d2f8881-6347-4fed-9a14-bdeb32be736a
-    network: ws
-    tls: true
-    servername: sg.frankgo.eu.cc
-    ws-opts:
-      host: sg.frankgo.eu.cc
-      path: "/"
-    skip-cert-verify: true
-
-  # 4. 新加坡 TUIC
+  # 1. 新加坡 TUIC
   - name: "新加坡 TUIC"
     type: tuic
     server: 2401:4520:1015:34::a
@@ -73,7 +29,7 @@ proxies:
     sni: www.bing.com
     skip-cert-verify: true
 
-  # 5. 新加坡 Hysteria2
+  # 2. 新加坡 Hysteria2
   - name: "新加坡 Hysteria2"
     type: hysteria2
     server: 2401:4520:1015:34::a
@@ -84,7 +40,7 @@ proxies:
     obfs-password: nsrighcvnlzxd
     skip-cert-verify: true
 
-  # 6. 洛杉矶 DC02 (VLESS+WS+TLS via Cloudflare)
+  # 3. 洛杉矶 DC02 (VLESS+WS+TLS via Cloudflare)
   - name: "洛杉矶 DC02"
     type: vless
     server: sui02.666014.xyz
@@ -98,7 +54,7 @@ proxies:
       path: "/"
     skip-cert-verify: false
 
-  # 7. 洛杉矶 DC02 TUIC
+  # 4. 洛杉矶 DC02 TUIC
   - name: "洛杉矶 DC02 TUIC"
     type: tuic
     server: sui02.666014.xyz
@@ -110,7 +66,7 @@ proxies:
     sni: www.bing.com
     skip-cert-verify: true
 
-  # 8. 洛杉矶 DC02 Hysteria2
+  # 5. 洛杉矶 DC02 Hysteria2
   - name: "洛杉矶 DC02 HY2"
     type: hysteria2
     server: sui02.666014.xyz
@@ -123,7 +79,7 @@ proxies:
     obfs-password: "K8704Qzh5xvdb3Rv93yutJH7D7jh+NuTo3v70PG3tXs="
     skip-cert-verify: true
 
-  # 9. 洛杉矶 NAT (VLESS+WS+TLS via Cloudflare)
+  # 6. 洛杉矶 NAT (VLESS+WS+TLS via Cloudflare)
   - name: "洛杉矶 NAT"
     type: vless
     server: nats.666014.xyz
@@ -137,7 +93,7 @@ proxies:
       path: "/"
     skip-cert-verify: false
 
-  # 10. 洛杉矶 NAT TUIC
+  # 7. 洛杉矶 NAT TUIC
   - name: "洛杉矶 NAT TUIC"
     type: tuic
     server: nats.666014.xyz
@@ -150,7 +106,7 @@ proxies:
     sni: www.bing.com
     skip-cert-verify: true
 
-  # 11. 洛杉矶 NAT Hysteria2
+  # 8. 洛杉矶 NAT Hysteria2
   - name: "洛杉矶 NAT HY2"
     type: hysteria2
     server: nats.666014.xyz
@@ -165,9 +121,6 @@ proxy-groups:
     proxies:
       - "♻️ 自动选择"
       - "🔯 故障转移"
-      - "香港 CF"
-      - "台湾"
-      - "新加坡"
       - "新加坡 TUIC"
       - "新加坡 Hysteria2"
       - "洛杉矶 DC02"
@@ -181,9 +134,6 @@ proxy-groups:
   - name: "♻️ 自动选择"
     type: url-test
     proxies:
-      - "香港 CF"
-      - "台湾"
-      - "新加坡"
       - "新加坡 TUIC"
       - "新加坡 Hysteria2"
       - "洛杉矶 DC02"
@@ -199,11 +149,12 @@ proxy-groups:
   - name: "🔯 故障转移"
     type: fallback
     proxies:
-      - "香港 CF"
-      - "新加坡"
-      - "洛杉矶 DC02"
-      - "洛杉矶 NAT"
-      - "台湾"
+      - "洛杉矶 DC02 TUIC"
+      - "洛杉矶 DC02 HY2"
+      - "洛杉矶 NAT TUIC"
+      - "洛杉矶 NAT HY2"
+      - "新加坡 TUIC"
+      - "新加坡 Hysteria2"
     url: "http://www.gstatic.com/generate_204"
     interval: 300
 
