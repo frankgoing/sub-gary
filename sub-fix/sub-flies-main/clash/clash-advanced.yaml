@@ -16,7 +16,7 @@ proxy-providers:
   Airport_01:
     <<: *PProviders
     proxy: "🟢 直连"
-    url: "https://raw.githubusercontent.com/frankgoing/sub-flies/refs/heads/main/jiedian.yaml"
+    url: "https://raw.githubusercontent.com/frankgoing/sub-gary/refs/heads/main/sub-fix/sub-flies-main/frankgogo"
     override:
       skip-cert-verify: true
       udp: true
