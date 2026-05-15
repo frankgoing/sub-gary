@@ -23,11 +23,11 @@ exclude:
 proxy-providers:
   provider1:
     <<: [*p, *exclude]
-    url: '此处填入机场订阅链接'
+    url: 'https://nats.666014.xyz:33596/nnds/gary?format=clash'
     path: ./proxy_providers/provider1.yaml
 #  provider2:
 #   <<: [*p, *exclude]
-#   url: '此处填入机场订阅链接'
+#   url: 'https://sui02.666014.xyz:33596/sui02/02?format=clash'
 #   path: ./proxy_providers/provider2.yaml
 
 # --- 基础全局配置 ---
