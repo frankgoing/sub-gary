@@ -32,15 +32,15 @@ proxies:
   - name: "台湾"
     type: vless
     server: 35.206.255.170
-    port: 52695
-    uuid: a41239cb-0dbb-4e5a-b30a-95b940d7eb99
+    port: 56000
+    uuid: c1f46eac-b03f-451a-b8f9-98bccb090c91
     network: tcp
     tls: true
     servername: apple.com
     fingerprint: chrome
     reality-opts:
-      public-key: f-gXueUiR1mRPzygBhQ0k_Vf7cbQk_ZW79hXd3sWwVg
-      short-id: 90e67883
+      public-key: qFbMwGPcMHgKtzxVLNqEycuXHXCMJOj3IE7K4dE_CDc
+      short-id: e4070505
     flow: xtls-rprx-vision
     skip-cert-verify: false
 
