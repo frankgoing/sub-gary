@@ -55,7 +55,7 @@ proxies:
     ws-opts:
       host: sg.frankgo.eu.cc
       path: "/"
-    skip-cert-verify: false
+    skip-cert-verify: ture
 
   # 4. 新加坡 TUIC
   - name: "新加坡 TUIC"
