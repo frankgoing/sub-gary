@@ -17,13 +17,12 @@ proxies:
   # 1. 香港 CF (VLESS+WS+TLS via Cloudflare)
   - name: "香港 CF"
     type: vless
-    server: 104.18.39.209
+    server: super.frankgoing.us.kg
     port: 443
     uuid: 79a95971-a99c-4f4c-b2c8-d67bafc09a5b
     network: ws
     tls: true
     servername: super.frankgoing.us.kg
-    fingerprint: random
     ws-opts:
       host: super.frankgoing.us.kg
       path: "/?ed=2560"
@@ -47,7 +46,7 @@ proxies:
   # 3. 新加坡 (VLESS+WS+TLS via Cloudflare)
   - name: "新加坡"
     type: vless
-    server: 104.18.39.209
+    server: sg.frankgo.eu.cc
     port: 2096
     uuid: 3d2f8881-6347-4fed-9a14-bdeb32be736a
     network: ws
@@ -87,7 +86,7 @@ proxies:
   # 6. 洛杉矶 DC02 (VLESS+WS+TLS via Cloudflare)
   - name: "洛杉矶 DC02"
     type: vless
-    server: 104.18.39.209
+    server: sui02.666014.xyz
     port: 2096
     uuid: 1a13ed18-37a9-437b-a427-de2746d46409
     network: ws
@@ -126,7 +125,7 @@ proxies:
   # 9. 洛杉矶 NAT (VLESS+WS+TLS via Cloudflare)
   - name: "洛杉矶 NAT"
     type: vless
-    server: 104.18.39.209
+    server: nats.666014.xyz
     port: 2096
     uuid: 789852e0-7006-4032-8e58-93875c5e4a41
     network: ws
