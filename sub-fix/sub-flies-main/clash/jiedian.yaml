@@ -1,3 +1,18 @@
+mixed-port: 7890
+allow-lan: false
+mode: rule
+log-level: info
+external-controller: 127.0.0.1:9090
+
+dns:
+  enable: true
+  ipv6: true
+  nameserver:
+    - 8.8.8.8
+    - 1.1.1.1
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+
 proxies:
   # 1. 新加坡 TUIC
   - name: "新加坡 TUIC"
@@ -107,3 +122,64 @@ proxies:
     sni: www.bing.com
     skip-cert-verify: true
     icon: "https://flagcdn.com/us.svg"
+
+proxy-groups:
+  - name: "🚀 节点选择"
+    type: select
+    proxies:
+      - "♻️ 自动选择"
+      - "🔯 故障转移"
+      - "新加坡 TUIC"
+      - "新加坡 Hysteria2"
+      - "洛杉矶 DC02"
+      - "洛杉矶 DC02 TUIC"
+      - "洛杉矶 DC02 HY2"
+      - "洛杉矶 NAT"
+      - "洛杉矶 NAT TUIC"
+      - "洛杉矶 NAT HY2"
+      - "DIRECT"
+
+  - name: "♻️ 自动选择"
+    type: url-test
+    proxies:
+      - "新加坡 TUIC"
+      - "新加坡 Hysteria2"
+      - "洛杉矶 DC02"
+      - "洛杉矶 DC02 TUIC"
+      - "洛杉矶 DC02 HY2"
+      - "洛杉矶 NAT"
+      - "洛杉矶 NAT TUIC"
+      - "洛杉矶 NAT HY2"
+    url: "http://www.gstatic.com/generate_204"
+    interval: 300
+    tolerance: 50
+
+  - name: "🔯 故障转移"
+    type: fallback
+    proxies:
+      - "洛杉矶 DC02 TUIC"
+      - "洛杉矶 DC02 HY2"
+      - "洛杉矶 NAT TUIC"
+      - "洛杉矶 NAT HY2"
+      - "新加坡 TUIC"
+      - "新加坡 Hysteria2"
+    url: "http://www.gstatic.com/generate_204"
+    interval: 300
+
+  - name: "🎯 全球直连"
+    type: select
+    proxies:
+      - "DIRECT"
+      - "🚀 节点选择"
+
+  - name: "🛑 全球拦截"
+    type: select
+    proxies:
+      - "REJECT"
+      - "DIRECT"
+
+rules:
+  - GEOIP,CN,🎯 全球直连
+  - GEOIP,LAN,🎯 全球直连
+  - DOMAIN-SUFFIX,cn,🎯 全球直连
+  - MATCH,🚀 节点选择
