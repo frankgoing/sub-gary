@@ -15,7 +15,7 @@ dns:
 
 proxies:
   # 1. 新加坡 TUIC
-  - name: "新加坡 TUIC"
+  - name: "🇸🇬 新加坡 TUIC"
     type: tuic
     server: 2401:4520:1015:34::a
     port: 34839
@@ -30,7 +30,7 @@ proxies:
     skip-cert-verify: true
 
   # 2. 新加坡 Hysteria2
-  - name: "新加坡 Hysteria2"
+  - name: "🇸🇬 新加坡 Hysteria2"
     type: hysteria2
     server: 2401:4520:1015:34::a
     port: 41703
@@ -41,7 +41,7 @@ proxies:
     skip-cert-verify: true
 
   # 3. 洛杉矶 DC02 (VLESS+WS+TLS via Cloudflare)
-  - name: "洛杉矶 DC02"
+  - name: "🇺🇸 洛杉矶 DC02"
     type: vless
     server: sui02.666014.xyz
     port: 2096
@@ -55,7 +55,7 @@ proxies:
     skip-cert-verify: false
 
   # 4. 洛杉矶 DC02 TUIC
-  - name: "洛杉矶 DC02 TUIC"
+  - name: "🇺🇸 洛杉矶 DC02 TUIC"
     type: tuic
     server: sui02.666014.xyz
     port: 41322
@@ -67,7 +67,7 @@ proxies:
     skip-cert-verify: true
 
   # 5. 洛杉矶 DC02 Hysteria2
-  - name: "洛杉矶 DC02 HY2"
+  - name: "🇺🇸 洛杉矶 DC02 HY2"
     type: hysteria2
     server: sui02.666014.xyz
     port: 42648
@@ -80,7 +80,7 @@ proxies:
     skip-cert-verify: true
 
   # 6. 洛杉矶 NAT (VLESS+WS+TLS via Cloudflare)
-  - name: "洛杉矶 NAT"
+  - name: "🇺🇸 洛杉矶 NAT"
     type: vless
     server: nats.666014.xyz
     port: 2096
@@ -94,7 +94,7 @@ proxies:
     skip-cert-verify: false
 
   # 7. 洛杉矶 NAT TUIC
-  - name: "洛杉矶 NAT TUIC"
+  - name: "🇺🇸 洛杉矶 NAT TUIC"
     type: tuic
     server: nats.666014.xyz
     port: 44019
@@ -107,7 +107,7 @@ proxies:
     skip-cert-verify: true
 
   # 8. 洛杉矶 NAT Hysteria2
-  - name: "洛杉矶 NAT HY2"
+  - name: "🇺🇸 洛杉矶 NAT HY2"
     type: hysteria2
     server: nats.666014.xyz
     port: 17091
@@ -118,54 +118,59 @@ proxies:
 proxy-groups:
   - name: "🚀 节点选择"
     type: select
+    icon: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/icon/select.png"
     proxies:
       - "♻️ 自动选择"
       - "🔯 故障转移"
-      - "新加坡 TUIC"
-      - "新加坡 Hysteria2"
-      - "洛杉矶 DC02"
-      - "洛杉矶 DC02 TUIC"
-      - "洛杉矶 DC02 HY2"
-      - "洛杉矶 NAT"
-      - "洛杉矶 NAT TUIC"
-      - "洛杉矶 NAT HY2"
+      - "🇸🇬 新加坡 TUIC"
+      - "🇸🇬 新加坡 Hysteria2"
+      - "🇺🇸 洛杉矶 DC02"
+      - "🇺🇸 洛杉矶 DC02 TUIC"
+      - "🇺🇸 洛杉矶 DC02 HY2"
+      - "🇺🇸 洛杉矶 NAT"
+      - "🇺🇸 洛杉矶 NAT TUIC"
+      - "🇺🇸 洛杉矶 NAT HY2"
       - "DIRECT"
 
   - name: "♻️ 自动选择"
     type: url-test
+    icon: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/icon/automation2.png"
     proxies:
-      - "新加坡 TUIC"
-      - "新加坡 Hysteria2"
-      - "洛杉矶 DC02"
-      - "洛杉矶 DC02 TUIC"
-      - "洛杉矶 DC02 HY2"
-      - "洛杉矶 NAT"
-      - "洛杉矶 NAT TUIC"
-      - "洛杉矶 NAT HY2"
+      - "🇸🇬 新加坡 TUIC"
+      - "🇸🇬 新加坡 Hysteria2"
+      - "🇺🇸 洛杉矶 DC02"
+      - "🇺🇸 洛杉矶 DC02 TUIC"
+      - "🇺🇸 洛杉矶 DC02 HY2"
+      - "🇺🇸 洛杉矶 NAT"
+      - "🇺🇸 洛杉矶 NAT TUIC"
+      - "🇺🇸 洛杉矶 NAT HY2"
     url: "http://www.gstatic.com/generate_204"
     interval: 300
     tolerance: 50
 
   - name: "🔯 故障转移"
     type: fallback
+    icon: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/icon/fallback.png"
     proxies:
-      - "洛杉矶 DC02 TUIC"
-      - "洛杉矶 DC02 HY2"
-      - "洛杉矶 NAT TUIC"
-      - "洛杉矶 NAT HY2"
-      - "新加坡 TUIC"
-      - "新加坡 Hysteria2"
+      - "🇺🇸 洛杉矶 DC02 TUIC"
+      - "🇺🇸 洛杉矶 DC02 HY2"
+      - "🇺🇸 洛杉矶 NAT TUIC"
+      - "🇺🇸 洛杉矶 NAT HY2"
+      - "🇸🇬 新加坡 TUIC"
+      - "🇸🇬 新加坡 Hysteria2"
     url: "http://www.gstatic.com/generate_204"
     interval: 300
 
   - name: "🎯 全球直连"
     type: select
+    icon: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/icon/direct.png"
     proxies:
       - "DIRECT"
       - "🚀 节点选择"
 
   - name: "🛑 全球拦截"
     type: select
+    icon: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/icon/block.png"
     proxies:
       - "REJECT"
       - "DIRECT"
