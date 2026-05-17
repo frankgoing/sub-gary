@@ -126,6 +126,7 @@ proxies:
 proxy-groups:
   - name: "🚀 节点选择"
     type: select
+    icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/adjust.svg"
     proxies:
       - "♻️ 自动选择"
       - "🔯 故障转移"
@@ -141,6 +142,7 @@ proxy-groups:
 
   - name: "♻️ 自动选择"
     type: url-test
+    icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/speed.svg"
     proxies:
       - "新加坡 TUIC"
       - "新加坡 Hysteria2"
@@ -156,6 +158,7 @@ proxy-groups:
 
   - name: "🔯 故障转移"
     type: fallback
+    icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/ambulance.svg"
     proxies:
       - "洛杉矶 DC02 TUIC"
       - "洛杉矶 DC02 HY2"
@@ -168,12 +171,14 @@ proxy-groups:
 
   - name: "🎯 全球直连"
     type: select
+    icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/link.svg"
     proxies:
       - "DIRECT"
       - "🚀 节点选择"
 
   - name: "🛑 全球拦截"
     type: select
+    icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/block.svg"
     proxies:
       - "REJECT"
       - "DIRECT"
