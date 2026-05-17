@@ -118,7 +118,7 @@ proxies:
 proxy-groups:
   - name: "🚀 节点选择"
     type: select
-    icon: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/icon/select.png"
+    icon: "https://cdn.jsdelivr.net/gh/Lanlan13-14/Rules@main/icon/select.png"
     proxies:
       - "♻️ 自动选择"
       - "🔯 故障转移"
@@ -134,7 +134,7 @@ proxy-groups:
 
   - name: "♻️ 自动选择"
     type: url-test
-    icon: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/icon/automation2.png"
+    icon: "https://cdn.jsdelivr.net/gh/Lanlan13-14/Rules@main/icon/automation2.png"
     proxies:
       - "🇸🇬 新加坡 TUIC"
       - "🇸🇬 新加坡 Hysteria2"
@@ -150,7 +150,7 @@ proxy-groups:
 
   - name: "🔯 故障转移"
     type: fallback
-    icon: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/icon/fallback.png"
+    icon: "https://cdn.jsdelivr.net/gh/Lanlan13-14/Rules@main/icon/fallback.png"
     proxies:
       - "🇺🇸 洛杉矶 DC02 TUIC"
       - "🇺🇸 洛杉矶 DC02 HY2"
@@ -163,14 +163,14 @@ proxy-groups:
 
   - name: "🎯 全球直连"
     type: select
-    icon: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/icon/direct.png"
+    icon: "https://cdn.jsdelivr.net/gh/Lanlan13-14/Rules@main/icon/direct.png"
     proxies:
       - "DIRECT"
       - "🚀 节点选择"
 
   - name: "🛑 全球拦截"
     type: select
-    icon: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/icon/block.png"
+    icon: "https://cdn.jsdelivr.net/gh/Lanlan13-14/Rules@main/icon/block.png"
     proxies:
       - "REJECT"
       - "DIRECT"
