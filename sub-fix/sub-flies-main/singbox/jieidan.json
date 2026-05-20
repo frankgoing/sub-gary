@@ -42,6 +42,9 @@
         "洛杉矶 DC02",
         "洛杉矶 dc02 tuic",
         "洛杉矶 dc02 hy2",
+        "洛杉矶 DC03",
+        "洛杉矶 DC03 TUIC",
+        "洛杉矶 DC03 HY2",
         "俄勒冈 GCP TUIC",
         "俄勒冈 GCP HY2",
         "德国 EUserv",
@@ -149,6 +152,55 @@
       "obfs": {
         "type": "salamander",
         "password": "K8704Qzh5xvdb3Rv93yutJH7D7jh+NuTo3v70PG3tXs="
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "www.bing.com",
+        "alpn": [ "h3" ],
+        "insecure": true
+      }
+    },
+    {
+      "tag": "洛杉矶 DC03",
+      "type": "vless",
+      "server": "104.18.39.209",
+      "server_port": 2096,
+      "uuid": "ae4ccb0a-8f7c-413d-8ed9-480e7fba562d",
+      "tls": {
+        "enabled": true,
+        "server_name": "dc03.666014.xyz",
+        "insecure": false
+      },
+      "transport": {
+        "type": "ws",
+        "headers": { "Host": "dc03.666014.xyz" },
+        "path": "/"
+      }
+    },
+    {
+      "tag": "洛杉矶 DC03 TUIC",
+      "type": "tuic",
+      "server": "dc03.666014.xyz",
+      "server_port": 46248,
+      "uuid": "ae4ccb0a-8f7c-413d-8ed9-480e7fba562d",
+      "password": "ae4ccb0a-8f7c-413d-8ed9-480e7fba562d",
+      "congestion_control": "bbr",
+      "tls": {
+        "enabled": true,
+        "server_name": "www.bing.com",
+        "alpn": [ "h3" ],
+        "insecure": true
+      }
+    },
+    {
+      "tag": "洛杉矶 DC03 HY2",
+      "type": "hysteria2",
+      "server": "dc03.666014.xyz",
+      "server_port": 37425,
+      "password": "98dskE8W6undefined",
+      "obfs": {
+        "type": "salamander",
+        "password": "sga5hedyjuiolr"
       },
       "tls": {
         "enabled": true,
