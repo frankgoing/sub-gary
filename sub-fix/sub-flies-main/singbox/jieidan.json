@@ -117,24 +117,24 @@
       "type": "vless",
       "server": "104.18.39.209",
       "server_port": 2096,
-      "uuid": "1a13ed18-37a9-437b-a427-de2746d46409",
+      "uuid": "72f12990-7e43-4e2e-b732-ee77ded7917e",
       "tls": {
         "enabled": true,
-        "server_name": "sui02.666014.xyz"
+        "server_name": "sui.666014.xyz"
       },
       "transport": {
         "type": "ws",
-        "headers": { "Host": "sui02.666014.xyz" },
+        "headers": { "Host": "sui.666014.xyz" },
         "path": "/"
       }
     },
     {
       "tag": "洛杉矶 dc02 tuic",
       "type": "tuic",
-      "server": "sui02.666014.xyz",
-      "server_port": 41322,
-      "uuid": "1a13ed18-37a9-437b-a427-de2746d46409",
-      "password": "1a13ed18-37a9-437b-a427-de2746d46409",
+      "server": "sui.666014.xyz",
+      "server_port": 42432,
+      "uuid": "72f12990-7e43-4e2e-b732-ee77ded7917e",
+      "password": "72f12990-7e43-4e2e-b732-ee77ded7917e",
       "congestion_control": "bbr",
       "tls": {
         "enabled": true,
@@ -146,12 +146,12 @@
     {
       "tag": "洛杉矶 dc02 hy2",
       "type": "hysteria2",
-      "server": "sui02.666014.xyz",
-      "server_port": 42648,
-      "password": "1a13ed18-37a9-437b-a427-de2746d46409",
+      "server": "sui.666014.xyz",
+      "server_port": 13707,
+      "password": "72f12990-7e43-4e2e-b732-ee77ded7917e",
       "obfs": {
         "type": "salamander",
-        "password": "K8704Qzh5xvdb3Rv93yutJH7D7jh+NuTo3v70PG3tXs="
+        "password": "egawtshr"
       },
       "tls": {
         "enabled": true,
