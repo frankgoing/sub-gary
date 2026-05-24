@@ -45,7 +45,7 @@
         "洛杉矶 DC03",
         "洛杉矶 DC03 TUIC",
         "洛杉矶 DC03 HY2",
-        "俄勒冈 GCP TUIC",
+        "新加坡 TUIC",
         "俄勒冈 GCP HY2",
         "德国 EUserv",
         "德国 EUserv TUIC"
@@ -210,12 +210,12 @@
       }
     },
     {
-      "tag": "俄勒冈 GCP TUIC",
+      "tag": "新加坡 TUIC",
       "type": "tuic",
-      "server": "35.212.135.196",
-      "server_port": 55318,
-      "uuid": "92a4658e-9bbb-47f4-bd3c-1ea31a6ee84b",
-      "password": "gMpt0UKundefinedxG",
+      "server": "sg.frankgo.eu.cc",
+      "server_port": 34839,
+      "uuid": "3d2f8881-6347-4fed-9a14-bdeb32be736a",
+      "password": "3d2f8881-6347-4fed-9a14-bdeb32be736a",
       "congestion_control": "bbr",
       "tls": {
         "enabled": true,
