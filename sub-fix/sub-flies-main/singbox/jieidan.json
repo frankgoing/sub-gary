@@ -45,6 +45,7 @@
         "洛杉矶 DC03",
         "洛杉矶 DC03 TUIC",
         "洛杉矶 DC03 HY2",
+        "新加披"
         "新加坡 TUIC",
         "新加坡 HY2",
         "德国 EUserv",
@@ -207,6 +208,22 @@
         "server_name": "www.bing.com",
         "alpn": [ "h3" ],
         "insecure": true
+      }
+    },
+    {
+      "tag": "新加披",
+      "type": "vless",
+      "server": "104.18.39.209",
+      "server_port": 2096,
+      "uuid": "3d2f8881-6347-4fed-9a14-bdeb32be736a",
+      "tls": {
+        "enabled": true,
+        "server_name": "sg.frankgo.eu.cc"
+      },
+      "transport": {
+        "type": "ws",
+        "headers": { "Host": "sg.frankgo.eu.cc" },
+        "path": "/"
       }
     },
     {
