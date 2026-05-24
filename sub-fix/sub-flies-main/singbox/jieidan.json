@@ -211,26 +211,27 @@
       }
     },
     {
-    "tag": "新加披 NAT",
-    "type": "vless",
-    "server": "104.18.39.209",
-    "server_port": 2096,
-    "uuid": "3d2f8881-6347-4fed-9a14-bdeb32be736a",
-    "tls": {
-      "enabled": true,
-      "server_name": "sg.frankgo.eu.cc",
-      "insecure": true,
-      "utls": {
+      "tag": "新加披 NAT",
+      "type": "vless",
+      "server": "104.18.39.209",
+      "server_port": 2096,
+      "uuid": "3d2f8881-6347-4fed-9a14-bdeb32be736a",
+      "tls": {
         "enabled": true,
-        "fingerprint": "chrome"
-      }
-    },
-    "transport": {
-      "type": "ws",
-      "headers": {
-        "Host": "sg.frankgo.eu.cc"
+        "server_name": "sg.frankgo.eu.cc",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
       },
-      "path": "/"
+      "transport": {
+        "type": "ws",
+        "headers": {
+          "Host": "sg.frankgo.eu.cc"
+        },
+        "path": "/"
+      }
     },
     {
       "tag": "新加坡 TUIC",
