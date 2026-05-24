@@ -281,23 +281,23 @@
         "path": "/"
       }
     },
-     {
-    "tag": "德国 EUserv TUIC",
-    "type": "tuic",
-    "server": "eus.666014.xyz",
-    "server_port": 17782,
-    "uuid": "6a50fe55-f703-45ea-a813-d6bd9d075614",
-    "password": "6a50fe55-f703-45ea-a813-d6bd9d075614",
-    "tls": {
-      "enabled": true,
-      "server_name": "www.bing.com",
-      "insecure": true,
-      "alpn": [
-        "h3"
-      ]
+    {
+      "tag": "德国 EUserv TUIC",
+      "type": "tuic",
+      "server": "eus.666014.xyz",
+      "server_port": 17782,
+      "uuid": "6a50fe55-f703-45ea-a813-d6bd9d075614",
+      "password": "6a50fe55-f703-45ea-a813-d6bd9d075614",
+      "congestion_control": "bbr",
+      "tls": {
+        "enabled": true,
+        "server_name": "www.bing.com",
+        "insecure": true,
+        "alpn": [ "h3" ]
+      }
     },
-    "congestion_control": "bbr"
-  }
+    { "type": "dns", "tag": "dns-out" },
+    { "type": "direct", "tag": "direct" }
   ],
   "route": {
     "rules": [
