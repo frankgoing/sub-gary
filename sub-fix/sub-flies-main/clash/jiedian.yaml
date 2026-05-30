@@ -45,14 +45,14 @@ proxies:
   # 3. 洛杉矶 DC02 (VLESS+WS+TLS via Cloudflare)
   - name: "洛杉矶 DC02"
     type: vless
-    server: sui02.666014.xyz
+    server: sui.666014.xyz
     port: 2096
-    uuid: 1a13ed18-37a9-437b-a427-de2746d46409
+    uuid: 72f12990-7e43-4e2e-b732-ee77ded7917e
     network: ws
     tls: true
-    servername: sui02.666014.xyz
+    servername: sui.666014.xyz
     ws-opts:
-      host: sui02.666014.xyz
+      host: sui.666014.xyz
       path: "/"
     skip-cert-verify: false
     icon: "https://flagcdn.com/us.svg"
@@ -60,10 +60,10 @@ proxies:
   # 4. 洛杉矶 DC02 TUIC
   - name: "洛杉矶 DC02 TUIC"
     type: tuic
-    server: sui02.666014.xyz
-    port: 41322
-    uuid: 1a13ed18-37a9-437b-a427-de2746d46409
-    password: 1a13ed18-37a9-437b-a427-de2746d46409
+    server: sui.666014.xyz
+    port: 42432
+    uuid: 72f12990-7e43-4e2e-b732-ee77ded7917e
+    password: 72f12990-7e43-4e2e-b732-ee77ded7917e
     alpn:
       - h3
     sni: www.bing.com
@@ -73,14 +73,14 @@ proxies:
   # 5. 洛杉矶 DC02 Hysteria2
   - name: "洛杉矶 DC02 HY2"
     type: hysteria2
-    server: sui02.666014.xyz
-    port: 42648
-    password: 1a13ed18-37a9-437b-a427-de2746d46409
+    server: sui.666014.xyz
+    port: 13707
+    password: 72f12990-7e43-4e2e-b732-ee77ded7917e
     sni: www.bing.com
     alpn:
       - h3
     obfs: salamander
-    obfs-password: "K8704Qzh5xvdb3Rv93yutJH7D7jh+NuTo3v70PG3tXs="
+    obfs-password: "egawtshr"
     skip-cert-verify: true
     icon: "https://flagcdn.com/us.svg"
 
