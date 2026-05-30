@@ -14,50 +14,81 @@ dns:
   fake-ip-range: 198.18.0.1/16
 
 proxies:
-  # 1. 新加坡 TUIC
-  - name: "新加坡 TUIC"
+  # 1. 香港 CF (VLESS+WS+TLS via Cloudflare)
+  - name: "香港 CF"
+    type: vless
+    server: 104.18.39.209
+    port: 443
+    uuid: 79a95971-a99c-4f4c-b2c8-d67bafc09a5b
+    network: ws
+    tls: true
+    servername: super.frankgoing.us.kg
+    ws-opts:
+      headers:
+        Host: super.frankgoing.us.kg
+      path: "/?ed=2560"
+    skip-cert-verify: false
+    icon: "https://flagcdn.com/hk.svg"
+
+  # 2. 洛杉矶 NAT (VLESS+WS+TLS via Cloudflare)
+  - name: "洛杉矶 NAT"
+    type: vless
+    server: 104.18.39.209
+    port: 2096
+    uuid: 789852e0-7006-4032-8e58-93875c5e4a41
+    network: ws
+    tls: true
+    servername: nats.666014.xyz
+    ws-opts:
+      headers:
+        Host: nats.666014.xyz
+      path: "/"
+    skip-cert-verify: false
+    icon: "https://flagcdn.com/us.svg"
+
+  # 3. 洛杉矶 NAT TUIC
+  - name: "洛杉矶 NAT TUIC"
     type: tuic
-    server: 2401:4520:1015:34::a
-    port: 34839
-    uuid: 3d2f8881-6347-4fed-9a14-bdeb32be736a
-    password: 3d2f8881-6347-4fed-9a14-bdeb32be736a
+    server: nats.666014.xyz
+    port: 44019
+    uuid: 789852e0-7006-4032-8e58-93875c5e4a41
+    password: ge3BK5FaQK
     alpn:
       - h3
-      - h2
-      - http/1.1
     congestion-controller: bbr
-    sni: www.bing.com
-    skip-cert-verify: true
-    icon: "https://flagcdn.com/sg.svg"
+    sni: nats.666014.xyz
+    skip-cert-verify: false
+    icon: "https://flagcdn.com/us.svg"
 
-  # 2. 新加坡 Hysteria2
-  - name: "新加坡 Hysteria2"
+  # 4. 洛杉矶 NAT Hysteria2
+  - name: "洛杉矶 NAT HY2"
     type: hysteria2
-    server: 2401:4520:1015:34::a
-    port: 41703
-    password: 3d2f8881-6347-4fed-9a14-bdeb32be736a
-    sni: www.bing.com
-    obfs: salamander
-    obfs-password: nsrighcvnlzxd
-    skip-cert-verify: true
-    icon: "https://flagcdn.com/sg.svg"
+    server: nats.666014.xyz
+    port: 17091
+    password: ge3BK5FaQK
+    sni: nats.666014.xyz
+    alpn:
+      - h3
+    skip-cert-verify: false
+    icon: "https://flagcdn.com/us.svg"
 
-  # 3. 洛杉矶 DC02 (VLESS+WS+TLS via Cloudflare)
+  # 5. 洛杉矶 DC02 (VLESS+WS+TLS via Cloudflare)
   - name: "洛杉矶 DC02"
     type: vless
-    server: sui.666014.xyz
+    server: 104.18.39.209
     port: 2096
     uuid: 72f12990-7e43-4e2e-b732-ee77ded7917e
     network: ws
     tls: true
     servername: sui.666014.xyz
     ws-opts:
-      host: sui.666014.xyz
+      headers:
+        Host: sui.666014.xyz
       path: "/"
     skip-cert-verify: false
     icon: "https://flagcdn.com/us.svg"
 
-  # 4. 洛杉矶 DC02 TUIC
+  # 6. 洛杉矶 DC02 TUIC
   - name: "洛杉矶 DC02 TUIC"
     type: tuic
     server: sui.666014.xyz
@@ -70,7 +101,7 @@ proxies:
     skip-cert-verify: true
     icon: "https://flagcdn.com/us.svg"
 
-  # 5. 洛杉矶 DC02 Hysteria2
+  # 7. 洛杉矶 DC02 Hysteria2
   - name: "洛杉矶 DC02 HY2"
     type: hysteria2
     server: sui.666014.xyz
@@ -84,44 +115,120 @@ proxies:
     skip-cert-verify: true
     icon: "https://flagcdn.com/us.svg"
 
-  # 6. 洛杉矶 NAT (VLESS+WS+TLS via Cloudflare)
-  - name: "洛杉矶 NAT"
+  # 8. 洛杉矶 DC03 (VLESS+WS+TLS via Cloudflare)
+  - name: "洛杉矶 DC03"
     type: vless
-    server: nats.666014.xyz
+    server: 104.18.39.209
     port: 2096
-    uuid: 789852e0-7006-4032-8e58-93875c5e4a41
+    uuid: ae4ccb0a-8f7c-413d-8ed9-480e7fba562d
     network: ws
     tls: true
-    servername: nats.666014.xyz
+    servername: dc03.666014.xyz
     ws-opts:
-      host: nats.666014.xyz
+      headers:
+        Host: dc03.666014.xyz
       path: "/"
     skip-cert-verify: false
     icon: "https://flagcdn.com/us.svg"
 
-  # 7. 洛杉矶 NAT TUIC
-  - name: "洛杉矶 NAT TUIC"
+  # 9. 洛杉矶 DC03 TUIC
+  - name: "洛杉矶 DC03 TUIC"
     type: tuic
-    server: nats.666014.xyz
-    port: 44019
-    uuid: 789852e0-7006-4032-8e58-93875c5e4a41
-    password: ge3BK5FaQK
+    server: dc03.666014.xyz
+    port: 46248
+    uuid: ae4ccb0a-8f7c-413d-8ed9-480e7fba562d
+    password: ae4ccb0a-8f7c-413d-8ed9-480e7fba562d
     alpn:
       - h3
-    congestion-controller: bbr
     sni: www.bing.com
     skip-cert-verify: true
     icon: "https://flagcdn.com/us.svg"
 
-  # 8. 洛杉矶 NAT Hysteria2
-  - name: "洛杉矶 NAT HY2"
+  # 10. 洛杉矶 DC03 Hysteria2
+  - name: "洛杉矶 DC03 HY2"
     type: hysteria2
-    server: nats.666014.xyz
-    port: 17091
-    password: ge3BK5FaQK
+    server: dc03.666014.xyz
+    port: 37425
+    password: 98dskE8W6undefined
     sni: www.bing.com
+    alpn:
+      - h3
+    obfs: salamander
+    obfs-password: "sga5hedyjuiolr"
     skip-cert-verify: true
     icon: "https://flagcdn.com/us.svg"
+
+  # 11. 新加坡 NAT (VLESS+WS+TLS via Cloudflare)
+  - name: "新加坡 NAT"
+    type: vless
+    server: 104.18.39.209
+    port: 2096
+    uuid: 3d2f8881-6347-4fed-9a14-bdeb32be736a
+    network: ws
+    tls: true
+    servername: sg.frankgo.eu.cc
+    ws-opts:
+      headers:
+        Host: sg.frankgo.eu.cc
+      path: "/"
+    skip-cert-verify: true
+    icon: "https://flagcdn.com/sg.svg"
+
+  # 12. 新加坡 TUIC
+  - name: "新加坡 TUIC"
+    type: tuic
+    server: sg.frankgo.eu.cc
+    port: 34839
+    uuid: 3d2f8881-6347-4fed-9a14-bdeb32be736a
+    password: 3d2f8881-6347-4fed-9a14-bdeb32be736a
+    alpn:
+      - h3
+    sni: www.bing.com
+    skip-cert-verify: true
+    icon: "https://flagcdn.com/sg.svg"
+
+  # 13. 新加坡 Hysteria2
+  - name: "新加坡 HY2"
+    type: hysteria2
+    server: sg.frankgo.eu.cc
+    port: 41703
+    password: 3d2f8881-6347-4fed-9a14-bdeb32be736a
+    sni: www.bing.com
+    alpn:
+      - h3
+    obfs: salamander
+    obfs-password: "nsrighcvnlzxd"
+    skip-cert-verify: true
+    icon: "https://flagcdn.com/sg.svg"
+
+  # 14. 德国 EUserv (VLESS+WS+TLS via Cloudflare)
+  - name: "德国 EUserv"
+    type: vless
+    server: 104.18.39.209
+    port: 2096
+    uuid: 6a50fe55-f703-45ea-a813-d6bd9d075614
+    network: ws
+    tls: true
+    servername: eus.666014.xyz
+    ws-opts:
+      headers:
+        Host: eus.666014.xyz
+      path: "/"
+    skip-cert-verify: false
+    icon: "https://flagcdn.com/de.svg"
+
+  # 15. 德国 EUserv TUIC
+  - name: "德国 EUserv TUIC"
+    type: tuic
+    server: eus.666014.xyz
+    port: 17782
+    uuid: 6a50fe55-f703-45ea-a813-d6bd9d075614
+    password: 6a50fe55-f703-45ea-a813-d6bd9d075614
+    alpn:
+      - h3
+    sni: www.bing.com
+    skip-cert-verify: true
+    icon: "https://flagcdn.com/de.svg"
 
 proxy-groups:
   - name: "🚀 节点选择"
@@ -130,28 +237,42 @@ proxy-groups:
     proxies:
       - "♻️ 自动选择"
       - "🔯 故障转移"
-      - "新加坡 TUIC"
-      - "新加坡 Hysteria2"
-      - "洛杉矶 DC02"
-      - "洛杉矶 DC02 TUIC"
-      - "洛杉矶 DC02 HY2"
+      - "香港 CF"
       - "洛杉矶 NAT"
       - "洛杉矶 NAT TUIC"
       - "洛杉矶 NAT HY2"
+      - "洛杉矶 DC02"
+      - "洛杉矶 DC02 TUIC"
+      - "洛杉矶 DC02 HY2"
+      - "洛杉矶 DC03"
+      - "洛杉矶 DC03 TUIC"
+      - "洛杉矶 DC03 HY2"
+      - "新加坡 NAT"
+      - "新加坡 TUIC"
+      - "新加坡 HY2"
+      - "德国 EUserv"
+      - "德国 EUserv TUIC"
       - "DIRECT"
 
   - name: "♻️ 自动选择"
     type: url-test
     icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/speed.svg"
     proxies:
-      - "新加坡 TUIC"
-      - "新加坡 Hysteria2"
-      - "洛杉矶 DC02"
-      - "洛杉矶 DC02 TUIC"
-      - "洛杉矶 DC02 HY2"
+      - "香港 CF"
       - "洛杉矶 NAT"
       - "洛杉矶 NAT TUIC"
       - "洛杉矶 NAT HY2"
+      - "洛杉矶 DC02"
+      - "洛杉矶 DC02 TUIC"
+      - "洛杉矶 DC02 HY2"
+      - "洛杉矶 DC03"
+      - "洛杉矶 DC03 TUIC"
+      - "洛杉矶 DC03 HY2"
+      - "新加坡 NAT"
+      - "新加坡 TUIC"
+      - "新加坡 HY2"
+      - "德国 EUserv"
+      - "德国 EUserv TUIC"
     url: "http://www.gstatic.com/generate_204"
     interval: 300
     tolerance: 50
@@ -162,10 +283,13 @@ proxy-groups:
     proxies:
       - "洛杉矶 DC02 TUIC"
       - "洛杉矶 DC02 HY2"
+      - "洛杉矶 DC03 TUIC"
+      - "洛杉矶 DC03 HY2"
       - "洛杉矶 NAT TUIC"
       - "洛杉矶 NAT HY2"
       - "新加坡 TUIC"
-      - "新加坡 Hysteria2"
+      - "新加坡 HY2"
+      - "德国 EUserv TUIC"
     url: "http://www.gstatic.com/generate_204"
     interval: 300
 
