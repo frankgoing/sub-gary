@@ -27,7 +27,7 @@ proxies:
       headers:
         Host: super.frankgoing.us.kg
       path: "/?ed=2560"
-    skip-cert-verify: false
+    skip-cert-verify: true
     icon: "https://flagcdn.com/hk.svg"
 
   # 2. 洛杉矶 NAT (VLESS+WS+TLS via Cloudflare)
@@ -43,7 +43,7 @@ proxies:
       headers:
         Host: nats.666014.xyz
       path: "/"
-    skip-cert-verify: false
+    skip-cert-verify: true
     icon: "https://flagcdn.com/us.svg"
 
   # 3. 洛杉矶 NAT TUIC
@@ -57,7 +57,7 @@ proxies:
       - h3
     congestion-controller: bbr
     sni: nats.666014.xyz
-    skip-cert-verify: false
+    skip-cert-verify: true
     icon: "https://flagcdn.com/us.svg"
 
   # 4. 洛杉矶 NAT Hysteria2
@@ -69,7 +69,7 @@ proxies:
     sni: nats.666014.xyz
     alpn:
       - h3
-    skip-cert-verify: false
+    skip-cert-verify: true
     icon: "https://flagcdn.com/us.svg"
 
   # 5. 洛杉矶 DC02 (VLESS+WS+TLS via Cloudflare)
@@ -85,7 +85,7 @@ proxies:
       headers:
         Host: sui.666014.xyz
       path: "/"
-    skip-cert-verify: false
+    skip-cert-verify: true
     icon: "https://flagcdn.com/us.svg"
 
   # 6. 洛杉矶 DC02 TUIC
@@ -128,7 +128,7 @@ proxies:
       headers:
         Host: dc03.666014.xyz
       path: "/"
-    skip-cert-verify: false
+    skip-cert-verify: true
     icon: "https://flagcdn.com/us.svg"
 
   # 9. 洛杉矶 DC03 TUIC
@@ -214,7 +214,7 @@ proxies:
       headers:
         Host: eus.666014.xyz
       path: "/"
-    skip-cert-verify: false
+    skip-cert-verify: true
     icon: "https://flagcdn.com/de.svg"
 
   # 15. 德国 EUserv TUIC
