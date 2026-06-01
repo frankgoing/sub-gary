@@ -1,9 +1,12 @@
 # 锚点区
-Proxy_first: &Proxy_first {type: select, include-all: true, proxies: [节点选择, 全球直连], exclude-filter: "(?i)(🟢 直连)"}
+# Proxy_first：代理优先，节点列表首位插入直连供备用
+Proxy_first: &Proxy_first {type: select, include-all: true, proxies: [全球直连], exclude-filter: "(?i)(🟢 直连)"}
 
-Direct_first: &Direct_first {type: select, include-all: true, proxies: [全球直连, 节点选择], exclude-filter: "(?i)(🟢 直连)"}
+# Direct_first：直连优先，节点列表末尾可选代理节点
+Direct_first: &Direct_first {type: select, include-all: true, proxies: [全球直连], exclude-filter: "(?i)(🟢 直连)"}
 
-Include_all: &Include_all {type: select, include-all: true, proxies: [节点选择, 全球直连], exclude-filter: "(?i)(🟢 直连)"}
+# Include_all：纯节点列表，不套娃任何分组
+Include_all: &Include_all {type: select, include-all: true, proxies: [全球直连], exclude-filter: "(?i)(🟢 直连)"}
 
 PProviders: &PProviders {type: http, interval: 86400, health-check: {enable: true, url: 'https://edge.microsoft.com/captiveportal/generate_204', interval: 300}, filter: '^(?!.*(拒绝|直连|群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|提示|特别|访问|支持|教程|关注|更新|作者|加入|USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author|traffic))'}
 
@@ -159,7 +162,7 @@ proxies:
 
 # 策略组
 proxy-groups:
-  - {name: 节点选择, type: select, include-all: true, proxies: [自建/家宽节点], exclude-filter: "(?i)(🟢 直连)", icon: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/icon/select.png"}
+  - {name: 节点选择, type: select, include-all: true, proxies: [自建/家宽节点, 全部节点], exclude-filter: "(?i)(🟢 直连)", icon: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/icon/select.png"}
 # 功能型代理组默认隐藏 start
   - {name: 🔗 代理, type: select, hidden: true, proxies: [节点选择]}
   - {name: 🚫 拒绝, type: select, hidden: true, proxies: [REJECT]}
