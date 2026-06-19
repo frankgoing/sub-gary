@@ -600,7 +600,6 @@
             "server": "104.18.39.209",
             "server_port": 2083,
             "uuid": "a4068593-5d3a-460a-b046-0bddf002a629",
-            "encryption": "none",
             "tls": {
                 "enabled": true,
                 "server_name": "sui.666014.xyz",
@@ -653,7 +652,6 @@
             "server": "104.18.39.209",
             "server_port": 2083,
             "uuid": "ae4ccb0a-8f7c-413d-8ed9-480e7fba562d",
-            "encryption": "none",
             "tls": {
                 "enabled": true,
                 "server_name": "dc03.666014.xyz",
@@ -706,7 +704,6 @@
             "server": "104.18.39.209",
             "server_port": 2083,
             "uuid": "3d2f8881-6347-4fed-9a14-bdeb32be736a",
-            "encryption": "none",
             "tls": {
                 "enabled": true,
                 "server_name": "sg.frankgo.eu.cc",
