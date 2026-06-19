@@ -598,35 +598,33 @@
             "tag": "🇺🇸 洛杉矶 DC02",
             "type": "vless",
             "server": "104.18.39.209",
-            "server_port": 2096,
-            "uuid": "72f12990-7e43-4e2e-b732-ee77ded7917e",
+            "server_port": 2083,
+            "uuid": "a4068593-5d3a-460a-b046-0bddf002a629",
             "tls": {
                 "enabled": true,
-                "server_name": "sui.666014.xyz"
+                "server_name": "sui.666014.xyz",
+                "insecure": false
             },
             "transport": {
-                "type": "ws",
-                "headers": {
-                    "Host": "sui.666014.xyz"
-                },
-                "path": "/"
+                "type": "grpc",
+                "service_name": "suigrpc"
             }
         },
         {
             "tag": "🇺🇸 洛杉矶 DC02 TUIC",
             "type": "tuic",
             "server": "sui.666014.xyz",
-            "server_port": 42432,
-            "uuid": "72f12990-7e43-4e2e-b732-ee77ded7917e",
-            "password": "72f12990-7e43-4e2e-b732-ee77ded7917e",
+            "server_port": 18174,
+            "uuid": "a4068593-5d3a-460a-b046-0bddf002a629",
+            "password": "a4068593-5d3a-460a-b046-0bddf002a629",
             "congestion_control": "bbr",
             "tls": {
                 "enabled": true,
-                "server_name": "www.bing.com",
+                "server_name": "sui.666014.xyz",
                 "alpn": [
                     "h3"
                 ],
-                "insecure": true
+                "insecure": false
             }
         },
         {
@@ -652,7 +650,7 @@
             "tag": "🇺🇸 洛杉矶 DC03",
             "type": "vless",
             "server": "104.18.39.209",
-            "server_port": 2096,
+            "server_port": 2083,
             "uuid": "ae4ccb0a-8f7c-413d-8ed9-480e7fba562d",
             "tls": {
                 "enabled": true,
@@ -660,11 +658,8 @@
                 "insecure": false
             },
             "transport": {
-                "type": "ws",
-                "headers": {
-                    "Host": "dc03.666014.xyz"
-                },
-                "path": "/"
+                "type": "grpc",
+                "service_name": "dc03grpc"
             }
         },
         {
@@ -677,11 +672,12 @@
             "congestion_control": "bbr",
             "tls": {
                 "enabled": true,
-                "server_name": "www.bing.com",
+                "server_name": "dc03.666014.xyz",
                 "alpn": [
-                    "h3"
+                    "h3",
+                    "h2"
                 ],
-                "insecure": true
+                "insecure": false
             }
         },
         {
@@ -707,23 +703,16 @@
             "tag": "🇸🇬 新加坡 NAT",
             "type": "vless",
             "server": "104.18.39.209",
-            "server_port": 2096,
+            "server_port": 2083,
             "uuid": "3d2f8881-6347-4fed-9a14-bdeb32be736a",
             "tls": {
                 "enabled": true,
                 "server_name": "sg.frankgo.eu.cc",
-                "insecure": true,
-                "utls": {
-                    "enabled": true,
-                    "fingerprint": "chrome"
-                }
+                "insecure": false
             },
             "transport": {
-                "type": "ws",
-                "headers": {
-                    "Host": "sg.frankgo.eu.cc"
-                },
-                "path": "/"
+                "type": "grpc",
+                "service_name": "sgsgrpc"
             }
         },
         {
@@ -736,11 +725,12 @@
             "congestion_control": "bbr",
             "tls": {
                 "enabled": true,
-                "server_name": "www.bing.com",
+                "server_name": "sg.frankgo.eu.cc",
                 "alpn": [
-                    "h3"
+                    "h3",
+                    "h2"
                 ],
-                "insecure": true
+                "insecure": false
             }
         },
         {
@@ -790,11 +780,12 @@
             "congestion_control": "bbr",
             "tls": {
                 "enabled": true,
-                "server_name": "www.bing.com",
-                "insecure": true,
+                "server_name": "eus.666014.xyz",
                 "alpn": [
-                    "h3"
-                ]
+                    "h3",
+                    "h2"
+                ],
+                "insecure": false
             }
         }
     ],
