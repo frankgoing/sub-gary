@@ -1,4 +1,4 @@
-vless=104.18.39.209:8443, method=none, password=79a95971-a99c-4f4c-b2c8-d67bafc09a5b, obfs=wss, obfs-host=super.frankgoing.us.kg, obfs-uri=/?ed=2560, fast-open=false, udp-relay=false, tag=香港 CF
+vless=104.18.39.209:2096, method=none, password=aaf8d499-879d-4814-a8f2-560afb192335, obfs=wss, obfs-host=lin.drzp.qzz.io, obfs-uri=/, fast-open=false, udp-relay=false, tag=香港
 vless=104.18.39.209:2096, method=none, password=86de080d-e4fc-4351-9190-c03dd56a1187, obfs=wss, obfs-host=sg.666014.xyz, obfs-uri=/, fast-open=false, udp-relay=false, tag=新加坡 NAT
 vless=104.18.39.209:2096, method=none, password=a4068593-5d3a-460a-b046-0bddf002a629, obfs=wss, obfs-host=sui.666014.xyz, obfs-uri=/, fast-open=false, udp-relay=false, tag=洛杉矶 RN2
 vless=104.18.39.209:2096, method=none, password=ae4ccb0a-8f7c-413d-8ed9-480e7fba562d, obfs=wss, obfs-host=dc03.666014.xyz, obfs-uri=/, fast-open=false, udp-relay=false, tag=洛杉矶 RN3
