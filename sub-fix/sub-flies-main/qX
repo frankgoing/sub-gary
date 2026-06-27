@@ -1,7 +1,8 @@
 vless=104.18.39.209:2096, method=none, password=aaf8d499-879d-4814-a8f2-560afb192335, obfs=wss, obfs-host=lin.drzp.qzz.io, obfs-uri=/, fast-open=true, udp-relay=false, tag=香港
 vless=104.18.39.209:2096, method=none, password=86de080d-e4fc-4351-9190-c03dd56a1187, obfs=wss, obfs-host=sg.666014.xyz, obfs-uri=/, fast-open=true, udp-relay=false, tag=新加坡 NAT
-vless=104.18.39.209:2096, method=none, password=a4068593-5d3a-460a-b046-0bddf002a629, obfs=wss, obfs-host=sui.666014.xyz, obfs-uri=/, fast-open=true, udp-relay=false, tag=洛杉矶 RN2
+vless=104.18.39.209:2096, method=none, password=a4068593-5d3a-460a-b046-0bddf002a629, obfs=wss, obfs-host=sui.666014.xyz, obfs-uri=/, fast-open=true, udp-relay=true, tag=洛杉矶 RN2
 vless=104.18.39.209:2096, method=none, password=ae4ccb0a-8f7c-413d-8ed9-480e7fba562d, obfs=wss, obfs-host=dc03.666014.xyz, obfs-uri=/, fast-open=true, udp-relay=false, tag=洛杉矶 RN3
 vless=104.18.39.209:2096, method=none, password=789852e0-7006-4032-8e58-93875c5e4a41, obfs=wss, obfs-host=nats.666014.xyz, obfs-uri=/, fast-open=true, udp-relay=false, tag=洛杉矶 NAT
 vless=104.18.39.209:2096, method=none, password=6a50fe55-f703-45ea-a813-d6bd9d075614, obfs=wss, obfs-host=eus.666014.xyz, obfs-uri=/, fast-open=true, udp-relay=false, tag=德国 EU
 
+																		
