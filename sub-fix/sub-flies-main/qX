@@ -1,4 +1,4 @@
-vless=104.18.39.209:2096, method=none, password=aaf8d499-879d-4814-a8f2-560afb192335, obfs=wss, obfs-host=lin.drzp.qzz.io, obfs-uri=/, fast-open=true, udp-relay=false, tag=香港
+vless=35.215.166.174:27228, method=none, password=ff30b519-5bf8-4e9b-86cd-07aee7f7ae6e, obfs=over-tls, obfs-host=apple.com, reality-base64-pubkey=XIRTeds3UyKMiHJ4rpOzJ4fORiKlOcrpyhN4Mvb6SCI, reality-hex-shortid=238732, vless-flow=xtls-rprx-vision, fast-open=false, udp-relay=true, tag=香港 reality
 vless=104.18.39.209:2096, method=none, password=86de080d-e4fc-4351-9190-c03dd56a1187, obfs=wss, obfs-host=sg.666014.xyz, obfs-uri=/, fast-open=true, udp-relay=false, tag=新加坡 NAT
 vless=104.18.39.209:2096, method=none, password=a4068593-5d3a-460a-b046-0bddf002a629, obfs=wss, obfs-host=sui.666014.xyz, obfs-uri=/, fast-open=true, udp-relay=false, tag=洛杉矶 RN2
 vless=104.18.39.209:2096, method=none, password=ae4ccb0a-8f7c-413d-8ed9-480e7fba562d, obfs=wss, obfs-host=dc03.666014.xyz, obfs-uri=/, fast-open=true, udp-relay=false, tag=洛杉矶 RN3
