@@ -177,23 +177,23 @@ proxies:
   # 12. 新加坡 TUIC
   - name: "新加坡 TUIC"
     type: tuic
-    server: sg.frankgo.eu.cc
-    port: 34839
-    uuid: 3d2f8881-6347-4fed-9a14-bdeb32be736a
-    password: 3d2f8881-6347-4fed-9a14-bdeb32be736a
+    server: sg.666014.xyz
+    port: 40213
+    uuid: 86de080d-e4fc-4351-9190-c03dd56a1187
+    password: 86de080d-e4fc-4351-9190-c03dd56a1187
     alpn:
       - h3
-    sni: www.bing.com
-    skip-cert-verify: true
+    sni: sg.666014.xyz
+    skip-cert-verify: flase
     icon: "https://flagcdn.com/sg.svg"
 
   # 13. 新加坡 Hysteria2
   - name: "新加坡 HY2"
     type: hysteria2
-    server: sg.frankgo.eu.cc
+    server: sg.666014.xyz
     port: 41703
     password: 3d2f8881-6347-4fed-9a14-bdeb32be736a
-    sni: www.bing.com
+    sni: sg.666014.xyz
     alpn:
       - h3
     obfs: salamander
