@@ -35,38 +35,78 @@
       "type": "selector",
       "tag": "proxy",
       "outbounds": [
-        "香港 CF",
+        "香港 reality",
+        "新加坡 NAT",
+        "洛杉矶 RN2",
+        "洛杉矶 RN3",
         "洛杉矶 NAT",
-        "洛杉矶 NAT TUIC",
-        "洛杉矶 NAT HY2",
-        "洛杉矶 DC02",
-        "洛杉矶 dc02 tuic",
-        "洛杉矶 dc02 hy2",
-        "洛杉矶 DC03",
-        "洛杉矶 DC03 TUIC",
-        "洛杉矶 DC03 HY2",
-        "新加披 NAT",
-        "新加坡 TUIC",
-        "新加坡 HY2",
-        "德国 EUserv",
-        "德国 EUserv TUIC"
+        "德国 EU"
       ]
     },
     {
-      "tag": "香港 CF",
+      "tag": "香港 reality",
       "type": "vless",
-      "server": "104.18.39.209",
-      "server_port": 443,
-      "uuid": "79a95971-a99c-4f4c-b2c8-d67bafc09a5b",
+      "server": "35.215.166.174",
+      "server_port": 27228,
+      "uuid": "ff30b519-5bf8-4e9b-86cd-07aee7f7ae6e",
+      "flow": "xtls-rprx-vision",
       "tls": {
         "enabled": true,
-        "server_name": "super.frankgoing.us.kg",
-        "utls": { "enabled": true, "fingerprint": "random" }
+        "server_name": "apple.com",
+        "utls": { "enabled": true, "fingerprint": "chrome" },
+        "reality": {
+          "enabled": true,
+          "public_key": "XIRTeds3UyKMiHJ4rpOzJ4fORiKlOcrpyhN4Mvb6SCI",
+          "short_id": "238732"
+        }
+      }
+    },
+    {
+      "tag": "新加坡 NAT",
+      "type": "vless",
+      "server": "104.18.39.209",
+      "server_port": 2096,
+      "uuid": "86de080d-e4fc-4351-9190-c03dd56a1187",
+      "tls": {
+        "enabled": true,
+        "server_name": "sg.666014.xyz"
       },
       "transport": {
         "type": "ws",
-        "headers": { "Host": "super.frankgoing.us.kg" },
-        "path": "/?ed=2560"
+        "headers": { "Host": "sg.666014.xyz" },
+        "path": "/"
+      }
+    },
+    {
+      "tag": "洛杉矶 RN2",
+      "type": "vless",
+      "server": "104.18.39.209",
+      "server_port": 2096,
+      "uuid": "a4068593-5d3a-460a-b046-0bddf002a629",
+      "tls": {
+        "enabled": true,
+        "server_name": "sui.666014.xyz"
+      },
+      "transport": {
+        "type": "ws",
+        "headers": { "Host": "sui.666014.xyz" },
+        "path": "/"
+      }
+    },
+    {
+      "tag": "洛杉矶 RN3",
+      "type": "vless",
+      "server": "104.18.39.209",
+      "server_port": 2096,
+      "uuid": "ae4ccb0a-8f7c-413d-8ed9-480e7fba562d",
+      "tls": {
+        "enabled": true,
+        "server_name": "dc03.666014.xyz"
+      },
+      "transport": {
+        "type": "ws",
+        "headers": { "Host": "dc03.666014.xyz" },
+        "path": "/"
       }
     },
     {
@@ -86,187 +126,7 @@
       }
     },
     {
-      "tag": "洛杉矶 NAT TUIC",
-      "type": "tuic",
-      "server": "nats.666014.xyz",
-      "server_port": 44019,
-      "uuid": "789852e0-7006-4032-8e58-93875c5e4a41",
-      "password": "ge3BK5FaQK",
-      "congestion_control": "bbr",
-      "tls": {
-        "enabled": true,
-        "server_name": "nats.666014.xyz",
-        "alpn": [ "h3" ],
-        "insecure": true
-      }
-    },
-    {
-      "tag": "洛杉矶 NAT HY2",
-      "type": "hysteria2",
-      "server": "nats.666014.xyz",
-      "server_port": 17091,
-      "password": "ge3BK5FaQK",
-      "tls": {
-        "enabled": true,
-        "server_name": "nats.666014.xyz",
-        "alpn": [ "h3" ],
-        "insecure": true
-      }
-    },
-    {
-      "tag": "洛杉矶 DC02",
-      "type": "vless",
-      "server": "104.18.39.209",
-      "server_port": 2096,
-      "uuid": "72f12990-7e43-4e2e-b732-ee77ded7917e",
-      "tls": {
-        "enabled": true,
-        "server_name": "sui.666014.xyz"
-      },
-      "transport": {
-        "type": "ws",
-        "headers": { "Host": "sui.666014.xyz" },
-        "path": "/"
-      }
-    },
-    {
-      "tag": "洛杉矶 dc02 tuic",
-      "type": "tuic",
-      "server": "sui.666014.xyz",
-      "server_port": 42432,
-      "uuid": "72f12990-7e43-4e2e-b732-ee77ded7917e",
-      "password": "72f12990-7e43-4e2e-b732-ee77ded7917e",
-      "congestion_control": "bbr",
-      "tls": {
-        "enabled": true,
-        "server_name": "www.bing.com",
-        "alpn": [ "h3" ],
-        "insecure": true
-      }
-    },
-    {
-      "tag": "洛杉矶 dc02 hy2",
-      "type": "hysteria2",
-      "server": "sui.666014.xyz",
-      "server_port": 13707,
-      "password": "72f12990-7e43-4e2e-b732-ee77ded7917e",
-      "obfs": {
-        "type": "salamander",
-        "password": "egawtshr"
-      },
-      "tls": {
-        "enabled": true,
-        "server_name": "www.bing.com",
-        "alpn": [ "h3" ],
-        "insecure": true
-      }
-    },
-    {
-      "tag": "洛杉矶 DC03",
-      "type": "vless",
-      "server": "104.18.39.209",
-      "server_port": 2096,
-      "uuid": "ae4ccb0a-8f7c-413d-8ed9-480e7fba562d",
-      "tls": {
-        "enabled": true,
-        "server_name": "dc03.666014.xyz",
-        "insecure": false
-      },
-      "transport": {
-        "type": "ws",
-        "headers": { "Host": "dc03.666014.xyz" },
-        "path": "/"
-      }
-    },
-    {
-      "tag": "洛杉矶 DC03 TUIC",
-      "type": "tuic",
-      "server": "dc03.666014.xyz",
-      "server_port": 46248,
-      "uuid": "ae4ccb0a-8f7c-413d-8ed9-480e7fba562d",
-      "password": "ae4ccb0a-8f7c-413d-8ed9-480e7fba562d",
-      "congestion_control": "bbr",
-      "tls": {
-        "enabled": true,
-        "server_name": "www.bing.com",
-        "alpn": [ "h3" ],
-        "insecure": true
-      }
-    },
-    {
-      "tag": "洛杉矶 DC03 HY2",
-      "type": "hysteria2",
-      "server": "dc03.666014.xyz",
-      "server_port": 37425,
-      "password": "98dskE8W6undefined",
-      "obfs": {
-        "type": "salamander",
-        "password": "sga5hedyjuiolr"
-      },
-      "tls": {
-        "enabled": true,
-        "server_name": "www.bing.com",
-        "alpn": [ "h3" ],
-        "insecure": true
-      }
-    },
-    {
-      "tag": "新加披 NAT",
-      "type": "vless",
-      "server": "104.18.39.209",
-      "server_port": 2096,
-      "uuid": "3d2f8881-6347-4fed-9a14-bdeb32be736a",
-      "tls": {
-        "enabled": true,
-        "server_name": "sg.frankgo.eu.cc",
-        "insecure": true,
-        "utls": {
-          "enabled": true,
-          "fingerprint": "chrome"
-        }
-      },
-      "transport": {
-        "type": "ws",
-        "headers": {
-          "Host": "sg.frankgo.eu.cc"
-        },
-        "path": "/"
-      }
-    },
-    {
-      "tag": "新加坡 TUIC",
-      "type": "tuic",
-      "server": "sg.frankgo.eu.cc",
-      "server_port": 34839,
-      "uuid": "3d2f8881-6347-4fed-9a14-bdeb32be736a",
-      "password": "3d2f8881-6347-4fed-9a14-bdeb32be736a",
-      "congestion_control": "bbr",
-      "tls": {
-        "enabled": true,
-        "server_name": "www.bing.com",
-        "alpn": [ "h3" ],
-        "insecure": true
-      }
-    },
-    {
-      "tag": "新加坡 HY2",
-      "type": "hysteria2",
-      "server": "sg.frankgo.eu.cc",
-      "server_port": 41703,
-      "password": "3d2f8881-6347-4fed-9a14-bdeb32be736a",
-      "obfs": {
-        "type": "salamander",
-        "password": "nsrighcvnlzxd"
-      },
-      "tls": {
-        "enabled": true,
-        "server_name": "www.bing.com",
-        "alpn": [ "h3" ],
-        "insecure": true
-      }
-    },
-    {
-      "tag": "德国 EUserv",
+      "tag": "德国 EU",
       "type": "vless",
       "server": "104.18.39.209",
       "server_port": 2096,
@@ -279,21 +139,6 @@
         "type": "ws",
         "headers": { "Host": "eus.666014.xyz" },
         "path": "/"
-      }
-    },
-    {
-      "tag": "德国 EUserv TUIC",
-      "type": "tuic",
-      "server": "eus.666014.xyz",
-      "server_port": 17782,
-      "uuid": "6a50fe55-f703-45ea-a813-d6bd9d075614",
-      "password": "6a50fe55-f703-45ea-a813-d6bd9d075614",
-      "congestion_control": "bbr",
-      "tls": {
-        "enabled": true,
-        "server_name": "www.bing.com",
-        "insecure": true,
-        "alpn": [ "h3" ]
       }
     },
     { "type": "dns", "tag": "dns-out" },
