@@ -184,21 +184,19 @@ proxies:
     alpn:
       - h3
     sni: sg.666014.xyz
-    skip-cert-verify: flase
+    skip-cert-verify: false
     icon: "https://flagcdn.com/sg.svg"
 
   # 13. 新加坡 Hysteria2
   - name: "新加坡 HY2"
     type: hysteria2
     server: sg.666014.xyz
-    port: 41703
-    password: 3d2f8881-6347-4fed-9a14-bdeb32be736a
+    port: 20689
+    password: 86de080d-e4fc-4351-9190-c03dd56a1187
     sni: sg.666014.xyz
     alpn:
       - h3
-    obfs: salamander
-    obfs-password: "nsrighcvnlzxd"
-    skip-cert-verify: true
+    skip-cert-verify: false
     icon: "https://flagcdn.com/sg.svg"
 
   # 14. 德国 EUserv (VLESS+WS+TLS via Cloudflare)
