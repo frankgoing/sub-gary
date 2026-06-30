@@ -77,7 +77,7 @@ proxies:
     type: vless
     server: 104.18.39.209
     port: 2096
-    uuid: 72f12990-7e43-4e2e-b732-ee77ded7917e
+    uuid: a4068593-5d3a-460a-b046-0bddf002a629
     network: ws
     tls: true
     servername: sui.666014.xyz
