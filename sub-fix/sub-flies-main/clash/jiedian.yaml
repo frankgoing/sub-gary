@@ -30,7 +30,38 @@ proxies:
     skip-cert-verify: true
     icon: "https://flagcdn.com/hk.svg"
 
-  # 2. 洛杉矶 NAT (VLESS+WS+TLS via Cloudflare)
+  # 2. 香港 reality (VLESS+TCP+Reality)
+  - name: "香港 reality"
+    type: vless
+    server: 35.215.166.174
+    port: 27228
+    uuid: ff30b519-5bf8-4e9b-86cd-07aee7f7ae6e
+    network: tcp
+    tls: true
+    udp: true
+    flow: xtls-rprx-vision
+    servername: apple.com
+    client-fingerprint: chrome
+    reality-opts:
+      public-key: XIRTeds3UyKMiHJ4rpOzJ4fORiKlOcrpyhN4Mvb6SCI
+      short-id: 238732
+    icon: "https://flagcdn.com/hk.svg"
+
+  # 3. 香港 AnyTLS (AnyTLS+Reality)
+  - name: "香港 AnyTls"
+    type: anytls
+    server: 35.215.166.174
+    port: 28415
+    password: "hYTJ2Lh0qzvMIE7+ksYMON1dlzr8lKJdaySPQ82p4l4="
+    udp: true
+    sni: apple.com
+    client-fingerprint: chrome
+    reality-opts:
+      public-key: XIRTeds3UyKMiHJ4rpOzJ4fORiKlOcrpyhN4Mvb6SCI
+      short-id: 3e08dc
+    icon: "https://flagcdn.com/hk.svg"
+
+  # 4. 洛杉矶 NAT (VLESS+WS+TLS via Cloudflare)
   - name: "洛杉矶 NAT"
     type: vless
     server: 104.18.39.209
@@ -46,7 +77,7 @@ proxies:
     skip-cert-verify: true
     icon: "https://flagcdn.com/us.svg"
 
-  # 3. 洛杉矶 NAT TUIC
+  # 5. 洛杉矶 NAT TUIC
   - name: "洛杉矶 NAT TUIC"
     type: tuic
     server: nats.666014.xyz
@@ -60,7 +91,7 @@ proxies:
     skip-cert-verify: true
     icon: "https://flagcdn.com/us.svg"
 
-  # 4. 洛杉矶 NAT Hysteria2
+  # 6. 洛杉矶 NAT Hysteria2
   - name: "洛杉矶 NAT HY2"
     type: hysteria2
     server: nats.666014.xyz
@@ -72,7 +103,7 @@ proxies:
     skip-cert-verify: true
     icon: "https://flagcdn.com/us.svg"
 
-  # 5. 洛杉矶 DC02 (VLESS+WS+TLS via Cloudflare)
+  # 7. 洛杉矶 DC02 (VLESS+WS+TLS via Cloudflare)
   - name: "洛杉矶 DC02"
     type: vless
     server: 104.18.39.209
@@ -88,7 +119,7 @@ proxies:
     skip-cert-verify: true
     icon: "https://flagcdn.com/us.svg"
 
-  # 6. 洛杉矶 DC02 TUIC
+  # 8. 洛杉矶 DC02 TUIC
   - name: "洛杉矶 DC02 TUIC"
     type: tuic
     server: sui.666014.xyz
@@ -101,7 +132,7 @@ proxies:
     skip-cert-verify: true
     icon: "https://flagcdn.com/us.svg"
 
-  # 7. 洛杉矶 DC02 Hysteria2
+  # 9. 洛杉矶 DC02 Hysteria2
   - name: "洛杉矶 DC02 HY2"
     type: hysteria2
     server: sui.666014.xyz
@@ -115,7 +146,7 @@ proxies:
     skip-cert-verify: true
     icon: "https://flagcdn.com/us.svg"
 
-  # 8. 洛杉矶 DC03 (VLESS+WS+TLS via Cloudflare)
+  # 10. 洛杉矶 DC03 (VLESS+WS+TLS via Cloudflare)
   - name: "洛杉矶 DC03"
     type: vless
     server: 104.18.39.209
@@ -131,7 +162,7 @@ proxies:
     skip-cert-verify: true
     icon: "https://flagcdn.com/us.svg"
 
-  # 9. 洛杉矶 DC03 TUIC
+  # 11. 洛杉矶 DC03 TUIC
   - name: "洛杉矶 DC03 TUIC"
     type: tuic
     server: dc03.666014.xyz
@@ -144,7 +175,7 @@ proxies:
     skip-cert-verify: true
     icon: "https://flagcdn.com/us.svg"
 
-  # 10. 洛杉矶 DC03 Hysteria2
+  # 12. 洛杉矶 DC03 Hysteria2
   - name: "洛杉矶 DC03 HY2"
     type: hysteria2
     server: dc03.666014.xyz
@@ -158,7 +189,7 @@ proxies:
     skip-cert-verify: true
     icon: "https://flagcdn.com/us.svg"
 
-  # 11. 新加坡 NAT (VLESS+WS+TLS via Cloudflare)
+  # 13. 新加坡 NAT (VLESS+WS+TLS via Cloudflare)
   - name: "新加坡 NAT"
     type: vless
     server: 104.18.39.209
@@ -174,7 +205,7 @@ proxies:
     skip-cert-verify: true
     icon: "https://flagcdn.com/sg.svg"
 
-  # 12. 新加坡 TUIC
+  # 14. 新加坡 TUIC
   - name: "新加坡 TUIC"
     type: tuic
     server: sg.666014.xyz
@@ -187,7 +218,7 @@ proxies:
     skip-cert-verify: false
     icon: "https://flagcdn.com/sg.svg"
 
-  # 13. 新加坡 Hysteria2
+  # 15. 新加坡 Hysteria2
   - name: "新加坡 HY2"
     type: hysteria2
     server: sg.666014.xyz
@@ -199,7 +230,7 @@ proxies:
     skip-cert-verify: false
     icon: "https://flagcdn.com/sg.svg"
 
-  # 14. 德国 EUserv (VLESS+WS+TLS via Cloudflare)
+  # 16. 德国 EUserv (VLESS+WS+TLS via Cloudflare)
   - name: "德国 EUserv"
     type: vless
     server: 104.18.39.209
@@ -215,7 +246,7 @@ proxies:
     skip-cert-verify: true
     icon: "https://flagcdn.com/de.svg"
 
-  # 15. 德国 EUserv TUIC
+  # 17. 德国 EUserv TUIC
   - name: "德国 EUserv TUIC"
     type: tuic
     server: eus.666014.xyz
@@ -236,6 +267,8 @@ proxy-groups:
       - "♻️ 自动选择"
       - "🔯 故障转移"
       - "香港 CF"
+      - "香港 reality"
+      - "香港 AnyTls"
       - "洛杉矶 NAT"
       - "洛杉矶 NAT TUIC"
       - "洛杉矶 NAT HY2"
@@ -257,6 +290,8 @@ proxy-groups:
     icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/speed.svg"
     proxies:
       - "香港 CF"
+      - "香港 reality"
+      - "香港 AnyTls"
       - "洛杉矶 NAT"
       - "洛杉矶 NAT TUIC"
       - "洛杉矶 NAT HY2"
@@ -279,6 +314,8 @@ proxy-groups:
     type: fallback
     icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/ambulance.svg"
     proxies:
+      - "香港 reality"
+      - "香港 AnyTls"
       - "洛杉矶 DC02 TUIC"
       - "洛杉矶 DC02 HY2"
       - "洛杉矶 DC03 TUIC"
