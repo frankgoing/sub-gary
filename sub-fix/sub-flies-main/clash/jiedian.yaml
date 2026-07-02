@@ -22,10 +22,10 @@ proxies:
     uuid: 79a95971-a99c-4f4c-b2c8-d67bafc09a5b
     network: ws
     tls: true
-    servername: super.frankgoing.us.kg
+    servername: csgo.666014.xyz
     ws-opts:
       headers:
-        Host: super.frankgoing.us.kg
+        Host: csgo.666014.xyz
       path: "/?ed=2560"
     skip-cert-verify: true
     icon: "https://flagcdn.com/hk.svg"
