@@ -592,42 +592,108 @@ function render(ip, data, media) {
     const factors = buildFactors(data);
     const audit = buildAudit(data);
     const displayNodeName = truncateText(nodeName, 30);
+    const text = buildReportText(basic, types, risks, factors, media, audit);
 
-    const body = [
-        summaryCard(basic),
-        section("基础信息", renderBasic(basic)),
-        section("IP 类型属性", renderTypeList(types)),
-        section("风险评分", renderRiskList(risks)),
-        section("风险因素", renderFactorCards(factors)),
-        section("流媒体与 AI", mediaEnabled
-            ? renderMediaList(media)
-            : mutedLine("流媒体检测已关闭")),
-        section("数据状态", renderAudit(audit, data._probe)),
-        '<div style="font-size:9px;line-height:9px">&nbsp;</div>',
-        '<div style="color:#8e8e93;font-size:10px;line-height:1.45">'
-            + '类型名称、评分分档与风险字段遵循 xykt/IPQuality 的展示口径；各库结果独立展示，不生成综合结论。'
-            + '聚合来源不可用时保留直连结果。QX 不提供节点 TCP/DNS API，25 端口与 DNSBL 未检测。</div>',
-        '<div style="height:24px">&nbsp;</div>',
-    ].join("");
-
-    const html = [
-        '<div style="font-family:-apple-system,BlinkMacSystemFont;font-size:14px;line-height:1.5;text-align:left;overflow-wrap:anywhere">',
-        '<div style="font-size:18px;line-height:18px">&nbsp;</div>',
-        '<div style="font-size:20px;font-weight:700;line-height:1.25;margin-bottom:6px">节点 IP 质量检测</div>',
-        `<div style="color:#8e8e93;font-size:11px;margin-bottom:10px">节点 · ${escapeHtml(displayNodeName)} · 可上下滑动查看全部</div>`,
-        // 内容整体可能超出 QX 弹窗默认高度，这里限定一个最大高度并开启内部滚动，
-        // 否则超出部分会直接被裁掉、也点不到关闭按钮。
-        '<div style="max-height:58vh;overflow-y:auto;-webkit-overflow-scrolling:touch">',
-        body,
-        "</div>",
-        "</div>",
-    ].join("");
-
+    // QX 的 event-interaction 弹窗（$done 的 htmlMessage）本身是一个固定大小的原生弹窗，
+    // 内容超出后既不能内部滚动、关闭按钮也可能被顶出屏幕之外。改用 $notify 推送完整报告：
+    // 通知本身可以正常下拉/展开查看全文，也能像普通通知一样一划就关掉，不会卡屏。
+    $notify("节点 IP 质量检测", displayNodeName, text);
     postMapNotification(basic, displayNodeName);
     $done({
-        title: "\u200B",
-        htmlMessage: html,
+        title: "节点 IP 质量检测",
+        content: "报告已通过通知推送，下拉通知栏或长按该通知可查看完整内容。",
     });
+}
+
+function buildReportText(basic, types, risks, factors, media, audit) {
+    const lines = [];
+    lines.push(`IP：${basic.ip}${basic.nature ? `（${basic.nature}）` : ""}`);
+    if (basic.actualRegion) lines.push(`地区：${basic.actualRegion}`);
+    if (basic.city) lines.push(`城市：${basic.city}`);
+    const asn = [basic.asn, basic.organization].filter(Boolean).join(" ");
+    if (asn) lines.push(`ASN：${asn}`);
+    if (basic.route) lines.push(`网段：${basic.route}`);
+    if (basic.timezone) lines.push(`时区：${basic.timezone}`);
+    if (basic.registeredRegion) lines.push(`注册地：${basic.registeredRegion}`);
+    if (basic.coordinates) lines.push(`坐标：${basic.coordinates}`);
+
+    lines.push("");
+    lines.push("【IP 类型属性】");
+    if (types.length) {
+        types.forEach((row) => {
+            const parts = [];
+            if (row.usage) parts.push(`使用 ${row.usage}`);
+            if (row.company) parts.push(`公司 ${row.company}`);
+            lines.push(`${row.name}：${parts.join(" / ") || "—"}`);
+        });
+    } else {
+        lines.push("本次没有可验证的网络类型");
+    }
+
+    lines.push("");
+    lines.push("【风险评分】");
+    const availableRisks = risks.filter((row) => row.available);
+    if (availableRisks.length) {
+        availableRisks.forEach((row) => {
+            lines.push(`${row.name}：${[row.detail, row.label].filter(Boolean).join(" · ")}`);
+        });
+    } else {
+        lines.push("本次没有可验证的风险评分");
+    }
+    const missingRisks = risks.filter((row) => !row.available).map((row) => row.name);
+    if (missingRisks.length) lines.push(`未返回：${missingRisks.join("、")}`);
+
+    lines.push("");
+    lines.push("【风险因素】");
+    if (factors.length) {
+        factors.forEach((source) => {
+            const hit = [];
+            const clear = [];
+            Object.keys(source.checks).forEach((key) => {
+                const value = booleanOrNull(source.checks[key]);
+                if (value === true) hit.push(key);
+                if (value === false) clear.push(key);
+            });
+            const region = cleanValue(source.country);
+            const title = region && region.length === 2
+                ? `${source.name}[${region.toUpperCase()}]`
+                : source.name;
+            const parts = [];
+            if (hit.length) parts.push(`命中 ${hit.join("、")}`);
+            if (clear.length) parts.push(`未命中 ${clear.join("、")}`);
+            lines.push(`${title}：${parts.join("；") || "—"}`);
+        });
+    } else {
+        lines.push("本次没有可验证的风险标记");
+    }
+
+    lines.push("");
+    lines.push("【流媒体与 AI】");
+    if (mediaEnabled) {
+        const confirmed = media.filter((row) => row.status !== "unknown");
+        const unknown = media.filter((row) => row.status === "unknown");
+        if (confirmed.length) {
+            confirmed.forEach((row) => {
+                const icon = row.status === "yes" ? "✅" : row.status === "partial" ? "🟠" : "❌";
+                const status = row.status === "yes" ? "解锁" : row.status === "partial" ? "部分可用" : "不可用";
+                const detail = [row.region ? `[${row.region}]` : "", row.detail].filter(Boolean).join(" · ");
+                lines.push(`${icon} ${row.name}：${status}${detail ? ` ${detail}` : ""}`);
+            });
+        } else {
+            lines.push("本次没有确认任何服务状态");
+        }
+        if (unknown.length) lines.push(`未确认：${unknown.map((row) => row.name).join("、")}`);
+    } else {
+        lines.push("流媒体检测已关闭");
+    }
+
+    lines.push("");
+    lines.push(`【数据状态】来源 ${audit.success.length}/${audit.total}`);
+    if (audit.failed.length) lines.push(`未返回：${audit.failed.join("、")}`);
+    if (audit.skipped && audit.skipped.length) lines.push(`已跳过：${audit.skipped.join("、")}`);
+    if (audit.supplemental && audit.supplemental.length) lines.push(`补充来源：${audit.supplemental.join("、")}`);
+
+    return lines.join("\n");
 }
 
 function buildBasic(ip, data) {
