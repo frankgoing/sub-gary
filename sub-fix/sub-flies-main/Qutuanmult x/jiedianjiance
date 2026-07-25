@@ -1,11 +1,19 @@
 /**
- * 节点 IP 质量检测 · Quantumult X & Loon 双兼容版
+ * 节点 IP 质量检测 · Quantumult X 专用版
  *
- * @Author: MaYIHEI (原作者) / Adapted for QX
- * @Updated: 2026-07-24
+ * @Author: MaYIHEI (原作者) / Adapted for QX by Claude
+ * @Updated: 2026-07-25
+ *
+ * 用法（QX 脚本参数示例，写在 [task_local] / rewrite_local 对应行的 argument 里）：
+ *   node=香港01&MaskIP=false&MediaTest=true
+ *
+ * QX 与 Loon 的关键差异（本版本已处理）：
+ *   1. QX 没有 $environment，脚本参数走 $argument（querystring 形式的字符串）
+ *   2. 网络请求统一用 $task.fetch，不使用 fetch() / $httpClient
+ *   3. 结果展示用 $notify(title, subtitle, body)，QX 不支持 htmlMessage
  */
 
-const SCRIPT_VERSION = "2026-07-24.qx-fix";
+const SCRIPT_VERSION = "2026-07-25.qx-only";
 const IPPURE_URL = "https://my.ippure.com/v1/info";
 const IPIFY_URL = "https://api4.ipify.org?format=json";
 const IPAPI_URL = "https://api.ipapi.is/";
@@ -14,15 +22,11 @@ const IPQUALITY_BACKEND = "https://ipinfo.check.place";
 const USER_AGENT = "Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Version/18.0 Mobile/15E148 Safari/604.1";
 const DISNEY_CLIENT_TOKEN = "ZGlzbmV5JmJyb3dzZXImMS4wLjA.Cu56AgSfBTDag5NiRA81oLHkDZfu5L3CKadnefEAY84";
 
-// ==================== 环境与参数兼容层 ====================
-const isQX = typeof $task !== "undefined";
-const params = typeof $environment !== "undefined" && $environment.params ? $environment.params : {};
-// QX 没有 $environment.params，默认给一个替代名称，避免报错
-const nodeName = params.node || (isQX ? "Quantumult X 节点" : "默认节点");
-
-const maskIP = readSwitch("MaskIP", false);
-const mediaEnabled = readSwitch("MediaTest", true);
-const mapNotificationEnabled = readSwitch("MapNotification", false);
+// ==================== 参数解析（QX 用 $argument 而非 $environment.params） ====================
+const params = parseArgument(typeof $argument !== "undefined" ? $argument : "");
+const nodeName = params.node || "Quantumult X 节点";
+const maskIP = readSwitch(params, "MaskIP", false);
+const mediaEnabled = readSwitch(params, "MediaTest", true);
 
 console.log(`[INFO] 节点 IP 质量检测 ${SCRIPT_VERSION}`);
 console.log(`[INFO] 节点: ${nodeName}`);
@@ -40,7 +44,29 @@ async function run() {
     render(ip, results[0], results[1]);
 }
 
-// 兼容 QX 与 Loon 的通用网络请求包装
+// ==================== $argument 解析 ====================
+function parseArgument(raw) {
+    const result = {};
+    if (!raw) return result;
+    String(raw)
+        .split("&")
+        .filter(Boolean)
+        .forEach((pair) => {
+            const idx = pair.indexOf("=");
+            if (idx === -1) return;
+            const key = decodeURIComponent(pair.slice(0, idx));
+            const value = decodeURIComponent(pair.slice(idx + 1));
+            result[key] = value;
+        });
+    return result;
+}
+
+function readSwitch(params, key, defaultValue) {
+    if (key in params) return String(params[key]).toLowerCase() === "true";
+    return defaultValue;
+}
+
+// ==================== QX 网络请求封装 ====================
 function request(method, url, options = {}) {
     const reqHeaders = Object.assign({ "User-Agent": USER_AGENT }, options.headers || {});
     const reqOptions = {
@@ -50,49 +76,19 @@ function request(method, url, options = {}) {
         body: options.body,
         timeout: options.timeout || 10000
     };
-
-    if (isQX) {
-        return $task.fetch(reqOptions).then(resp => ({
-            status: resp.statusCode || resp.status,
-            headers: resp.headers,
-            body: resp.body
-        }));
-    }
-
-    if (typeof fetch !== "undefined") {
-        return fetch(url, {
-            method: method,
-            headers: reqHeaders,
-            body: options.body
-        }).then(async resp => ({
-            status: resp.status,
-            headers: Object.fromEntries(resp.headers.entries()),
-            body: await resp.text()
-        }));
-    }
-
-    return new Promise((resolve, reject) => {
-        const m = method.toLowerCase();
-        $httpClient[m](reqOptions, (error, response, body) => {
-            if (error) reject(error);
-            else resolve({ status: response.status || response.statusCode, headers: response.headers, body });
-        });
-    });
+    return $task.fetch(reqOptions).then((resp) => ({
+        status: resp.statusCode || resp.status,
+        headers: resp.headers,
+        body: resp.body
+    }));
 }
 
 function requestText(url, options = {}) {
-    return request("GET", url, options).then(res => res.body);
+    return request("GET", url, options).then((res) => res.body);
 }
 
 function requestJson(url, options = {}) {
-    return request("GET", url, options).then(res => JSON.parse(res.body));
-}
-
-function readSwitch(key, defaultValue) {
-    if (typeof $environment !== "undefined" && $environment.params && key in $environment.params) {
-        return String($environment.params[key]).toLowerCase() === "true";
-    }
-    return defaultValue;
+    return request("GET", url, options).then((res) => JSON.parse(res.body));
 }
 
 function errorMessage(err) {
@@ -101,77 +97,67 @@ function errorMessage(err) {
 
 function finishError(msg) {
     console.log(`[ERROR] ${msg}`);
-    if (isQX) {
-        $notify("节点 IP 质量检测", nodeName, `❌ ${msg}`);
-        $done();
-    } else {
-        $done({ title: "节点 IP 质量检测", htmlMessage: `<div style="color:red;padding:20px">${msg}</div>` });
-    }
+    $notify("节点 IP 质量检测", nodeName, `❌ ${msg}`);
+    $done();
 }
 
-// ==================== 结果渲染 (QX 弹窗通知 / Loon HTML) ====================
+// ==================== 结果渲染（QX 纯文本通知） ====================
 function render(ip, data, media) {
     const displayIP = maskIP ? maskIPAddress(ip) : ip;
-    
-    // QX 纯文本通知逻辑
-    if (isQX) {
-        let textParts = [`出口 IP: ${displayIP}`];
-        
-        // 简要分析风险
-        let scamScore = data.scamalytics ? valueAt(data.scamalytics, "scamalytics.scamalytics_score") : null;
-        if (scamScore !== null) textParts.push(`Scamalytics 欺诈分: ${scamScore}`);
-        
-        // 流媒体解锁情况
-        if (mediaEnabled && media && media.length) {
-            let mediaSummary = media.map(m => {
-                let status = m.status === "yes" ? "✅" : (m.status === "no" ? "❌" : "⚠️");
-                let region = m.region ? `[${m.region}]` : "";
-                return `${m.name}: ${status}${region}`;
-            }).join(" | ");
-            textParts.push(`\n解锁: ${mediaSummary}`);
-        }
+    let textParts = [`出口 IP: ${displayIP}`];
 
-        $notify("节点 IP 质量检测", nodeName, textParts.join("\n"));
-        $done();
-        return;
+    // 欺诈分 / 风险评分
+    const scamScore = data.scamalytics ? valueAt(data.scamalytics, "scamalytics.scamalytics_score") : null;
+    if (scamScore !== null && scamScore !== undefined) {
+        textParts.push(`Scamalytics 欺诈分: ${scamScore}`);
     }
 
-    // Loon 原版 HTML 逻辑保留...
-    $done({
-        title: "\u200B",
-        htmlMessage: `<div>IP: ${displayIP} 检测完成</div>`,
-        icon: "shield.lefthalf.filled"
-    });
+    // 流媒体解锁情况
+    if (mediaEnabled && media && media.length) {
+        const mediaSummary = media
+            .map((m) => {
+                const status = m.status === "yes" ? "✅" : m.status === "no" ? "❌" : "⚠️";
+                const region = m.region ? `[${m.region}]` : "";
+                return `${m.name}: ${status}${region}`;
+            })
+            .join(" | ");
+        textParts.push(`解锁: ${mediaSummary}`);
+    }
+
+    $notify("节点 IP 质量检测", nodeName, textParts.join("\n"));
+    $done();
 }
 
 function maskIPAddress(ip) {
     if (!ip) return "";
-    let parts = ip.split(".");
+    const parts = ip.split(".");
     if (parts.length === 4) return `${parts[0]}.${parts[1]}.*.*`;
     return ip;
 }
 
 function valueAt(obj, path) {
-    return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+    return path.split(".").reduce((acc, part) => acc && acc[part], obj);
 }
 
 // ==================== 探针与检测逻辑 ====================
 async function discoverIP() {
     try {
-        let res = await requestJson(IPIFY_URL);
+        const res = await requestJson(IPIFY_URL);
         return { ip: res.ip };
     } catch (e) {
-        let text = await requestText("https://ipv4.icanhazip.com/");
+        const text = await requestText("https://ipv4.icanhazip.com/");
         return { ip: text.trim() };
     }
 }
 
-async function collectDatabases(ip, discovery) {
-    let pathIP = encodeURIComponent(ip);
+async function collectDatabases(ip) {
+    const pathIP = encodeURIComponent(ip);
     let scamalytics = null;
     try {
         scamalytics = await requestJson(`${IPQUALITY_BACKEND}/${pathIP}?db=scamalytics`);
-    } catch(e){}
+    } catch (e) {
+        console.log(`[WARN] Scamalytics 查询失败: ${errorMessage(e)}`);
+    }
     return { scamalytics };
 }
 
@@ -181,30 +167,39 @@ async function collectMedia() {
         ["Disney+", testDisneyPlus()],
         ["Netflix", testNetflix()],
         ["YouTube", testYouTube()],
-        ["ChatGPT", testChatGPT()],
+        ["ChatGPT", testChatGPT()]
     ];
-    const settled = await Promise.all(tests.map(t => capture(t[1])));
-    return tests.map((t, i) => settled[i].ok ? settled[i].value : { name: t[0], status: "unknown" });
+    const settled = await Promise.all(tests.map((t) => capture(t[1])));
+    return tests.map((t, i) => (settled[i].ok ? settled[i].value : { name: t[0], status: "unknown" }));
 }
 
 function capture(promise) {
-    return promise.then(value => ({ ok: true, value })).catch(error => ({ ok: false, error }));
+    return promise.then((value) => ({ ok: true, value })).catch((error) => ({ ok: false, error }));
 }
 
 async function testTikTok() {
-    let res = await request("GET", "https://www.tiktok.com/");
+    const res = await request("GET", "https://www.tiktok.com/");
     return { name: "TikTok", status: res.status === 200 ? "yes" : "no" };
 }
-async function testDisneyPlus() { return { name: "Disney+", status: "unknown" }; }
+
+// 注：Disney+ 检测保留原脚本的占位实现（未实现完整解锁判断，仅返回 unknown）。
+// 如需完整判断，需用 DISNEY_CLIENT_TOKEN 走 Disney+ 的设备注册/地区接口，逻辑较复杂，
+// 告诉我的话我可以单独帮你补上。
+async function testDisneyPlus() {
+    return { name: "Disney+", status: "unknown" };
+}
+
 async function testNetflix() {
-    let res = await request("GET", "https://www.netflix.com/title/81280792");
+    const res = await request("GET", "https://www.netflix.com/title/81280792");
     return { name: "Netflix", status: res.status === 200 ? "yes" : "no" };
 }
+
 async function testYouTube() {
-    let res = await request("GET", "https://www.youtube.com/premium");
+    const res = await request("GET", "https://www.youtube.com/premium");
     return { name: "YouTube", status: res.status === 200 ? "yes" : "no" };
 }
+
 async function testChatGPT() {
-    let res = await request("GET", "https://chatgpt.com/cdn-cgi/trace");
+    const res = await request("GET", "https://chatgpt.com/cdn-cgi/trace");
     return { name: "ChatGPT", status: res.status === 200 ? "yes" : "no" };
 }
