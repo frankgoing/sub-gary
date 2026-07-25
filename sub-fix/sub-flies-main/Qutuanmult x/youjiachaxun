@@ -3,7 +3,7 @@
  * 多 Key 自动failover，结果以弹窗（htmlMessage）方式展示，而非系统通知
  *
  * QuantumultX 用户：复制到本地脚本即可，如需改省份用 $argument 传入，
- * 多个省份用英文逗号分隔，例如 $argument=甘肃,宁夏
+ * 多个省份用英文逗号分隔，例如 $argument=甘肃,宁夏回族自治区
  * 省份名不能含"省"字（自治区/直辖市名称按官方全称填写）
  */
 
@@ -75,15 +75,30 @@ function request(url) {
   });
 }
 
+const FUEL_COLOR = {
+  "0号柴油": "#8e8e93",
+  "92号汽油": "#0A84FF",
+  "95号汽油": "#ff9500",
+  "98号汽油": "#ff453a",
+};
+
 function render(results) {
+  const okResults = results.filter((result) => result.ok);
+  const displayTime = okResults.length ? String(okResults[0].data.time || "") : "";
+
   const html = [
     '<div style="font-family:-apple-system,BlinkMacSystemFont;font-size:14px;line-height:1.5;text-align:left;overflow-wrap:anywhere">',
     '<div style="font-size:18px;line-height:18px">&nbsp;</div>',
-    '<div style="font-size:20px;font-weight:700;line-height:1.25;margin-bottom:16px">油价查询</div>',
+    '<div style="font-size:20px;font-weight:700;line-height:1.25;margin-bottom:16px">⛽️ 油价查询</div>',
+    displayTime
+      ? `<div style="color:#8e8e93;font-size:11px;margin-bottom:10px">更新时间 · ${escapeHtml(displayTime)}</div>`
+      : "",
+    summaryCard(okResults),
     results.map((result) => renderProvince(result)).join(""),
     '<div style="font-size:9px;line-height:9px">&nbsp;</div>',
-    '<div style="color:#8e8e93;font-size:10px;line-height:1.45">数据来自天行数据 oilprice 接口，多 Key 自动切换重试。</div>',
-    '<div style="font-size:40px;line-height:40px">&nbsp;</div>',
+    '<div style="color:#8e8e93;font-size:10px;line-height:1.45">数据来自天行数据 oilprice 接口，多 Key 自动切换重试；各省数据独立请求，互不影响。</div>',
+    '<div style="font-size:56px;line-height:56px">&nbsp;</div>',
+    '<div style="font-size:56px;line-height:56px">&nbsp;</div>',
     "</div>",
   ].join("");
 
@@ -93,9 +108,23 @@ function render(results) {
   });
 }
 
+function summaryCard(okResults) {
+  if (!okResults.length) return "";
+  const lines = okResults
+    .filter((result) => result.data.p95 !== undefined && result.data.p95 !== null && result.data.p95 !== "")
+    .map((result) => {
+      return '<div style="margin-bottom:6px;line-height:1.2">'
+        + `<span style="font-size:24px;font-weight:800;letter-spacing:0.2px">¥${escapeHtml(result.data.p95)}</span>`
+        + `<span style="color:#8e8e93;font-size:12px;font-weight:600">&nbsp;&nbsp;${escapeHtml(result.data.prov || result.prov)} · 95号汽油</span>`
+        + "</div>";
+    })
+    .join("");
+  return lines ? `<div style="margin-bottom:16px">${lines}</div>` : "";
+}
+
 function renderProvince(result) {
   if (!result.ok) {
-    return section(result.prov, mutedLine(`查询失败：${escapeHtml(result.error)}`));
+    return section(`📍 ${result.prov}`, mutedLine(`查询失败：${escapeHtml(result.error)}`));
   }
   const data = result.data;
   const rows = [
@@ -106,10 +135,9 @@ function renderProvince(result) {
   ];
   const body = rows
     .filter((row) => row[1] !== undefined && row[1] !== null && row[1] !== "")
-    .map((row) => infoLine(`⛽️ ${row[0]}`, `¥${row[1]}`))
+    .map((row) => priceLine(row[0], `¥${row[1]}`, FUEL_COLOR[row[0]] || "#0A84FF"))
     .join("");
-  const time = data.time ? mutedLine(`更新时间：${escapeHtml(String(data.time))}`) : "";
-  return section(data.prov || result.prov, body + time);
+  return section(`📍 ${data.prov || result.prov}`, body);
 }
 
 function section(title, content) {
@@ -117,6 +145,14 @@ function section(title, content) {
     + '<div>'
     + `<div style="color:#0A84FF;font-weight:700;font-size:15px;margin-bottom:9px">▌${escapeHtml(title)}</div>`
     + `${content}</div>`;
+}
+
+function priceLine(label, value, color) {
+  return '<div style="margin-bottom:9px">'
+    + `<span style="color:${color};font-size:11px">●</span>&nbsp;`
+    + `<span style="font-weight:700">${escapeHtml(label)}</span>&nbsp;&nbsp;`
+    + `<span style="color:${color};font-weight:600">${escapeHtml(value)}</span>`
+    + "</div>";
 }
 
 function infoLine(label, value) {
