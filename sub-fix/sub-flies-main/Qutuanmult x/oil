@@ -1,83 +1,144 @@
-let provname;
-if (typeof $argument !== "undefined") {
-  provname = $argument;
-} else {
+/**
+ * 油价查询 · 甘肃 + 宁夏回族自治区
+ * 多 Key 自动failover，结果以弹窗（htmlMessage）方式展示，而非系统通知
+ *
+ * QuantumultX 用户：复制到本地脚本即可，如需改省份用 $argument 传入，
+ * 多个省份用英文逗号分隔，例如 $argument=甘肃,宁夏回族自治区
+ * 省份名不能含"省"字（自治区/直辖市名称按官方全称填写）
+ */
 
-  provname = "甘肃";//quantumultx用户请复制到本地脚本 更改其他省 省份名不能含"省"字。小火箭loon用户请看模块插件注释 surge请用面板
-}
-//默认江苏油价
-const encodedprovname = encodeURIComponent(provname);
-const apiUrls = [
-  `https://apis.tianapi.com/oilprice/index?key=231de491563c35731436829ac52aad43&prov=${encodedprovname}`,
-  `https://apis.tianapi.com/oilprice/index?key=a2bc7a0e01be908881ff752677cf94b7&prov=${encodedprovname}`,
-  `https://apis.tianapi.com/oilprice/index?key=1bcc67c0114bc39a8818c8be12c2c9ac&prov=${encodedprovname}`,
-  `https://apis.tianapi.com/oilprice/index?key=3c5ee42145c852de4147264f25b858dc&prov=${encodedprovname}`,
-  `https://apis.tianapi.com/oilprice/index?key=d718b0f7c2b6d71cb3a9814e90bf847f&prov=${encodedprovname}`
+let provArg = typeof $argument !== "undefined" && $argument ? String($argument) : "";
+const provinces = (provArg ? provArg.split(",") : ["甘肃", "宁夏"])
+  .map((item) => item.trim())
+  .filter(Boolean);
+
+const API_KEYS = [
+  "231de491563c35731436829ac52aad43",
+  "a2bc7a0e01be908881ff752677cf94b7",
+  "1bcc67c0114bc39a8818c8be12c2c9ac",
+  "3c5ee42145c852de4147264f25b858dc",
+  "d718b0f7c2b6d71cb3a9814e90bf847f",
 ];
-let currentIndex = 0;
 
-if (typeof $httpClient !== "undefined" || typeof $task !== "undefined") {
-  testNextUrl();
-} else {
+if (typeof $httpClient === "undefined" && typeof $task === "undefined") {
   console.log("Unsupported execution environment!");
   $done();
+} else {
+  run().catch((error) => {
+    console.log(`执行异常: ${errorMessage(error)}`);
+    $done({ title: "油价查询", content: `执行异常: ${errorMessage(error)}` });
+  });
 }
 
-function testNextUrl() {
-  if (currentIndex >= apiUrls.length) {
-    console.log("All URLs failed");
-    $done();
-    return;
-  }
-
-  const apiUrl = apiUrls[currentIndex];
-  const request = { url: apiUrl };
-
-  if (typeof $httpClient !== "undefined") {
-    $httpClient.get(request, function (error, response, data) {
-      if (error) {
-        console.log(`Error for URL ${currentIndex + 1}: ${error}`);
-        currentIndex++;
-        testNextUrl();
-      } else {
-        handleResponse(data);
-      }
-    });
-  } else if (typeof $task !== "undefined") {
-    $task.fetch(request).then(
-      function (response) {
-        handleResponse(response.body);
-      },
-      function (error) {
-        console.log(`Error for URL ${currentIndex + 1}: ${error}`);
-        currentIndex++;
-        testNextUrl();
-      }
-    );
-  }
+async function run() {
+  const results = await Promise.all(provinces.map((prov) => fetchProvince(prov)));
+  render(results);
 }
 
-function handleResponse(data) {
-  var obj = JSON.parse(data);
-  console.log(obj);
-
-  if (obj.code === 200) {
-    var prov = obj.result.prov;
-    var p0 = "⛽️0号柴油: " + "¥" + obj.result.p0;
-    var p92 = "⛽️92号汽油: " + "¥" + obj.result.p92 + "\n";
-    var p95 = "⛽️95号汽油: " + "¥" + obj.result.p95 + "\n";
-    var p98 = "⛽️98号汽油: " + "¥" + obj.result.p98 + "\n";
-    var time = obj.result.time;
-
-    if (typeof $notification !== "undefined") {
-      $notification.post(prov + "油价提醒", time, p92 + p95 + p98 + p0);
-    } else if (typeof $notify !== "undefined") {
-      $notify(prov + "油价提醒", time, p92 + p95 + p98 + p0);
+async function fetchProvince(prov) {
+  const encodedProv = encodeURIComponent(prov);
+  let lastError = "";
+  for (let i = 0; i < API_KEYS.length; i += 1) {
+    const url = `https://apis.tianapi.com/oilprice/index?key=${API_KEYS[i]}&prov=${encodedProv}`;
+    try {
+      const body = await request(url);
+      const obj = JSON.parse(body);
+      console.log(obj);
+      if (obj.code === 200 && obj.result) {
+        return { prov, ok: true, data: obj.result };
+      }
+      lastError = obj.msg || `code ${obj.code}`;
+      console.log(`[WARN] ${prov} 第 ${i + 1} 个 key 返回失败: ${lastError}`);
+    } catch (error) {
+      lastError = errorMessage(error);
+      console.log(`[WARN] ${prov} 第 ${i + 1} 个 key 请求失败: ${lastError}`);
     }
-    $done();
-  } else {
-    console.log(`请求失败，错误信息：${obj.msg}`);
-    currentIndex++;
-    testNextUrl();
   }
+  return { prov, ok: false, error: lastError || "全部 key 均请求失败" };
+}
+
+function request(url) {
+  return new Promise((resolve, reject) => {
+    if (typeof $httpClient !== "undefined") {
+      $httpClient.get({ url }, (error, response, data) => {
+        if (error) reject(new Error(error));
+        else resolve(data);
+      });
+    } else if (typeof $task !== "undefined") {
+      $task.fetch({ url }).then(
+        (response) => resolve(response.body),
+        (error) => reject(new Error(errorMessage(error && error.error ? error.error : error)))
+      );
+    } else {
+      reject(new Error("Unsupported execution environment"));
+    }
+  });
+}
+
+function render(results) {
+  const html = [
+    '<div style="font-family:-apple-system,BlinkMacSystemFont;font-size:14px;line-height:1.5;text-align:left;overflow-wrap:anywhere">',
+    '<div style="font-size:18px;line-height:18px">&nbsp;</div>',
+    '<div style="font-size:20px;font-weight:700;line-height:1.25;margin-bottom:16px">油价查询</div>',
+    results.map((result) => renderProvince(result)).join(""),
+    '<div style="font-size:9px;line-height:9px">&nbsp;</div>',
+    '<div style="color:#8e8e93;font-size:10px;line-height:1.45">数据来自天行数据 oilprice 接口，多 Key 自动切换重试。</div>',
+    '<div style="font-size:40px;line-height:40px">&nbsp;</div>',
+    "</div>",
+  ].join("");
+
+  $done({
+    title: "\u200B",
+    htmlMessage: html,
+  });
+}
+
+function renderProvince(result) {
+  if (!result.ok) {
+    return section(result.prov, mutedLine(`查询失败：${escapeHtml(result.error)}`));
+  }
+  const data = result.data;
+  const rows = [
+    ["0号柴油", data.p0],
+    ["92号汽油", data.p92],
+    ["95号汽油", data.p95],
+    ["98号汽油", data.p98],
+  ];
+  const body = rows
+    .filter((row) => row[1] !== undefined && row[1] !== null && row[1] !== "")
+    .map((row) => infoLine(`⛽️ ${row[0]}`, `¥${row[1]}`))
+    .join("");
+  const time = data.time ? mutedLine(`更新时间：${escapeHtml(String(data.time))}`) : "";
+  return section(data.prov || result.prov, body + time);
+}
+
+function section(title, content) {
+  return '<div style="font-size:8px;line-height:8px">&nbsp;</div>'
+    + '<div>'
+    + `<div style="color:#0A84FF;font-weight:700;font-size:15px;margin-bottom:9px">▌${escapeHtml(title)}</div>`
+    + `${content}</div>`;
+}
+
+function infoLine(label, value) {
+  return '<div style="margin-bottom:8px;line-height:1.4">'
+    + `<span style="color:#8e8e93;font-size:12px">${escapeHtml(label)}</span>&nbsp;&nbsp;`
+    + `<span style="font-weight:600">${escapeHtml(value)}</span>`
+    + "</div>";
+}
+
+function mutedLine(value) {
+  return `<div style="color:#8e8e93;font-size:11px;margin:5px 0;line-height:1.45">${escapeHtml(value)}</div>`;
+}
+
+function escapeHtml(value) {
+  return String(value === null || typeof value === "undefined" ? "" : value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function errorMessage(error) {
+  return error && error.message ? String(error.message) : String(error);
 }
