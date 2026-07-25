@@ -591,84 +591,34 @@ function render(ip, data, media) {
     const risks = buildRisks(data);
     const audit = buildAudit(data);
     const displayNodeName = truncateText(nodeName, 30);
-    const text = buildReportText(basic, types, risks, media, audit);
 
-    // QX 的 event-interaction 弹窗（$done 的 htmlMessage）本身是一个固定大小的原生弹窗，
-    // 内容超出后既不能内部滚动、关闭按钮也可能被顶出屏幕之外。改用 $notify 推送完整报告：
-    // 通知本身可以正常下拉/展开查看全文，也能像普通通知一样一划就关掉，不会卡屏。
-    $notify("节点 IP 质量检测", displayNodeName, text);
+    const html = [
+        '<div style="font-family:-apple-system,BlinkMacSystemFont;font-size:14px;line-height:1.5;text-align:left;overflow-wrap:anywhere">',
+        '<div style="font-size:18px;line-height:18px">&nbsp;</div>',
+        '<div style="font-size:20px;font-weight:700;line-height:1.25;margin-bottom:16px">节点 IP 质量检测</div>',
+        `<div style="color:#8e8e93;font-size:11px;margin-bottom:10px">节点 · ${escapeHtml(displayNodeName)}</div>`,
+        summaryCard(basic),
+        section("基础信息", renderBasic(basic)),
+        section("IP 类型属性", renderTypeList(types)),
+        section("风险评分", renderRiskList(risks)),
+        section("流媒体与 AI", mediaEnabled
+            ? renderMediaList(media)
+            : mutedLine("流媒体检测已关闭")),
+        section("数据状态", renderAudit(audit, data._probe)),
+        '<div style="font-size:9px;line-height:9px">&nbsp;</div>',
+        '<div style="color:#8e8e93;font-size:10px;line-height:1.45">'
+            + '类型名称、评分分档与风险字段遵循 xykt/IPQuality 的展示口径；各库结果独立展示，不生成综合结论。'
+            + '聚合来源不可用时保留直连结果。QX 不提供节点 TCP/DNS API，25 端口与 DNSBL 未检测。</div>',
+        '<div style="font-size:56px;line-height:56px">&nbsp;</div>',
+        '<div style="font-size:56px;line-height:56px">&nbsp;</div>',
+        "</div>",
+    ].join("");
+
     postMapNotification(basic, displayNodeName);
     $done({
-        title: "节点 IP 质量检测",
-        content: "报告已通过通知推送，下拉通知栏或长按该通知可查看完整内容。",
+        title: "\u200B",
+        htmlMessage: html,
     });
-}
-
-function buildReportText(basic, types, risks, media, audit) {
-    const lines = [];
-    lines.push(`IP：${basic.ip}${basic.nature ? `（${basic.nature}）` : ""}`);
-    if (basic.actualRegion) lines.push(`地区：${basic.actualRegion}`);
-    if (basic.city) lines.push(`城市：${basic.city}`);
-    const asn = [basic.asn, basic.organization].filter(Boolean).join(" ");
-    if (asn) lines.push(`ASN：${asn}`);
-    if (basic.route) lines.push(`网段：${basic.route}`);
-    if (basic.timezone) lines.push(`时区：${basic.timezone}`);
-    if (basic.registeredRegion) lines.push(`注册地：${basic.registeredRegion}`);
-    if (basic.coordinates) lines.push(`坐标：${basic.coordinates}`);
-
-    lines.push("");
-    lines.push("【IP 类型属性】");
-    if (types.length) {
-        types.forEach((row) => {
-            const parts = [];
-            if (row.usage) parts.push(`使用 ${row.usage}`);
-            if (row.company) parts.push(`公司 ${row.company}`);
-            lines.push(`${row.name}：${parts.join(" / ") || "—"}`);
-        });
-    } else {
-        lines.push("本次没有可验证的网络类型");
-    }
-
-    lines.push("");
-    lines.push("【风险评分】");
-    const availableRisks = risks.filter((row) => row.available);
-    if (availableRisks.length) {
-        availableRisks.forEach((row) => {
-            lines.push(`${row.name}：${[row.detail, row.label].filter(Boolean).join(" · ")}`);
-        });
-    } else {
-        lines.push("本次没有可验证的风险评分");
-    }
-    const missingRisks = risks.filter((row) => !row.available).map((row) => row.name);
-    if (missingRisks.length) lines.push(`未返回：${missingRisks.join("、")}`);
-
-    lines.push("");
-    lines.push("【流媒体与 AI】");
-    if (mediaEnabled) {
-        const confirmed = media.filter((row) => row.status !== "unknown");
-        const unknown = media.filter((row) => row.status === "unknown");
-        if (confirmed.length) {
-            confirmed.forEach((row) => {
-                const icon = row.status === "yes" ? "✅" : row.status === "partial" ? "🟠" : "❌";
-                const status = row.status === "yes" ? "解锁" : row.status === "partial" ? "部分可用" : "不可用";
-                const detail = [row.region ? `[${row.region}]` : "", row.detail].filter(Boolean).join(" · ");
-                lines.push(`${icon} ${row.name}：${status}${detail ? ` ${detail}` : ""}`);
-            });
-        } else {
-            lines.push("本次没有确认任何服务状态");
-        }
-        if (unknown.length) lines.push(`未确认：${unknown.map((row) => row.name).join("、")}`);
-    } else {
-        lines.push("流媒体检测已关闭");
-    }
-
-    lines.push("");
-    lines.push(`【数据状态】来源 ${audit.success.length}/${audit.total}`);
-    if (audit.failed.length) lines.push(`未返回：${audit.failed.join("、")}`);
-    if (audit.skipped && audit.skipped.length) lines.push(`已跳过：${audit.skipped.join("、")}`);
-    if (audit.supplemental && audit.supplemental.length) lines.push(`补充来源：${audit.supplemental.join("、")}`);
-
-    return lines.join("\n");
 }
 
 function buildBasic(ip, data) {
@@ -964,128 +914,6 @@ function buildRisks(data) {
             }
             : unavailableRisk("DB-IP"),
     ].filter(Boolean);
-}
-
-function buildFactors(data) {
-    const ipinfo = data.ipinfo && data.ipinfo.data ? data.ipinfo.data : null;
-    const ipregistry = parseIpregistry(data.ipregistry);
-    const ipapi = data.ipapi;
-    const ip2 = getIp2location(data);
-    const dbip = parseDbip(data.dbip);
-    const ip2Proxy = ip2 && ip2.proxy ? ip2.proxy : {};
-    const ipqs = data.ipqs && data.ipqs.success !== false ? data.ipqs : null;
-    const scamRoot = data.scamalytics;
-    const scam = scamRoot && scamRoot.scamalytics ? scamRoot.scamalytics : null;
-    const ipdata = data.ipdata;
-
-    return [
-        factorSource("IP2Location", ip2 ? {
-            country: ip2.country_code,
-            checks: {
-                代理: anyTrue([ip2.is_proxy, ip2Proxy.is_public_proxy, ip2Proxy.is_web_proxy]),
-                Tor: ip2Proxy.is_tor,
-                VPN: ip2Proxy.is_vpn,
-                机房: ip2Proxy.is_data_center,
-                滥用: ip2Proxy.is_spammer,
-                机器人: anyTrue([ip2Proxy.is_web_crawler, ip2Proxy.is_scanner, ip2Proxy.is_botnet]),
-            },
-        } : null),
-        factorSource("ipapi", ipapi ? {
-            country: valueAt(ipapi, "location.country_code"),
-            checks: {
-                VPN: ipapi.is_vpn,
-                代理: ipapi.is_proxy,
-                Tor: ipapi.is_tor,
-                机房: ipapi.is_datacenter,
-                滥用: ipapi.is_abuser,
-                爬虫: ipapi.is_crawler,
-            },
-        } : null),
-        factorSource("ipregistry", ipregistry ? {
-            country: ipregistry.country,
-            checks: {
-                VPN: ipregistry.vpn,
-                代理: ipregistry.proxy,
-                Tor: ipregistry.tor,
-                中继: ipregistry.relay,
-                机房: ipregistry.server,
-                滥用: ipregistry.abuser,
-                匿名: ipregistry.anonymous,
-                威胁: ipregistry.threat,
-            },
-        } : null),
-        factorSource("IPQS", ipqs ? {
-            country: ipqs.country_code,
-            checks: {
-                代理: ipqs.proxy,
-                Tor: ipqs.tor,
-                VPN: ipqs.vpn,
-                机房: null,
-                滥用: ipqs.recent_abuse,
-                机器人: ipqs.bot_status,
-            },
-        } : null),
-        factorSource("Scamalytics", scam ? {
-            country: valueAt(scamRoot, "external_datasources.maxmind_geolite2.ip_country_code"),
-            checks: {
-                代理: valueAt(scamRoot, "external_datasources.firehol.is_proxy"),
-                Tor: valueAt(scamRoot, "external_datasources.x4bnet.is_tor"),
-                VPN: valueAt(scam, "scamalytics_proxy.is_vpn"),
-                机房: valueAt(scam, "scamalytics_proxy.is_datacenter"),
-                滥用: scam.is_blacklisted_external,
-                机器人: anyTrue([
-                    valueAt(scamRoot, "external_datasources.x4bnet.is_blacklisted_spambot"),
-                    valueAt(scamRoot, "external_datasources.x4bnet.is_bot_operamini"),
-                    valueAt(scamRoot, "external_datasources.x4bnet.is_bot_semrush"),
-                ]),
-            },
-        } : null),
-        factorSource("ipdata", ipdata ? {
-            country: ipdata.country_code,
-            checks: {
-                代理: valueAt(ipdata, "threat.is_proxy"),
-                Tor: valueAt(ipdata, "threat.is_tor"),
-                机房: valueAt(ipdata, "threat.is_datacenter"),
-                滥用: anyTrue([
-                    valueAt(ipdata, "threat.is_threat"),
-                    valueAt(ipdata, "threat.is_known_abuser"),
-                    valueAt(ipdata, "threat.is_known_attacker"),
-                ]),
-                匿名: valueAt(ipdata, "threat.is_anonymous"),
-            },
-        } : null),
-        factorSource("IPinfo", ipinfo ? {
-            country: ipinfo.country,
-            checks: {
-                VPN: valueAt(ipinfo, "privacy.vpn"),
-                代理: valueAt(ipinfo, "privacy.proxy"),
-                Tor: valueAt(ipinfo, "privacy.tor"),
-                中继: valueAt(ipinfo, "privacy.relay"),
-                机房: valueAt(ipinfo, "privacy.hosting"),
-            },
-        } : null),
-        factorSource("DB-IP", dbip ? {
-            country: dbip.country,
-            checks: {
-                代理: dbip.proxy,
-                爬虫: dbip.robot,
-                攻击源: dbip.abuser,
-            },
-        } : null),
-    ].filter((source) => source.available);
-}
-
-function factorSource(name, values) {
-    const source = Object.assign({
-        name,
-        country: null,
-        checks: {},
-    }, values || {});
-    const booleanCount = Object.keys(source.checks).filter((key) => {
-        return booleanOrNull(source.checks[key]) !== null;
-    }).length;
-    source.available = booleanCount > 0;
-    return source;
 }
 
 function parseIpregistry(payload) {
@@ -1400,34 +1228,6 @@ function renderTypeList(rows) {
         return '<div style="margin-bottom:11px">'
             + `<div style="font-weight:700">${escapeHtml(row.name)}</div>`
             + `<div style="margin-top:2px;font-size:12px;line-height:1.5">${details.join('<br/>')}</div>`
-            + "</div>";
-    }).join("");
-}
-
-function renderFactorCards(sources) {
-    if (!sources.length) return mutedLine("本次没有可验证的风险标记");
-    return sources.map((source) => {
-        const hit = [];
-        const clear = [];
-        Object.keys(source.checks).forEach((key) => {
-            const value = booleanOrNull(source.checks[key]);
-            if (value === true) hit.push(key);
-            if (value === false) clear.push(key);
-        });
-        const region = cleanValue(source.country);
-        const lines = [];
-        if (hit.length) {
-            lines.push(`<span style="color:#ff453a;font-weight:600">命中 ${escapeHtml(hit.join("、"))}</span>`);
-        }
-        if (clear.length) {
-            lines.push(`<span style="color:#30d158">未命中 ${escapeHtml(clear.join("、"))}</span>`);
-        }
-        const title = region && region.length === 2
-            ? `${source.name} · ${flagEmoji(region)} [${region.toUpperCase()}]`
-            : source.name;
-        return '<div style="margin-bottom:11px">'
-            + `<div style="font-weight:700">${escapeHtml(title)}</div>`
-            + `<div style="margin-top:2px;font-size:12px;line-height:1.5">${lines.join('<br/>')}</div>`
             + "</div>";
     }).join("");
 }
