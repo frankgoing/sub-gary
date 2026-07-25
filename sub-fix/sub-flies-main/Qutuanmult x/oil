@@ -8,7 +8,7 @@
  */
 
 let provArg = typeof $argument !== "undefined" && $argument ? String($argument) : "";
-const provinces = (provArg ? provArg.split(",") : ["甘肃", "宁夏"])
+const provinces = (provArg ? provArg.split(",") : ["甘肃", "宁夏", "陕西"])
   .map((item) => item.trim())
   .filter(Boolean);
 
