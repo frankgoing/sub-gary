@@ -59,9 +59,14 @@ async function collectMedia() {
     ];
     const settled = await Promise.all(tests.map((item) => capture(item[1])));
     return tests.map((item, index) => {
-        if (settled[index].ok) return settled[index].value;
-        console.log(`[WARN] ${item[0]}: ${settled[index].error}`);
-        return mediaResult(item[0], "unknown", "", "请求失败");
+        const value = settled[index].ok
+            ? settled[index].value
+            : mediaResult(item[0], "unknown", "", "请求失败");
+        if (!settled[index].ok) console.log(`[WARN] ${item[0]}: ${settled[index].error}`);
+        if (value.status === "unknown") {
+            return mediaResult(item[0], "no", value.region, value.detail || "未识别到解锁信号");
+        }
+        return value;
     });
 }
 
@@ -411,9 +416,8 @@ function render(media) {
 }
 
 function renderMediaList(rows) {
-    const confirmed = rows.filter((row) => row.status !== "unknown");
-    const unknown = rows.filter((row) => row.status === "unknown");
-    const body = confirmed.map((row) => {
+    if (!rows.length) return mutedLine("本次没有检测结果");
+    return rows.map((row) => {
         const status = mediaStatus(row.status);
         const icon = row.status === "yes" ? "✅" : row.status === "partial" ? "🟠" : "❌";
         const summary = `${status.text}${row.region ? ` · [${row.region}]` : ""}`;
@@ -425,10 +429,6 @@ function renderMediaList(rows) {
             + `<span style="color:${status.color};font-weight:600">${escapeHtml(summary)}</span>${detail}`
             + "</div>";
     }).join("");
-    const unknownLine = unknown.length
-        ? mutedLine(`⚪ 未确认：${unknown.map((row) => row.name).join("、")}`)
-        : "";
-    return (body || mutedLine("本次没有确认任何服务状态")) + unknownLine;
 }
 
 function mediaStatus(status) {
