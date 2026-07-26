@@ -323,8 +323,8 @@ function databaseIPMismatch(key, value, expectedIP) {
 
 function render(ip, data) {
     const basic = buildBasic(ip, data);
-    const types = buildTypes(data);
     const risks = buildRisks(data);
+    const factors = buildFactors(data);
     const displayNodeName = truncateText(nodeName, 30);
 
     const html = [
@@ -333,12 +333,11 @@ function render(ip, data) {
         '<div style="font-size:20px;font-weight:700;line-height:1.25;margin-bottom:16px">节点 IP 质量检测</div>',
         `<div style="color:#8e8e93;font-size:11px;margin-bottom:10px">节点 · ${escapeHtml(displayNodeName)}</div>`,
         summaryCard(basic),
-        section("基础信息", renderBasic(basic)),
-        section("IP 类型属性", renderTypeList(types)),
         section("风险评分", renderRiskList(risks)),
+        section("风险因素", renderFactorCards(factors)),
         '<div style="font-size:9px;line-height:9px">&nbsp;</div>',
         '<div style="color:#8e8e93;font-size:10px;line-height:1.45">'
-            + '类型名称与评分分档遵循 xykt/IPQuality 的展示口径；各库结果独立展示，不生成综合结论。'
+            + '评分分档与风险字段遵循 xykt/IPQuality 的展示口径；各库结果独立展示，不生成综合结论。'
             + '聚合来源不可用时保留直连结果。</div>',
         '<div style="font-size:14px;line-height:14px">&nbsp;</div>',
         "</div>",
@@ -553,19 +552,150 @@ function buildBasic(ip, data) {
     };
 }
 
-function buildTypes(data) {
+function buildFactors(data) {
     const ipinfo = data.ipinfo && data.ipinfo.data ? data.ipinfo.data : null;
     const ipregistry = parseIpregistry(data.ipregistry);
     const ipapi = data.ipapi;
     const ip2 = getIp2location(data);
-    const abuse = data.abuseipdb && data.abuseipdb.data ? data.abuseipdb.data : null;
+    const dbip = parseDbip(data.dbip);
+    const ip2Proxy = ip2 && ip2.proxy ? ip2.proxy : {};
+    const ipqs = data.ipqs && data.ipqs.success !== false ? data.ipqs : null;
+    const scamRoot = data.scamalytics;
+    const scam = scamRoot && scamRoot.scamalytics ? scamRoot.scamalytics : null;
+    const ipdata = data.ipdata;
+
     return [
-        typeRow("IPinfo", valueAt(ipinfo, "asn.type"), valueAt(ipinfo, "company.type")),
-        typeRow("ipregistry", ipregistry && ipregistry.usageType, ipregistry && ipregistry.companyType),
-        typeRow("ipapi", valueAt(ipapi, "asn.type"), valueAt(ipapi, "company.type")),
-        typeRow("IP2Location", ip2 && ip2.usage_type, valueAt(ip2, "as_info.as_usage_type")),
-        typeRow("AbuseIPDB", abuse && abuse.usageType, null),
-    ].filter((row) => row.usage || row.company);
+        factorSource("IP2Location", ip2 ? {
+            country: ip2.country_code,
+            checks: {
+                代理: anyTrue([ip2.is_proxy, ip2Proxy.is_public_proxy, ip2Proxy.is_web_proxy]),
+                Tor: ip2Proxy.is_tor,
+                VPN: ip2Proxy.is_vpn,
+                机房: ip2Proxy.is_data_center,
+                滥用: ip2Proxy.is_spammer,
+                机器人: anyTrue([ip2Proxy.is_web_crawler, ip2Proxy.is_scanner, ip2Proxy.is_botnet]),
+            },
+        } : null),
+        factorSource("ipapi", ipapi ? {
+            country: valueAt(ipapi, "location.country_code"),
+            checks: {
+                VPN: ipapi.is_vpn,
+                代理: ipapi.is_proxy,
+                Tor: ipapi.is_tor,
+                机房: ipapi.is_datacenter,
+                滥用: ipapi.is_abuser,
+                爬虫: ipapi.is_crawler,
+            },
+        } : null),
+        factorSource("ipregistry", ipregistry ? {
+            country: ipregistry.country,
+            checks: {
+                VPN: ipregistry.vpn,
+                代理: ipregistry.proxy,
+                Tor: ipregistry.tor,
+                中继: ipregistry.relay,
+                机房: ipregistry.server,
+                滥用: ipregistry.abuser,
+                匿名: ipregistry.anonymous,
+                威胁: ipregistry.threat,
+            },
+        } : null),
+        factorSource("IPQS", ipqs ? {
+            country: ipqs.country_code,
+            checks: {
+                代理: ipqs.proxy,
+                Tor: ipqs.tor,
+                VPN: ipqs.vpn,
+                机房: null,
+                滥用: ipqs.recent_abuse,
+                机器人: ipqs.bot_status,
+            },
+        } : null),
+        factorSource("Scamalytics", scam ? {
+            country: valueAt(scamRoot, "external_datasources.maxmind_geolite2.ip_country_code"),
+            checks: {
+                代理: valueAt(scamRoot, "external_datasources.firehol.is_proxy"),
+                Tor: valueAt(scamRoot, "external_datasources.x4bnet.is_tor"),
+                VPN: valueAt(scam, "scamalytics_proxy.is_vpn"),
+                机房: valueAt(scam, "scamalytics_proxy.is_datacenter"),
+                滥用: scam.is_blacklisted_external,
+                机器人: anyTrue([
+                    valueAt(scamRoot, "external_datasources.x4bnet.is_blacklisted_spambot"),
+                    valueAt(scamRoot, "external_datasources.x4bnet.is_bot_operamini"),
+                    valueAt(scamRoot, "external_datasources.x4bnet.is_bot_semrush"),
+                ]),
+            },
+        } : null),
+        factorSource("ipdata", ipdata ? {
+            country: ipdata.country_code,
+            checks: {
+                代理: valueAt(ipdata, "threat.is_proxy"),
+                Tor: valueAt(ipdata, "threat.is_tor"),
+                机房: valueAt(ipdata, "threat.is_datacenter"),
+                滥用: anyTrue([
+                    valueAt(ipdata, "threat.is_threat"),
+                    valueAt(ipdata, "threat.is_known_abuser"),
+                    valueAt(ipdata, "threat.is_known_attacker"),
+                ]),
+                匿名: valueAt(ipdata, "threat.is_anonymous"),
+            },
+        } : null),
+        factorSource("IPinfo", ipinfo ? {
+            country: ipinfo.country,
+            checks: {
+                VPN: valueAt(ipinfo, "privacy.vpn"),
+                代理: valueAt(ipinfo, "privacy.proxy"),
+                Tor: valueAt(ipinfo, "privacy.tor"),
+                中继: valueAt(ipinfo, "privacy.relay"),
+                机房: valueAt(ipinfo, "privacy.hosting"),
+            },
+        } : null),
+        factorSource("DB-IP", dbip ? {
+            country: dbip.country,
+            checks: {
+                代理: dbip.proxy,
+                爬虫: dbip.robot,
+                攻击源: dbip.abuser,
+            },
+        } : null),
+    ].filter((source) => source.available);
+}
+
+function factorSource(name, values) {
+    const source = Object.assign({
+        name,
+        country: null,
+        checks: {},
+    }, values || {});
+    const booleanCount = Object.keys(source.checks).filter((key) => {
+        return booleanOrNull(source.checks[key]) !== null;
+    }).length;
+    source.available = booleanCount > 0;
+    return source;
+}
+
+function parseDbip(html) {
+    if (!html) return null;
+    const start = String(html).search(/<th class=['"]text-center['"]>Crawler/i);
+    if (start < 0) return null;
+    const block = String(html).slice(start, start + 8000);
+    const matches = [];
+    const pattern = /<span class="sr-only">\s*(Yes|No)(?:&nbsp;|\s)*<\/span>/gi;
+    let match;
+    while ((match = pattern.exec(block)) && matches.length < 3) {
+        matches.push(match[1].toLowerCase() === "yes");
+    }
+    const country = String(html).match(/"countryCode"\s*:\s*"([A-Z]{2})"/i)
+        || String(html).match(/\/img\/flags\/([A-Z]{2})\.png/i);
+    return {
+        country: country ? country[1].toUpperCase() : null,
+        robot: matches.length > 0 ? matches[0] : null,
+        proxy: matches.length > 1 ? matches[1] : null,
+        tor: null,
+        vpn: null,
+        server: null,
+        abuser: matches.length > 2 ? matches[2] : null,
+    };
 }
 
 function buildRisks(data) {
@@ -817,16 +947,6 @@ function translateRisk(level) {
     return map[String(level || "").toLowerCase()] || String(level || "未知");
 }
 
-function typeRow(name, usage, company) {
-    const cleanUsage = cleanValue(usage);
-    const cleanCompany = cleanValue(company);
-    return {
-        name,
-        usage: cleanUsage ? formatTypeWithRaw(cleanUsage) : "",
-        company: cleanCompany ? formatTypeWithRaw(cleanCompany) : "",
-    };
-}
-
 function summaryCard(basic) {
     const asn = [basic.asn, basic.organization].filter(Boolean).join(" · ");
     return '<div style="margin-bottom:16px">'
@@ -842,22 +962,6 @@ function summaryCard(basic) {
             : "")
         + (asn ? `<div style="margin-top:5px;color:#8e8e93;font-size:11px;line-height:1.35">${escapeHtml(asn)}</div>` : "")
         + "</div>";
-}
-
-function renderBasic(basic) {
-    const rows = [
-        ["来源", basic.source],
-        ["网段", basic.route],
-        ["时区", basic.timezone],
-        ["注册地", basic.registeredRegion],
-    ].filter((row) => row[1]);
-    const mapLine = basic.map
-        ? `<div style="margin-bottom:8px;line-height:1.4">`
-            + `<a href="${escapeHtml(basic.map)}" style="color:#0A84FF;font-weight:600;text-decoration:none">📍 节点 IP 出口</a>`
-            + (basic.coordinates ? `<span style="color:#8e8e93;font-size:12px">&nbsp;&nbsp;${escapeHtml(basic.coordinates)}</span>` : "")
-            + "</div>"
-        : (basic.coordinates ? infoLine("坐标", basic.coordinates) : "");
-    return rows.map((row) => infoLine(row[0], row[1])).join("") + mapLine;
 }
 
 function postMapNotification(basic, displayNodeName) {
@@ -887,15 +991,30 @@ function renderRiskList(rows) {
     return (body || mutedLine("本次没有可验证的风险评分")) + missing;
 }
 
-function renderTypeList(rows) {
-    if (!rows.length) return mutedLine("本次没有可验证的网络类型");
-    return rows.map((row) => {
-        const details = [];
-        if (row.usage) details.push(`<span style="color:#8e8e93">使用</span>&nbsp;${escapeHtml(row.usage)}`);
-        if (row.company) details.push(`<span style="color:#8e8e93">公司</span>&nbsp;${escapeHtml(row.company)}`);
+function renderFactorCards(sources) {
+    if (!sources.length) return mutedLine("本次没有可验证的风险标记");
+    return sources.map((source) => {
+        const hit = [];
+        const clear = [];
+        Object.keys(source.checks).forEach((key) => {
+            const value = booleanOrNull(source.checks[key]);
+            if (value === true) hit.push(key);
+            if (value === false) clear.push(key);
+        });
+        const region = cleanValue(source.country);
+        const lines = [];
+        if (hit.length) {
+            lines.push(`<span style="color:#ff453a;font-weight:600">命中 ${escapeHtml(hit.join("、"))}</span>`);
+        }
+        if (clear.length) {
+            lines.push(`<span style="color:#30d158">未命中 ${escapeHtml(clear.join("、"))}</span>`);
+        }
+        const title = region && region.length === 2
+            ? `${source.name} · ${flagEmoji(region)} [${region.toUpperCase()}]`
+            : source.name;
         return '<div style="margin-bottom:11px">'
-            + `<div style="font-weight:700">${escapeHtml(row.name)}</div>`
-            + `<div style="margin-top:2px;font-size:12px;line-height:1.5">${details.join('<br/>')}</div>`
+            + `<div style="font-weight:700">${escapeHtml(title)}</div>`
+            + `<div style="margin-top:2px;font-size:12px;line-height:1.5">${lines.join('<br/>')}</div>`
             + "</div>";
     }).join("");
 }
@@ -912,13 +1031,6 @@ function section(title, content) {
         + '<div>'
         + `<div style="color:#0A84FF;font-weight:700;font-size:15px;margin-bottom:9px">▌${escapeHtml(title)}</div>`
         + `${content}</div>`;
-}
-
-function infoLine(label, value) {
-    return '<div style="margin-bottom:8px;line-height:1.4">'
-        + `<span style="color:#8e8e93;font-size:12px">${escapeHtml(label)}</span>&nbsp;&nbsp;`
-        + `<span style="font-weight:600">${escapeHtml(value)}</span>`
-        + "</div>";
 }
 
 function mutedLine(value) {
@@ -1118,60 +1230,6 @@ function booleanOrNull(value) {
     if (value === true || value === "true" || value === 1 || value === "1") return true;
     if (value === false || value === "false" || value === 0 || value === "0") return false;
     return null;
-}
-
-function formatType(type) {
-    const clean = cleanValue(type);
-    if (!clean) return "未取到";
-    const phraseMap = {
-        "DATA CENTER/WEB HOSTING/TRANSIT": "机房",
-        "FIXED LINE ISP": "家宽",
-        "MOBILE ISP": "手机",
-        "CONTENT DELIVERY NETWORK": "CDN",
-        "DATA CENTER/TRANSIT": "机房",
-        "SEARCH ENGINE SPIDER": "搜索引擎",
-        "UNIVERSITY/COLLEGE/SCHOOL": "教育",
-    };
-    if (phraseMap[clean.toUpperCase()]) return phraseMap[clean.toUpperCase()];
-    const map = {
-        DCH: "机房",
-        WEB: "机房",
-        SES: "搜索引擎",
-        HOSTING: "机房",
-        ISP: "家宽",
-        RES: "住宅",
-        RESIDENTIAL: "住宅",
-        BUSINESS: "商业",
-        COMMERCIAL: "商业",
-        BANKING: "银行",
-        COM: "商业",
-        MOB: "手机",
-        MOBILE: "手机",
-        CDN: "CDN",
-        EDU: "教育",
-        MIL: "军队",
-        MILITARY: "军队",
-        LIB: "图书馆",
-        LIBRARY: "图书馆",
-        RSV: "保留",
-        RESERVED: "保留",
-        GOVERNMENT: "政府",
-        GOV: "政府",
-        ORG: "组织",
-        ORGANIZATION: "组织",
-    };
-    const first = clean.split("/")[0].trim();
-    const key = first.toUpperCase();
-    return map[key] || first;
-}
-
-function formatTypeWithRaw(type) {
-    const clean = cleanValue(type);
-    if (!clean) return "—";
-    const formatted = formatType(clean);
-    return formatted.toLowerCase() === clean.toLowerCase()
-        ? formatted
-        : `${formatted} (${clean})`;
 }
 
 function cleanValue(value) {
