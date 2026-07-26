@@ -1,10 +1,12 @@
 /**
  * 流媒体解锁检测 · Quantumult X event-interaction 脚本（流媒体 / AI 解锁检测版）
  * 由 Loon generic 脚本移植而来，原作者 MaYIHEI
+ * Dazn / Paramount+ / Discovery+ 三项检测逻辑移植自 KOP-XIAO/QuantumultX 的 streaming-ui-check.js
  *
  * 使用: 在 QX 首页「服务器」列表长按目标节点或策略组 → 执行「流媒体解锁检测」
  *
  * @Author: MaYIHEI <https://github.com/MaYIHEI/paperclip>（原 Loon 版本）
+ * @Reference: KOP-XIAO <https://github.com/KOP-XIAO/QuantumultX>（Dazn/Paramount+/Discovery+ 检测方式）
  * @Channel: Telegram 频道 https://t.me/mayihei
  * @Updated: 2026-07-19
  *
@@ -12,8 +14,11 @@
  * [task_local]
  * event-interaction https://raw.githubusercontent.com/frankgoing/sub-gary/refs/heads/main/sub-fix/sub-flies-main/Qutuanmult%20x/jiedianjiance, tag=流媒体解锁检测, img-url=shield.lefthalf.filled.system, enabled=true
  *
- * 本版本只保留「流媒体与 AI」解锁检测（TikTok / Disney+ / Netflix / YouTube / Prime Video / Reddit / ChatGPT），
- * IP 基础信息、IP 类型属性、风险评分、风险因素均已移除，不再做出口 IP 查询与风险库比对。
+ * 本版本只保留「流媒体与 AI」解锁检测：TikTok / Disney+ / Netflix / YouTube / Prime Video / Reddit / ChatGPT /
+ * Dazn / Paramount+ / Discovery+ 共 10 项。IP 基础信息、IP 类型属性、风险评分、风险因素均已移除。
+ *
+ * 注意：Discovery+ 检测沿用原脚本里写死的一段分析用 Cookie（非登录凭证），
+ * 一旦 Discovery+ 后端接口调整，这一项最可能先失效，其余 9 项不受影响。
  */
 
 const SCRIPT_VERSION = "2026-07-19.r10-qx-media";
@@ -48,12 +53,20 @@ async function collectMedia() {
         ["Prime Video", testPrimeVideo()],
         ["Reddit", testReddit()],
         ["ChatGPT", testChatGPT()],
+        ["Dazn", testDazn()],
+        ["Paramount+", testParamountPlus()],
+        ["Discovery+", testDiscoveryPlus()],
     ];
     const settled = await Promise.all(tests.map((item) => capture(item[1])));
     return tests.map((item, index) => {
-        if (settled[index].ok) return settled[index].value;
-        console.log(`[WARN] ${item[0]}: ${settled[index].error}`);
-        return mediaResult(item[0], "unknown", "", "请求失败");
+        const value = settled[index].ok
+            ? settled[index].value
+            : mediaResult(item[0], "unknown", "", "请求失败");
+        if (!settled[index].ok) console.log(`[WARN] ${item[0]}: ${settled[index].error}`);
+        if (value.status === "unknown") {
+            return mediaResult(item[0], "no", value.region, value.detail || "未识别到解锁信号");
+        }
+        return value;
     });
 }
 
@@ -274,6 +287,88 @@ async function testChatGPT() {
         details.length ? `${details.join("；")}；另一端未确认` : "响应不足以确认");
 }
 
+async function testDazn() {
+    const response = await request("POST", "https://startup.core.indazn.com/misl/v5/Startup", {
+        allowHttpErrors: true,
+        headers: {
+            "Content-Type": "application/json",
+            "User-Agent": USER_AGENT,
+        },
+        body: JSON.stringify({
+            LandingPageKey: "generic",
+            Platform: "web",
+            PlatformAttributes: {},
+            Manufacturer: "",
+            PromoCode: "",
+            Version: "2",
+        }),
+    });
+    const region = firstMatch(response.body, [/"GeolocatedCountry"\s*:\s*"([A-Za-z]{2})"/i]);
+    if (region) return mediaResult("Dazn", "yes", region, "GeolocatedCountry 字段");
+    if (response.status !== 200) return mediaResult("Dazn", "unknown", "", `HTTP ${response.status || "?"}`);
+    return mediaResult("Dazn", "no", "", "未返回地区字段");
+}
+
+async function testParamountPlus() {
+    const response = await request("GET", "https://www.paramountplus.com/", {
+        allowHttpErrors: true,
+        redirection: false,
+        headers: browserHeaders(),
+    });
+    if (response.status === 200) return mediaResult("Paramount+", "yes", "", "HTTP 200");
+    if (response.status === 302) return mediaResult("Paramount+", "no", "", "HTTP 302 重定向受限页");
+    return mediaResult("Paramount+", "unknown", "", `HTTP ${response.status || "?"}`);
+}
+
+async function testDiscoveryPlus() {
+    // 沿用 KOP-XIAO/QuantumultX 原脚本的检测方式：先拿短期 token，再带一段固定的分析用 Cookie
+    // 查询 currentLocationTerritory。这段 Cookie 是原脚本里写死的老值（非登录态凭证，只是分析用途），
+    // Discovery+ 后端接口一旦调整这项就可能失效，属于这三项里最容易先失灵的一个。
+    const tokenUrl = "https://us1-prod-direct.discoveryplus.com/token?deviceId=d1a4a5d25212400d1e6985984604d740&realm=go&shortlived=true";
+    let tokenResp;
+    try {
+        tokenResp = await requestJson(tokenUrl, {
+            headers: { "User-Agent": USER_AGENT },
+            verify: false,
+        });
+    } catch (error) {
+        return mediaResult("Discovery+", "unknown", "", `Token 获取失败: ${errorMessage(error)}`);
+    }
+    const token = tokenResp && tokenResp.data && tokenResp.data.attributes
+        ? tokenResp.data.attributes.token
+        : "";
+    if (!token) return mediaResult("Discovery+", "unknown", "", "Token 字段缺失");
+
+    const cookie = "_gcl_au=1.1.858579665.1632206782; _rdt_uuid=1632206782474.6a9ad4f2-8ef7-4a49-9d60-e071bce45e88;"
+        + " _scid=d154b864-8b7e-4f46-90e0-8b56cff67d05; _pin_unauth=dWlkPU1qWTRNR1ZoTlRBdE1tSXdNaTAwTW1Nd0xUbGxORFV0WWpZMU0yVXdPV1l6WldFeQ;"
+        + " _sctr=1|1632153600000; aam_fw=aam%3D9354365%3Baam%3D9040990; aam_uuid=24382050115125439381416006538140778858;"
+        + ` st=${token}; gi_ls=0; _uetvid=a25161a01aa711ec92d47775379d5e4d;`
+        + " AMCV_BC501253513148ED0A490D45%40AdobeOrg=-1124106680%7CMCIDTS%7C18894%7CMCMID%7C24223296309793747161435877577673078228%7CMCAAMLH-1633011393%7C9%7CMCAAMB-1633011393%7CRKhpRz8krg2tLO6pguXWp5olkAcUniQYPHaMWWgdJ3xzPWQmdj0y%7CMCOPTOUT-1632413793s%7CNONE%7CvVersion%7C5.2.0;"
+        + " ass=19ef15da-95d6-4b1d-8fa2-e9e099c9cc38.1632408400.1632406594";
+
+    let meResp;
+    try {
+        meResp = await requestJson("https://us1-prod-direct.discoveryplus.com/users/me", {
+            headers: {
+                "User-Agent": USER_AGENT,
+                Cookie: cookie,
+            },
+            verify: false,
+            ciphers: "DEFAULT@SECLEVEL=1",
+            allowHttpErrors: true,
+        });
+    } catch (error) {
+        return mediaResult("Discovery+", "unknown", "", `查询失败: ${errorMessage(error)}`);
+    }
+    const territory = meResp && meResp.data && meResp.data.attributes
+        ? meResp.data.attributes.currentLocationTerritory
+        : "";
+    if (!territory) return mediaResult("Discovery+", "unknown", "", "字段缺失");
+    return territory.toLowerCase() === "us"
+        ? mediaResult("Discovery+", "yes", territory.toUpperCase(), "currentLocationTerritory")
+        : mediaResult("Discovery+", "no", territory.toUpperCase(), "currentLocationTerritory");
+}
+
 function classifyChatGPTWeb(response) {
     if (!response) return "unknown";
     const body = String(response.body || "");
@@ -321,24 +416,19 @@ function render(media) {
 }
 
 function renderMediaList(rows) {
-    const confirmed = rows.filter((row) => row.status !== "unknown");
-    const unknown = rows.filter((row) => row.status === "unknown");
-    const body = confirmed.map((row) => {
+    if (!rows.length) return mutedLine("本次没有检测结果");
+    return rows.map((row) => {
         const status = mediaStatus(row.status);
         const icon = row.status === "yes" ? "✅" : row.status === "partial" ? "🟠" : "❌";
         const summary = `${status.text}${row.region ? ` · [${row.region}]` : ""}`;
         const detail = row.detail
             ? `<div style="font-size:11px;color:#8e8e93;margin-top:1px">${escapeHtml(row.detail)}</div>`
             : "";
-        return '<div style="margin-bottom:10px">'
+        return '<div style="margin-bottom:7px">'
             + `<span>${icon}</span>&nbsp;<span style="font-weight:700">${escapeHtml(row.name)}</span>&nbsp;&nbsp;`
             + `<span style="color:${status.color};font-weight:600">${escapeHtml(summary)}</span>${detail}`
             + "</div>";
     }).join("");
-    const unknownLine = unknown.length
-        ? mutedLine(`⚪ 未确认：${unknown.map((row) => row.name).join("、")}`)
-        : "";
-    return (body || mutedLine("本次没有确认任何服务状态")) + unknownLine;
 }
 
 function mediaStatus(status) {
@@ -396,6 +486,9 @@ function request(method, url, options) {
     }
     if (typeof config.timeout !== "undefined") requestOptions.timeout = Number(config.timeout);
     if (typeof config.body !== "undefined") requestOptions.body = config.body;
+    if (typeof config.redirection !== "undefined") requestOptions.opts.redirection = config.redirection;
+    if (typeof config.verify !== "undefined") requestOptions.verify = config.verify;
+    if (typeof config.ciphers !== "undefined") requestOptions.ciphers = config.ciphers;
     return $task.fetch(requestOptions).then((response) => {
         const status = Number(response && response.statusCode);
         if (!config.allowHttpErrors && (!Number.isFinite(status) || status < 200 || status >= 300)) {
