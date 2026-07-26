@@ -1,8 +1,8 @@
 /**
- * IP风险检测 · Quantumult X event-interaction 脚本（流媒体 / AI 解锁检测版）
+ * 流媒体解锁检测 · Quantumult X event-interaction 脚本（流媒体 / AI 解锁检测版）
  * 由 Loon generic 脚本移植而来，原作者 MaYIHEI
  *
- * 使用: 在 QX 首页「服务器」列表长按目标节点或策略组 → 执行「IP风险检测」
+ * 使用: 在 QX 首页「服务器」列表长按目标节点或策略组 → 执行「流媒体解锁检测」
  *
  * @Author: MaYIHEI <https://github.com/MaYIHEI/paperclip>（原 Loon 版本）
  * @Channel: Telegram 频道 https://t.me/mayihei
@@ -10,7 +10,7 @@
  *
  * ===== Quantumult X =====
  * [task_local]
- * event-interaction https://raw.githubusercontent.com/frankgoing/sub-gary/refs/heads/main/sub-fix/sub-flies-main/Qutuanmult%20x/jiedianjiance, tag=IP风险检测, img-url=shield.lefthalf.filled.system, enabled=true
+ * event-interaction https://raw.githubusercontent.com/frankgoing/sub-gary/refs/heads/main/sub-fix/sub-flies-main/Qutuanmult%20x/jiedianjiance, tag=流媒体解锁检测, img-url=shield.lefthalf.filled.system, enabled=true
  *
  * 本版本只保留「流媒体与 AI」解锁检测（TikTok / Disney+ / Netflix / YouTube / Prime Video / Reddit / ChatGPT），
  * IP 基础信息、IP 类型属性、风险评分、风险因素均已移除，不再做出口 IP 查询与风险库比对。
@@ -25,7 +25,7 @@ const nodeName = typeof $environment !== "undefined" && $environment.params
     ? String($environment.params).trim()
     : "";
 
-console.log(`[INFO] IP风险检测 ${SCRIPT_VERSION}`);
+console.log(`[INFO] 流媒体解锁检测 ${SCRIPT_VERSION}`);
 console.log(`[INFO] 节点: ${nodeName || "未获取"}`);
 
 if (!nodeName) {
@@ -306,7 +306,7 @@ function render(media) {
     const html = [
         '<div style="font-family:-apple-system,BlinkMacSystemFont;font-size:14px;line-height:1.5;text-align:left;overflow-wrap:anywhere">',
         '<div style="font-size:12px;line-height:12px">&nbsp;</div>',
-        '<div style="font-size:18px;font-weight:700;line-height:1.2;margin-bottom:12px">IP风险检测</div>',
+        '<div style="font-size:18px;font-weight:700;line-height:1.2;margin-bottom:12px">流媒体解锁检测</div>',
         `<div style="color:#8e8e93;font-size:11px;margin-bottom:10px">节点 · ${escapeHtml(displayNodeName)}</div>`,
         section("流媒体与 AI", renderMediaList(media)),
         '<div style="font-size:9px;line-height:9px">&nbsp;</div>',
@@ -445,7 +445,7 @@ function errorMessage(error) {
 
 function finishError(message) {
     $done({
-        title: "IP风险检测",
+        title: "流媒体解锁检测",
         content: message,
     });
 }
