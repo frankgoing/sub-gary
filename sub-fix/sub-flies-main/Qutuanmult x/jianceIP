@@ -1,8 +1,8 @@
 /**
- * 节点 IP 质量检测 · Quantumult X event-interaction 脚本
+ * IP风险检测 · Quantumult X event-interaction 脚本
  * 由 Loon generic 脚本移植而来，原作者 MaYIHEI
  *
- * 使用: 在 QX 首页「服务器」列表长按目标节点或策略组 → 执行「节点 IP 质量检测」
+ * 使用: 在 QX 首页「服务器」列表长按目标节点或策略组 → 执行「IP风险检测」
  *
  * @Author: MaYIHEI <https://github.com/MaYIHEI/paperclip>（原 Loon 版本）
  * @Reference: @Roddy-D <https://github.com/Roddy-D/Loon_plugins>
@@ -12,7 +12,7 @@
  *
  * ===== Quantumult X =====
  * [task_local]
- * event-interaction https://raw.githubusercontent.com/frankgoing/sub-gary/refs/heads/main/sub-fix/sub-flies-main/Qutuanmult%20x/jiedianjiance#mask_ip=false&map_notification=false, tag=节点 IP 质量检测, img-url=shield.lefthalf.filled.system, enabled=true
+ * event-interaction https://raw.githubusercontent.com/frankgoing/sub-gary/refs/heads/main/sub-fix/sub-flies-main/Qutuanmult%20x/jiedianjiance#mask_ip=false&map_notification=false, tag=IP风险检测, img-url=shield.lefthalf.filled.system, enabled=true
  *
  * 两个开关通过脚本 URL 井号后的参数控制（QX $environment.variables），改参数即可切换：
  *   mask_ip=true|false          是否打码显示 IP（默认 false）
@@ -46,7 +46,7 @@ const scriptArgs = typeof $environment !== "undefined" && $environment.variables
 const maskIP = readSwitch("mask_ip", false);
 const mapNotificationEnabled = readSwitch("map_notification", false);
 
-console.log(`[INFO] 节点 IP 风险检测 ${SCRIPT_VERSION}`);
+console.log(`[INFO] IP风险检测 ${SCRIPT_VERSION}`);
 console.log(`[INFO] 节点: ${nodeName || "未获取"}`);
 
 if (!nodeName) {
@@ -330,7 +330,7 @@ function render(ip, data) {
     const html = [
         '<div style="font-family:-apple-system,BlinkMacSystemFont;font-size:14px;line-height:1.5;text-align:left;overflow-wrap:anywhere">',
         '<div style="font-size:12px;line-height:12px">&nbsp;</div>',
-        '<div style="font-size:18px;font-weight:700;line-height:1.2;margin-bottom:12px">节点 IP 质量检测</div>',
+        '<div style="font-size:18px;font-weight:700;line-height:1.2;margin-bottom:12px">IP风险检测</div>',
         `<div style="color:#8e8e93;font-size:11px;margin-bottom:10px">节点 · ${escapeHtml(displayNodeName)}</div>`,
         summaryCard(basic),
         section("风险评分", renderRiskList(risks)),
@@ -1210,7 +1210,7 @@ function errorMessage(error) {
 
 function finishError(message) {
     $done({
-        title: "节点 IP 质量检测",
+        title: "IP风险检测",
         content: message,
     });
 }
