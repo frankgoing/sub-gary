@@ -46,7 +46,7 @@ const scriptArgs = typeof $environment !== "undefined" && $environment.variables
 const maskIP = readSwitch("mask_ip", false);
 const mapNotificationEnabled = readSwitch("map_notification", false);
 
-console.log(`[INFO] 节点 IP 质量检测 ${SCRIPT_VERSION}`);
+console.log(`[INFO] 节点 IP 风险检测 ${SCRIPT_VERSION}`);
 console.log(`[INFO] 节点: ${nodeName || "未获取"}`);
 
 if (!nodeName) {
