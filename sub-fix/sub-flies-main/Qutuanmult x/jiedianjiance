@@ -339,7 +339,6 @@ function render(ip, data) {
         '<div style="color:#8e8e93;font-size:10px;line-height:1.45">'
             + '评分分档与风险字段遵循 xykt/IPQuality 的展示口径；各库结果独立展示，不生成综合结论。'
             + '聚合来源不可用时保留直连结果。</div>',
-        '<div style="font-size:14px;line-height:14px">&nbsp;</div>',
         "</div>",
     ].join("");
 
