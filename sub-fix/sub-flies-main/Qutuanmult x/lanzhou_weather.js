@@ -110,7 +110,7 @@ $task.fetch({ url: URL, method: "GET" }).then(
         `<div style="font-size:10px;color:#CBD5E1;margin-top:6px">Open-Meteo · 兰州</div>` +
         `</div>`;
 
-      $done({ title: "兰州 · 7天预报", htmlMessage: html });
+      $done({ title: "🏙 兰州 · 7天预报", htmlMessage: html });
     } catch (e) {
       $done({ title: "❌ 兰州天气", content: `解析失败: ${e.message || String(e)}` });
     }
