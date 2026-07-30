@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         兰州天气预报
-// @version      1.4
+// @version      1.5
 // @description  兰州市未来7天天气预报（手动检测）
 // @author       Hermes Agent
 // @icon         https://openweathermap.org/themes/openweathermap/assets/vendor/owm/img/icons/01d.png
@@ -44,8 +44,8 @@ const URL =
 
 $httpClient.get(URL, function (error, response, data) {
   if (error) {
-    $notification.post("❌ 兰州天气", "获取失败", String(error));
-    $done({ title: "❌ 兰州天气", content: `获取失败: ${String(error)}` });
+    $notify("❌ 兰州天气", "获取失败", String(error));
+    $done();
     return;
   }
   try {
@@ -63,12 +63,9 @@ $httpClient.get(URL, function (error, response, data) {
     }
     const subtitle = lines[0];
     const body = lines.join("\n");
-    $notification.post("🏙 兰州 · 7天预报", subtitle, body);
-    // 关键修复：$done() 也带上结构化内容，供「测试」按钮的面板显示
-    $done({ title: "🏙 兰州 · 7天预报", content: body });
+    $notify("🏙 兰州 · 7天预报", subtitle, body);
   } catch (e) {
-    const msg = e.message || String(e);
-    $notification.post("❌ 兰州天气", "解析失败", msg);
-    $done({ title: "❌ 兰州天气", content: `解析失败: ${msg}` });
+    $notify("❌ 兰州天气", "解析失败", e.message || String(e));
   }
+  $done();
 });
