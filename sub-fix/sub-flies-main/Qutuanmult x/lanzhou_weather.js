@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         兰州天气预报
-// @version      2.0
+// @version      2.1
 // @description  兰州市未来7天天气预报（手动检测）
 // @author       Hermes Agent
 // @icon         https://openweathermap.org/themes/openweathermap/assets/vendor/owm/img/icons/01d.png
@@ -58,33 +58,13 @@ function weatherInfo(code) {
 function nowStamp() {
   const d = new Date();
   const p = (n) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+  return `${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
 }
 
 function precipColor(p) {
-  if (p >= 60) return "#2563EB"; // 高概率，深蓝
-  if (p >= 25) return "#60A5FA"; // 中等，浅蓝
-  return "#94A3B8"; // 低概率，灰蓝
-}
-
-function renderRow(row, isToday) {
-  const bg = isToday ? "background:#F0F9FF;border-radius:10px;" : "";
-  const border = isToday ? "" : "border-bottom:1px solid #F1F5F9;";
-  return `
-    <div style="display:flex;align-items:center;padding:8px 6px;${bg}${border}">
-      <div style="width:34px;font-size:20px;text-align:center">${row.icon}</div>
-      <div style="width:70px">
-        <div style="font-size:13px;font-weight:700;color:#0F172A">${row.dateShort}</div>
-        <div style="font-size:11px;color:#94A3B8">${row.weekday}${isToday ? " · 今天" : ""}</div>
-      </div>
-      <div style="flex:1;font-size:13px;color:#334155">${row.text}</div>
-      <div style="width:70px;text-align:right;font-size:13px;font-weight:600;color:#0F172A">
-        ${row.tMin}~${row.tMax}°
-      </div>
-      <div style="width:44px;text-align:right;font-size:12px;font-weight:600;color:${row.precipColor}">
-        💧${row.precip}%
-      </div>
-    </div>`;
+  if (p >= 60) return "#2563EB";
+  if (p >= 25) return "#60A5FA";
+  return "#94A3B8";
 }
 
 const URL =
@@ -107,36 +87,33 @@ $task.fetch({ url: URL, method: "GET" }).then(
         const tMin = Math.round(daily.temperature_2m_min[i]);
         const wi = weatherInfo(daily.weathercode[i]);
         const precip = daily.precipitation_probability_max[i];
-        rows.push({
-          dateShort: date.slice(5),
-          weekday: wd,
-          text: wi.text,
-          icon: wi.icon,
-          tMax, tMin, precip,
-          precipColor: precipColor(precip),
-        });
+        rows.push({ dateShort: date.slice(5), weekday: wd, text: wi.text, icon: wi.icon, tMax, tMin, precip, precipColor: precipColor(precip) });
       }
 
       const today = rows[0];
-      const headerHtml = `
-        <div style="padding:14px 4px 10px 4px">
-          <div style="display:flex;align-items:baseline;gap:8px">
-            <span style="font-size:34px">${today.icon}</span>
-            <span style="font-size:28px;font-weight:700;color:#0F172A">${today.tMin}~${today.tMax}°</span>
-            <span style="font-size:14px;color:#64748B">${today.text} · 💧${today.precip}%</span>
-          </div>
-          <div style="font-size:12px;color:#94A3B8;margin-top:4px">更新时间 · ${nowStamp()}</div>
-        </div>`;
+      const headerHtml =
+        `<div style="font-size:16px;font-weight:700;color:#0F172A">${today.icon} ${today.tMin}~${today.tMax}° · ${today.text} · 💧${today.precip}%</div>` +
+        `<div style="font-size:10px;color:#94A3B8;margin-top:1px">更新 ${nowStamp()}</div>`;
 
-      const listHtml = rows.map((r, i) => renderRow(r, i === 0)).join("");
+      const tableRows = rows.map((r, i) => {
+        const bg = i === 0 ? "background:#F0F9FF;" : "";
+        return (
+          `<tr style="${bg}">` +
+          `<td style="padding:3px 4px;font-size:12px;font-weight:700;color:#0F172A;white-space:nowrap">${r.dateShort} ${r.weekday}</td>` +
+          `<td style="padding:3px 4px;font-size:13px;white-space:nowrap">${r.icon} ${r.text}</td>` +
+          `<td style="padding:3px 4px;font-size:12px;font-weight:600;color:#0F172A;text-align:right;white-space:nowrap">${r.tMin}~${r.tMax}°</td>` +
+          `<td style="padding:3px 4px;font-size:11px;font-weight:600;color:${r.precipColor};text-align:right;white-space:nowrap">💧${r.precip}%</td>` +
+          `</tr>`
+        );
+      }).join("");
 
-      const html = `
-        <div style="font-family:-apple-system,BlinkMacSystemFont;overflow-wrap:anywhere">
-          ${headerHtml}
-          <div style="height:1px;background:#E2E8F0;margin:4px 0 6px 0"></div>
-          ${listHtml}
-          <div style="font-size:10px;color:#CBD5E1;margin-top:8px;text-align:center">数据来自 Open-Meteo · 兰州（36.06, 103.79）</div>
-        </div>`;
+      const html =
+        `<div style="font-family:-apple-system,BlinkMacSystemFont;overflow-wrap:anywhere">` +
+        `<div style="padding:2px 2px 4px 2px">${headerHtml}</div>` +
+        `<div style="height:1px;background:#E2E8F0;margin:2px 0 3px 0"></div>` +
+        `<table style="width:100%;border-collapse:collapse">${tableRows}</table>` +
+        `<div style="font-size:9px;color:#CBD5E1;margin-top:4px;text-align:center">Open-Meteo · 兰州</div>` +
+        `</div>`;
 
       $done({ title: "🏙 兰州 · 7天预报", htmlMessage: html });
     } catch (e) {
