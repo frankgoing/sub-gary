@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         兰州天气预报
-// @version      2.1
+// @version      2.2
 // @description  兰州市未来7天天气预报（手动检测）
 // @author       Hermes Agent
 // @icon         https://openweathermap.org/themes/openweathermap/assets/vendor/owm/img/icons/01d.png
@@ -91,28 +91,23 @@ $task.fetch({ url: URL, method: "GET" }).then(
       }
 
       const today = rows[0];
-      const headerHtml =
-        `<div style="font-size:16px;font-weight:700;color:#0F172A">${today.icon} ${today.tMin}~${today.tMax}° · ${today.text} · 💧${today.precip}%</div>` +
-        `<div style="font-size:10px;color:#94A3B8;margin-top:1px">更新 ${nowStamp()}</div>`;
+      const headerLine =
+        `<div style="font-size:16px;font-weight:700;color:#0F172A;margin-bottom:2px">${today.icon} ${today.tMin}~${today.tMax}° · ${today.text} · 💧${today.precip}%</div>` +
+        `<div style="font-size:10px;color:#94A3B8;margin-bottom:6px">更新 ${nowStamp()}</div>`;
 
-      const tableRows = rows.map((r, i) => {
+      const dayLines = rows.map((r, i) => {
         const bg = i === 0 ? "background:#F0F9FF;" : "";
-        return (
-          `<tr style="${bg}">` +
-          `<td style="padding:3px 4px;font-size:12px;font-weight:700;color:#0F172A;white-space:nowrap">${r.dateShort} ${r.weekday}</td>` +
-          `<td style="padding:3px 4px;font-size:13px;white-space:nowrap">${r.icon} ${r.text}</td>` +
-          `<td style="padding:3px 4px;font-size:12px;font-weight:600;color:#0F172A;text-align:right;white-space:nowrap">${r.tMin}~${r.tMax}°</td>` +
-          `<td style="padding:3px 4px;font-size:11px;font-weight:600;color:${r.precipColor};text-align:right;white-space:nowrap">💧${r.precip}%</td>` +
-          `</tr>`
-        );
+        return `<div style="${bg}padding:3px 4px;font-size:12.5px;color:#0F172A">` +
+          `${r.dateShort} ${r.weekday}　${r.icon}${r.text}　${r.tMin}~${r.tMax}°　` +
+          `<span style="color:${r.precipColor};font-weight:600">💧${r.precip}%</span>` +
+          `</div>`;
       }).join("");
 
       const html =
-        `<div style="font-family:-apple-system,BlinkMacSystemFont;overflow-wrap:anywhere">` +
-        `<div style="padding:2px 2px 4px 2px">${headerHtml}</div>` +
-        `<div style="height:1px;background:#E2E8F0;margin:2px 0 3px 0"></div>` +
-        `<table style="width:100%;border-collapse:collapse">${tableRows}</table>` +
-        `<div style="font-size:9px;color:#CBD5E1;margin-top:4px;text-align:center">Open-Meteo · 兰州</div>` +
+        `<div style="font-family:-apple-system,BlinkMacSystemFont">` +
+        headerLine +
+        dayLines +
+        `<div style="font-size:9px;color:#CBD5E1;margin-top:5px">Open-Meteo · 兰州</div>` +
         `</div>`;
 
       $done({ title: "🏙 兰州 · 7天预报", htmlMessage: html });
