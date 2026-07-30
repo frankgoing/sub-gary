@@ -141,10 +141,10 @@ function section(title, content) {
 }
 
 function priceLine(icon, label, value) {
-  return '<div style="margin-bottom:11px;line-height:1.3">'
-    + `<span style="font-size:15px">${icon}</span>&nbsp;`
-    + `<span style="font-weight:600;color:#3a3a3c">${escapeHtml(label)}</span>&nbsp;&nbsp;`
-    + `<span style="font-weight:800;color:#000000">${escapeHtml(value)}</span>`
+  return '<div style="margin-bottom:11px;line-height:1.3;display:flex;align-items:baseline">'
+    + `<span style="font-size:15px;display:inline-block;width:22px">${icon}</span>`
+    + `<span style="font-weight:600;color:#3a3a3c;display:inline-block;width:72px">${escapeHtml(label)}</span>`
+    + `<span style="font-weight:800;color:#000000;margin-left:8px">${escapeHtml(value)}</span>`
     + "</div>";
 }
 
