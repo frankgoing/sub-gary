@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         兰州天气预报
-// @version      2.4
+// @version      2.3
 // @description  兰州市未来7天天气预报（手动检测）
 // @author       Hermes Agent
 // @icon         https://openweathermap.org/themes/openweathermap/assets/vendor/owm/img/icons/01d.png
@@ -80,7 +80,6 @@ $task.fetch({ url: URL, method: "GET" }).then(
       const json = JSON.parse(response.body);
       const daily = json.daily;
       const rows = [];
-
       for (let i = 0; i < 7; i++) {
         const date = daily.time[i];
         const wd = getWeekday(date);
@@ -88,29 +87,17 @@ $task.fetch({ url: URL, method: "GET" }).then(
         const tMin = Math.round(daily.temperature_2m_min[i]);
         const wi = weatherInfo(daily.weathercode[i]);
         const precip = daily.precipitation_probability_max[i];
-
-        rows.push({
-          dateShort: date.slice(5),
-          weekday: wd,
-          text: wi.text,
-          icon: wi.icon,
-          tMax,
-          tMin,
-          precip,
-          precipColor: precipColor(precip)
-        });
+        rows.push({ dateShort: date.slice(5), weekday: wd, text: wi.text, icon: wi.icon, tMax, tMin, precip, precipColor: precipColor(precip) });
       }
 
       const today = rows[0];
-
       const headerLine =
-        `<div style="font-size:22px;font-weight:700;color:#0F172A;margin-bottom:3px">${today.icon} ${today.tMin}~${today.tMax}° · ${today.text} · 💧${today.precip}%</div>` +
-        `<div style="font-size:13px;color:#94A3B8;margin-bottom:8px">更新 ${nowStamp()}</div>`;
+        `<div style="font-size:20px;font-weight:700;color:#0F172A;margin-bottom:3px">${today.icon} ${today.tMin}~${today.tMax}° · ${today.text} · 💧${today.precip}%</div>` +
+        `<div style="font-size:12px;color:#94A3B8;margin-bottom:8px">更新 ${nowStamp()}</div>`;
 
       const dayLines = rows.map((r, i) => {
         const bg = i === 0 ? "background:#F0F9FF;" : "";
-
-        return `<div style="${bg}padding:6px 4px;font-size:18px;color:#0F172A">` +
+        return `<div style="${bg}padding:5px 4px;font-size:16px;color:#0F172A">` +
           `${r.dateShort} ${r.weekday}　${r.icon}${r.text}　${r.tMin}~${r.tMax}°　` +
           `<span style="color:${r.precipColor};font-weight:600">💧${r.precip}%</span>` +
           `</div>`;
@@ -120,25 +107,15 @@ $task.fetch({ url: URL, method: "GET" }).then(
         `<div style="font-family:-apple-system,BlinkMacSystemFont">` +
         headerLine +
         dayLines +
-        `<div style="font-size:12px;color:#CBD5E1;margin-top:6px">Open-Meteo · 兰州</div>` +
+        `<div style="font-size:11px;color:#CBD5E1;margin-top:6px">Open-Meteo · 兰州</div>` +
         `</div>`;
 
-      $done({
-        title: "🏙 兰州 · 7天预报",
-        htmlMessage: html
-      });
-
+      $done({ title: "🏙 兰州 · 7天预报", htmlMessage: html });
     } catch (e) {
-      $done({
-        title: "❌ 兰州天气",
-        content: `解析失败: ${e.message || String(e)}`
-      });
+      $done({ title: "❌ 兰州天气", content: `解析失败: ${e.message || String(e)}` });
     }
   },
   (reason) => {
-    $done({
-      title: "❌ 兰州天气",
-      content: `获取失败: ${reason && reason.error ? String(reason.error) : String(reason)}`
-    });
+    $done({ title: "❌ 兰州天气", content: `获取失败: ${reason && reason.error ? String(reason.error) : String(reason)}` });
   }
 );
