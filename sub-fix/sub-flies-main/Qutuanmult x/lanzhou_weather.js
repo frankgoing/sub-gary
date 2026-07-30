@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         兰州天气预报
-// @version      1.5
+// @version      1.6
 // @description  兰州市未来7天天气预报（手动检测）
 // @author       Hermes Agent
 // @icon         https://openweathermap.org/themes/openweathermap/assets/vendor/owm/img/icons/01d.png
@@ -42,30 +42,31 @@ const URL =
   "&timezone=Asia/Shanghai" +
   "&forecast_days=7";
 
-$httpClient.get(URL, function (error, response, data) {
-  if (error) {
-    $notify("❌ 兰州天气", "获取失败", String(error));
-    $done();
-    return;
-  }
-  try {
-    const json = JSON.parse(data);
-    const daily = json.daily;
-    let lines = [];
-    for (let i = 0; i < 7; i++) {
-      const date = daily.time[i];
-      const wd = getWeekday(date);
-      const tMax = Math.round(daily.temperature_2m_max[i]);
-      const tMin = Math.round(daily.temperature_2m_min[i]);
-      const wthr = weatherText(daily.weathercode[i]);
-      const precip = daily.precipitation_probability_max[i];
-      lines.push(`${date.slice(5)}${wd} ${wthr} ${tMin}~${tMax}℃ 💧${precip}%`);
+$task.fetch({ url: URL, method: "GET" }).then(
+  (response) => {
+    try {
+      const json = JSON.parse(response.body);
+      const daily = json.daily;
+      let lines = [];
+      for (let i = 0; i < 7; i++) {
+        const date = daily.time[i];
+        const wd = getWeekday(date);
+        const tMax = Math.round(daily.temperature_2m_max[i]);
+        const tMin = Math.round(daily.temperature_2m_min[i]);
+        const wthr = weatherText(daily.weathercode[i]);
+        const precip = daily.precipitation_probability_max[i];
+        lines.push(`${date.slice(5)}${wd} ${wthr} ${tMin}~${tMax}℃ 💧${precip}%`);
+      }
+      const subtitle = lines[0];
+      const body = lines.join("\n");
+      $notify("🏙 兰州 · 7天预报", subtitle, body);
+    } catch (e) {
+      $notify("❌ 兰州天气", "解析失败", e.message || String(e));
     }
-    const subtitle = lines[0];
-    const body = lines.join("\n");
-    $notify("🏙 兰州 · 7天预报", subtitle, body);
-  } catch (e) {
-    $notify("❌ 兰州天气", "解析失败", e.message || String(e));
+    $done();
+  },
+  (reason) => {
+    $notify("❌ 兰州天气", "获取失败", reason && reason.error ? String(reason.error) : String(reason));
+    $done();
   }
-  $done();
-});
+);
