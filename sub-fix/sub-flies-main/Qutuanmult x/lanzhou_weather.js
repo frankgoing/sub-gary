@@ -92,12 +92,12 @@ $task.fetch({ url: URL, method: "GET" }).then(
 
       const today = rows[0];
       const headerLine =
-        `<div style="font-size:20px;font-weight:700;color:#0F172A;margin-bottom:3px">${today.icon} ${today.tMin}~${today.tMax}° · ${today.text} · 💧${today.precip}%</div>` +
-        `<div style="font-size:12px;color:#94A3B8;margin-bottom:8px">更新 ${nowStamp()}</div>`;
+        `<div style="font-size:18px;font-weight:700;color:#0F172A;margin-bottom:3px">${today.icon} ${today.tMin}~${today.tMax}° · ${today.text} · 💧${today.precip}%</div>` +
+        `<div style="font-size:11px;color:#94A3B8;margin-bottom:8px">更新 ${nowStamp()}</div>`;
 
       const dayLines = rows.map((r, i) => {
         const bg = i === 0 ? "background:#F0F9FF;" : "";
-        return `<div style="${bg}padding:5px 4px;font-size:16px;color:#0F172A">` +
+        return `<div style="${bg}padding:5px 4px;font-size:14px;color:#0F172A">` +
           `${r.dateShort} ${r.weekday}　${r.icon}${r.text}　${r.tMin}~${r.tMax}°　` +
           `<span style="color:${r.precipColor};font-weight:600">💧${r.precip}%</span>` +
           `</div>`;
@@ -107,7 +107,7 @@ $task.fetch({ url: URL, method: "GET" }).then(
         `<div style="font-family:-apple-system,BlinkMacSystemFont">` +
         headerLine +
         dayLines +
-        `<div style="font-size:11px;color:#CBD5E1;margin-top:6px">Open-Meteo · 兰州</div>` +
+        `<div style="font-size:10px;color:#CBD5E1;margin-top:6px">Open-Meteo · 兰州</div>` +
         `</div>`;
 
       $done({ title: "🏙 兰州 · 7天预报", htmlMessage: html });
