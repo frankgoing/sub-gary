@@ -268,8 +268,6 @@ function render(tag, node, direct, remote, gpData) {
   }
 
   var html = '<div style=\"font-family:-apple-system,BlinkMacSystemFont;font-size:14px;line-height:1.5;padding:4px 0\">'
-    + '<div style=\"font-size:18px;font-weight:700;color:#0F172A;margin-bottom:4px\">\uD83C\uDF10 \u8282\u70B9\u963B\u65AD\u68C0\u6D4B</div>'
-    + '<div style=\"color:#94A3B8;font-size:11px;margin-bottom:10px\">\u8282\u70B9 \u00B7 ' + esc(tag) + '</div>'
     + nodeHtml + directHtml + remoteHtml + gpHtml
     + '<div style=\"background:#F8FAFC;border-radius:8px;padding:10px\">'
     + '<div style=\"font-weight:600;font-size:14px;color:#0F172A;margin-bottom:4px\">\uD83D\uDCCB \u8BCA\u65AD\u7ED3\u8BBA</div>'
