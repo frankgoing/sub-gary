@@ -1,6 +1,7 @@
 /**
- * 节点连通性检测 · Quantumult X event-interaction 脚本
- * 检测节点是否被运营商/GFW 阻断
+ * 节点连通性检测 · Quantumult X event-interaction
+ * 来源：https://github.com/RavelloH
+ * 修改：修复IPv6解析、优化样式
  *
  * [task_local]
  * event-interaction https://raw.githubusercontent.com/frankgoing/sub-gary/refs/heads/main/sub-fix/sub-flies-main/Qutuanmult%20x/block_check, tag=节点阻断检测, img-url=bolt.horizontal.icloud.fill.system, enabled=true
@@ -13,7 +14,7 @@ const TIMEOUT = 8000;
 
 function run() {
   var tag = $environment.params;
-  if (!tag) return fail("未获取到节点名称");
+  if (!tag) return done("未获取到节点名称");
 
   $configuration.sendMessage({
     action: "get_server_description",
@@ -26,41 +27,40 @@ function run() {
       if (eq !== -1) {
         var afterEq = desc.substring(eq + 1);
         var comma = afterEq.indexOf(",");
-        var str = comma === -1 ? afterEq : afterEq.substring(0, comma);
-        // 正确处理 IPv6: 最后一个:在]之后才认作端口分隔符
-        var colon = str.lastIndexOf(":");
-        var bracket = str.lastIndexOf("]");
+        var hp = comma === -1 ? afterEq : afterEq.substring(0, comma);
+        var colon = hp.lastIndexOf(":");
+        var bracket = hp.lastIndexOf("]");
         if (colon !== -1 && bracket < colon) {
-          host = str.substring(0, colon);
-          port = str.substring(colon + 1);
-        } else {
-          host = str;
+          host = hp.substring(0, colon);
+          port = hp.substring(colon + 1);
         }
       }
     }
-    start(tag, host, port);
+    startChecks(tag, host, port);
   }, function() {
-    start(tag, null, null);
+    startChecks(tag, null, null);
   });
 }
 
-function start(tag, host, port) {
-  var viaNode = $task.fetch({ url: IP_API, opts: { policy: $environment.params }, timeout: TIMEOUT })
-    .then(function(r) { return { ok: true, data: JSON.parse(r.body) }; })
-    .catch(function() { return { ok: false, data: null }; });
+function startChecks(tag, host, port) {
+  var opts = { policy: $environment.params };
 
-  var viaDirect = $task.fetch({ url: IP_API, timeout: TIMEOUT })
-    .then(function(r) { return { ok: true, data: JSON.parse(r.body) }; })
-    .catch(function() { return { ok: false, data: null }; });
+  var pA = $task.fetch({ url: IP_API, opts: opts, timeout: TIMEOUT })
+    .then(function(r) { return { src: "node", ok: true, data: JSON.parse(r.body) }; })
+    .catch(function() { return { src: "node", ok: false }; });
 
-  var viaRemote;
+  var pB = $task.fetch({ url: IP_API, timeout: TIMEOUT })
+    .then(function(r) { return { src: "direct", ok: true, data: JSON.parse(r.body) }; })
+    .catch(function() { return { src: "direct", ok: false }; });
+
+  var pC;
   if (host && port) {
     var target = host + ":" + port;
-    var checkUrl = CHECK_HOST + "/check-tcp?host=" + encodeURIComponent(target) + "&max_nodes=8";
-    viaRemote = $task.fetch({ url: checkUrl, headers: { "Accept": "application/json" }, timeout: TIMEOUT })
+    var checkUrl = CHECK_HOST + "/check-tcp?host=" + encodeURIComponent(target) + "&max_nodes=10";
+    pC = $task.fetch({ url: checkUrl, headers: { "Accept": "application/json" }, timeout: TIMEOUT })
       .then(function(r) {
         var d = JSON.parse(r.body);
-        if (!d.ok || !d.request_id) return { ok: false, data: null, error: "提交失败" };
+        if (!d.ok || !d.request_id) return { src: "remote", ok: false, error: "提交失败" };
         var rid = d.request_id;
         var nodes = d.nodes || {};
         var names = Object.keys(nodes);
@@ -78,86 +78,174 @@ function start(tag, host, port) {
                 var items = [];
                 names.forEach(function(n) {
                   var cc = countryMap[n] || "";
-                  var flag = cc ? getFlag(cc) : String.fromCodePoint(127758);
-                  var nr = res[n];
-                  var ms = "--.--ms";
-                  if (nr && Array.isArray(nr) && nr.length > 0 && nr[0].time !== undefined) {
+                  var flag = cc ? getFlag(cc) : "\uD83C\uDF0D";
+                  if (res[n] && Array.isArray(res[n]) && res[n].length > 0 && res[n][0].time !== undefined) {
                     reachable = true;
-                    ms = fmt(nr[0].time * 1000);
+                    items.push({ flag: flag, ms: formatMs(res[n][0].time * 1000) });
+                  } else {
+                    items.push({ flag: flag, ms: "--.--ms" });
                   }
-                  items.push({ flag: flag, ms: ms });
                 });
-                resolve({ ok: reachable, data: items });
+                resolve({ src: "remote", ok: reachable, data: items });
               }, function() {
-                resolve({ ok: false, data: null, error: "查询失败" });
+                resolve({ src: "remote", ok: false, error: "查询失败" });
               });
           }, 3500);
         });
       })
-      .catch(function() { return { ok: false, data: null, error: "请求失败" }; });
+      .catch(function() { return { src: "remote", ok: false, error: "请求失败" }; });
   } else {
-    viaRemote = Promise.resolve({ ok: false, data: null, error: "无地址信息" });
+    pC = Promise.resolve({ src: "remote", ok: false, error: "无地址信息" });
   }
 
-  Promise.all([viaNode, viaDirect, viaRemote]).then(function(results) {
-    render(tag, results[0], results[1], results[2]);
+  Promise.allSettled([pA, pB, pC]).then(function(results) {
+    var node = results[0].value;
+    var direct = results[1].value;
+    var checkHost = results[2].value;
+
+    var nOk = node && node.ok;
+    var dOk = direct && direct.ok;
+    var cOk = checkHost && checkHost.ok;
+
+    if (dOk && cOk && !nOk && host && port) {
+      runGlobalping(tag, host, port, node, direct, checkHost);
+    } else {
+      render(tag, node, direct, checkHost, null);
+    }
   });
 }
 
-function render(tag, node, direct, remote) {
+function runGlobalping(tag, host, port, node, direct, checkHost) {
+  var body = {
+    type: "ping",
+    target: host,
+    measurementOptions: { port: parseInt(port), protocol: "TCP" },
+    locations: [{ country: "CN", magic: "eyeball-network" }],
+    limit: 12
+  };
+
+  $task.fetch({
+    url: GP_API,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+    timeout: TIMEOUT
+  }).then(function(r) {
+    var d = JSON.parse(r.body);
+    if (!d.id) { render(tag, node, direct, checkHost, null); return; }
+
+    setTimeout(function() {
+      $task.fetch({
+        url: GP_API + "/" + d.id,
+        headers: { "Accept": "application/json" },
+        timeout: TIMEOUT
+      }).then(function(r2) {
+        render(tag, node, direct, checkHost, JSON.parse(r2.body));
+      }, function() {
+        render(tag, node, direct, checkHost, null);
+      });
+    }, 6000);
+  }).catch(function() {
+    render(tag, node, direct, checkHost, null);
+  });
+}
+
+function render(tag, node, direct, remote, gpData) {
   var nOk = node && node.ok;
   var dOk = direct && direct.ok;
 
-  // 节点信息
-  var nodeStr = "";
+  // Node
+  var nodeHtml = "";
   if (nOk && node.data) {
     var d = node.data;
     var loc = [d.country, d.regionName, d.city].filter(Boolean).join(" - ");
-    nodeStr = '<div style="background:#F8FAFC;border-radius:8px;padding:10px;margin-bottom:8px">'
-      + '<div style="font-weight:600;font-size:15px;color:#0F172A">'
-      + (nOk ? "\u2705 \u8282\u70B9\u4EE3\u7406 \u6B63\u5E38" : "\u274C \u8282\u70B9\u4EE3\u7406 \u4E0D\u53EF\u8FBE")
-      + '</div>'
-      + '<div style="color:#64748B;font-size:12px;margin-top:3px">' + esc(d.query) + ' \u00B7 ' + esc(loc) + '</div>'
-      + (d.isp ? '<div style="color:#94A3B8;font-size:11px;margin-top:1px">' + esc(d.isp) + '</div>' : "")
+    nodeHtml = '<div style=\"background:#F8FAFC;border-radius:8px;padding:10px;margin-bottom:8px\">'
+      + '<div style=\"font-weight:600;font-size:15px;color:#0F172A\">\u2705 \u8282\u70B9\u4EE3\u7406 \u6B63\u5E38</div>'
+      + '<div style=\"color:#64748B;font-size:12px;margin-top:3px\">' + esc(d.query) + ' \u00B7 ' + esc(loc) + '</div>'
+      + (d.isp ? '<div style=\"color:#94A3B8;font-size:11px;margin-top:2px\">' + esc(d.isp) + '</div>' : "")
       + '</div>';
   } else {
-    nodeStr = '<div style="background:#F8FAFC;border-radius:8px;padding:10px;margin-bottom:8px">'
-      + '<div style="font-weight:600;color:#EF4444">\u274C \u8282\u70B9\u4EE3\u7406 \u4E0D\u53EF\u8FBE</div>'
+    nodeHtml = '<div style=\"background:#F8FAFC;border-radius:8px;padding:10px;margin-bottom:8px\">'
+      + '<div style=\"font-weight:600;color:#EF4444\">\u274C \u8282\u70B9\u4EE3\u7406 \u4E0D\u53EF\u8FBE</div>'
       + '</div>';
   }
 
-  // 本机信息
-  var directStr = '<div style="background:#F8FAFC;border-radius:8px;padding:10px;margin-bottom:8px">'
-    + '<div style="font-weight:600;font-size:15px;color:#0F172A">'
+  // Direct
+  var directHtml = '<div style=\"background:#F8FAFC;border-radius:8px;padding:10px;margin-bottom:8px\">'
+    + '<div style=\"font-weight:600;font-size:15px;color:#0F172A\">'
     + (dOk ? "\u2705 \u672C\u673A\u7F51\u7EDC \u6B63\u5E38" : "\u274C \u672C\u673A\u7F51\u7EDC \u5F02\u5E38")
-    + '</div>'
-    + (dOk && direct.data
-      ? '<div style="color:#64748B;font-size:12px;margin-top:3px">' + esc(direct.data.query) + ' \u00B7 ' + esc(direct.data.isp || "") + '</div>'
-      : '<div style="color:#EF4444;font-size:12px;margin-top:3px">\u65E0\u6CD5\u8BBF\u95EE ip-api.com</div>')
     + '</div>';
+  if (dOk && direct.data) {
+    directHtml += '<div style=\"color:#64748B;font-size:12px;margin-top:3px\">' + esc(direct.data.query) + ' \u00B7 ' + esc(direct.data.isp || "") + '</div>';
+  }
+  directHtml += '</div>';
 
-  // 远端探测
-  var remoteStr = '<div style="background:#F8FAFC;border-radius:8px;padding:10px;margin-bottom:8px">'
-    + '<div style="font-weight:600;font-size:15px;color:#0F172A;margin-bottom:6px">\uD83D\uDD0D \u8FDC\u7AEF\u63A2\u6D4B</div>';
+  // Remote check
+  var remoteHtml = '<div style=\"background:#F8FAFC;border-radius:8px;padding:10px;margin-bottom:8px\">'
+    + '<div style=\"font-weight:600;margin-bottom:4px;color:#0F172A\">\uD83D\uDD0D \u8FDC\u7AEF\u63A2\u6D4B</div>';
   if (remote && remote.ok && remote.data && remote.data.length > 0) {
-    remoteStr += '<div style="font-size:12px;line-height:1.6">';
     for (var i = 0; i < remote.data.length; i += 2) {
       var left = remote.data[i];
       var right = i + 1 < remote.data.length ? remote.data[i + 1] : null;
-      remoteStr += '<div style="display:flex;justify-content:space-between;padding:1px 0">'
-        + '<span>' + left.flag + " " + left.ms + '</span>';
-      if (right) remoteStr += '<span>' + right.flag + " " + right.ms + '</span>';
-      remoteStr += '</div>';
+      remoteHtml += '<div style=\"display:flex;justify-content:space-between;font-size:13px;padding:2px 0\">'
+        + '<span>' + left.flag + ' ' + left.ms + '</span>';
+      if (right) remoteHtml += '<span>' + right.flag + ' ' + right.ms + '</span>';
+      remoteHtml += '</div>';
     }
-    remoteStr += '</div>';
   } else if (remote && remote.error) {
-    remoteStr += '<div style="color:#EF4444;font-size:12px">\u26A0\uFE0F ' + esc(remote.error) + '</div>';
+    remoteHtml += '<div style=\"color:#EF4444;font-size:12px\">\u26A0\uFE0F ' + esc(remote.error) + '</div>';
   } else {
-    remoteStr += '<div style="color:#94A3B8;font-size:12px">\u2014 \u8FDC\u7AEF\u63A2\u6D4B\u672A\u6267\u884C</div>';
+    remoteHtml += '<div style=\"color:#94A3B8;font-size:12px\">-- \u8FDC\u7AEF\u63A2\u6D4B\u672A\u6267\u884C</div>';
   }
-  remoteStr += '</div>';
+  remoteHtml += '</div>';
 
-  // 结论
+  // GPS blocking analysis
+  var gpHtml = "";
+  if (gpData && gpData.results) {
+    var analysis = analyzeBlockSource(gpData);
+    if (analysis) {
+      var ispOrder = ["\u4E2D\u56FD\u7535\u4FE1", "\u4E2D\u56FD\u8054\u901A", "\u4E2D\u56FD\u79FB\u52A8"];
+      var ispAbbr = {"\u4E2D\u56FD\u7535\u4FE1": "\u7535\u4FE1", "\u4E2D\u56FD\u8054\u901A": "\u8054\u901A", "\u4E2D\u56FD\u79FB\u52A8": "\u79FB\u52A8"};
+      var allProbes = [];
+      for (var j = 0; j < ispOrder.length; j++) {
+        var key = ispOrder[j];
+        var group = analysis.ispGroups[key];
+        if (!group) continue;
+        for (var p = 0; p < group.probes.length; p++) {
+          allProbes.push({
+            label: ispAbbr[key] + "\u00B7" + group.probes[p].city,
+            ms: group.probes[p].ms,
+            ok: group.probes[p].ok
+          });
+        }
+      }
+
+      var domesticReachable = allProbes.some(function(p) { return p.ok; });
+      gpHtml = '<div style=\"background:#F8FAFC;border-radius:8px;padding:10px;margin-bottom:8px\">'
+        + '<div style=\"font-weight:600;margin-bottom:4px;color:#0F172A\">\uD83C\uDF0D \u56FD\u5185\u63A2\u6D4B</div>'
+        + '<div style=\"font-weight:600;font-size:14px;margin-bottom:6px\">'
+        + (domesticReachable ? "\u2705 \u53EF\u8FBE" : "\u274C \u4E0D\u53EF\u8FBE")
+        + '</div>';
+      for (var i2 = 0; i2 < allProbes.length; i2 += 2) {
+        var l = allProbes[i2];
+        var r = i2 + 1 < allProbes.length ? allProbes[i2 + 1] : null;
+        var lc = l.ok ? "#10B981" : "#EF4444";
+        gpHtml += '<div style=\"display:flex;justify-content:space-between;font-size:12px;padding:2px 0\">'
+          + '<span>' + esc(l.label) + '</span>'
+          + '<span style=\"font-family:Menlo,monospace;color:' + lc + '\">' + l.ms + '</span>';
+        if (r) {
+          var rc = r.ok ? "#10B981" : "#EF4444";
+          gpHtml += '<span>' + esc(r.label) + '</span>'
+            + '<span style=\"font-family:Menlo,monospace;color:' + rc + '\">' + r.ms + '</span>';
+        }
+        gpHtml += '</div>';
+      }
+      gpHtml += '<div style=\"margin-top:6px;font-size:13px;font-weight:600;color:#0F172A\">' + esc(analysis.conclusion) + '</div>';
+      gpHtml += '</div>';
+    }
+  }
+
+  // Conclusion
   var conclusion = "", conclusionColor = "#64748B";
   if (!dOk) {
     conclusion = "\u26A0\uFE0F \u672C\u673A\u7F51\u7EDC\u5F02\u5E38\uFF0C\u8BF7\u68C0\u67E5\u7F51\u7EDC\u8FDE\u63A5";
@@ -168,22 +256,25 @@ function render(tag, node, direct, remote) {
   } else if (!nOk && dOk && remote && remote.ok) {
     conclusion = "\u26A0\uFE0F \u8282\u70B9\u65E0\u6CD5\u8FDE\u63A5\uFF0C\u4F46\u5916\u7F51\u53EF\u8FBE \u2014 \u53EF\u80FD\u88AB\u963B\u65AD";
     conclusionColor = "#F59E0B";
-  } else if (!nOk && dOk && remote && !remote.ok && remote.data) {
+  } else if (!nOk && dOk && gpData && gpData.results) {
+    var a2 = analyzeBlockSource(gpData);
+    if (a2) {
+      conclusion = a2.conclusion;
+      conclusionColor = a2.conclusion.indexOf("\u274C") === 0 ? "#EF4444" : "#F59E0B";
+    }
+  } else {
     conclusion = "\u274C \u8282\u70B9\u79BB\u7EBF\u6216\u88AB\u963B\u65AD";
     conclusionColor = "#EF4444";
-  } else {
-    conclusion = "\u2753 \u6570\u636E\u4E0D\u5B8C\u6574";
   }
 
-  var html = '<div style="font-family:-apple-system,BlinkMacSystemFont;font-size:14px;line-height:1.5;padding:4px 0">'
-    + '<div style="font-size:18px;font-weight:700;color:#0F172A;margin-bottom:4px">\uD83C\uDF10 \u8282\u70B9\u963B\u65AD\u68C0\u6D4B</div>'
-    + '<div style="color:#94A3B8;font-size:11px;margin-bottom:10px">\u8282\u70B9 \u00B7 ' + esc(tag) + '</div>'
-    + nodeStr + directStr + remoteStr
-    + '<div style="background:#F8FAFC;border-radius:8px;padding:10px">'
-    + '<div style="font-weight:600;font-size:14px;color:#0F172A;margin-bottom:4px">\uD83D\uDCCB \u8BCA\u65AD\u7ED3\u8BBA</div>'
-    + '<div style="font-weight:600;font-size:14px;color:' + conclusionColor + '">' + conclusion + '</div>'
-    + '</div>'
-    + '</div>';
+  var html = '<div style=\"font-family:-apple-system,BlinkMacSystemFont;font-size:14px;line-height:1.5;padding:4px 0\">'
+    + '<div style=\"font-size:18px;font-weight:700;color:#0F172A;margin-bottom:4px\">\uD83C\uDF10 \u8282\u70B9\u963B\u65AD\u68C0\u6D4B</div>'
+    + '<div style=\"color:#94A3B8;font-size:11px;margin-bottom:10px\">\u8282\u70B9 \u00B7 ' + esc(tag) + '</div>'
+    + nodeHtml + directHtml + remoteHtml + gpHtml
+    + '<div style=\"background:#F8FAFC;border-radius:8px;padding:10px\">'
+    + '<div style=\"font-weight:600;font-size:14px;color:#0F172A;margin-bottom:4px\">\uD83D\uDCCB \u8BCA\u65AD\u7ED3\u8BBA</div>'
+    + '<div style=\"font-weight:600;font-size:14px;color:' + conclusionColor + '\">' + conclusion + '</div>'
+    + '</div></div>';
 
   $done({
     title: "\u8282\u70B9\u963B\u65AD\u68C0\u6D4B",
@@ -191,19 +282,20 @@ function render(tag, node, direct, remote) {
   });
 }
 
-function fail(msg) {
+function done(msg) {
   $done({
     title: "\u8282\u70B9\u963B\u65AD\u68C0\u6D4B",
-    htmlMessage: '<div style="font-family:-apple-system,BlinkMacSystemFont;font-size:14px;padding:12px;color:#EF4444">\u26A0\uFE0F ' + esc(msg) + '</div>'
+    htmlMessage: '<div style=\"font-family:-apple-system,BlinkMacSystemFont;font-size:14px;padding:12px 0\"><span style=\"font-weight:600;color:#EF4444\">\u26A0\uFE0F ' + esc(msg) + '</span></div>'
   });
 }
 
 function getFlag(cc) {
-  if (!cc || cc.length !== 2) return String.fromCodePoint(127758);
-  return String.fromCodePoint(127397 + cc.charCodeAt(0), 127397 + cc.charCodeAt(1));
+  if (!cc || cc.length !== 2) return "\uD83C\uDF0D";
+  var cp = cc.toUpperCase().split("").map(function(c) { return 127397 + c.charCodeAt(); });
+  return String.fromCodePoint.apply(null, cp);
 }
 
-function fmt(ms) {
+function formatMs(ms) {
   if (ms <= 0) return "0.00ms";
   if (ms >= 10000) return Math.floor(ms) + "ms";
   if (ms >= 1000) return Math.floor(ms).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "ms";
