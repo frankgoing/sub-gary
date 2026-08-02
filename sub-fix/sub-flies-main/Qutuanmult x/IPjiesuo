@@ -81,7 +81,6 @@ async function collectMedia() {
         ["ChatGPT", () => testChatGPT()],
         ["Dazn", () => testDazn()],
         ["Paramount+", () => testParamountPlus()],
-
         ["Talkatone", () => testTalkatone()],
     ];
     // 单轮检测：并行执行 + 失败自动重试一次（移除第二轮复检以大幅缩短耗时，避免 QX 超时空白）
@@ -342,3 +341,165 @@ async function testParamountPlus() {
 }
 
 async 
+function normalizeAsn(value) {
+    const text = String(value === null || typeof value === "undefined" ? "" : value).trim();
+    const match = text.match(/AS?\s*(\d+)/i);
+    return match ? `AS${match[1]}` : "";
+}
+
+
+
+function render(media, ipInfo, ipInfo2) {
+    const displayNodeName = truncateText(nodeName, 30);
+    const ipLine = ipInfo && ipInfo.query
+        ? `出口IP · ${ipInfo.query} · ${ipInfo.countryCode || ""}${ipInfo.regionName ? " · " + ipInfo.regionName : ""}`
+        : "出口IP · 获取失败";
+    const ipWarn = ipInfo2 && ipInfo2.query
+        ? `<div style="color:#ff9500;font-size:11px;margin:4px 0">⚠️ 检测期间出口IP变化：${escapeHtml(ipInfo.query)} → ${escapeHtml(ipInfo2.query)}，各服务结果可能来自不同IP</div>`
+        : "";
+
+    const html = [
+        '<div style="font-family:-apple-system,BlinkMacSystemFont;font-size:14px;line-height:1.5;text-align:left;overflow-wrap:anywhere">',
+        '<div style="font-size:12px;line-height:12px">&nbsp;</div>',
+        '<div style="font-size:18px;font-weight:700;line-height:1.2;margin-bottom:12px">节点解锁检测</div>',
+        `<div style="color:#8e8e93;font-size:11px;margin-bottom:10px">节点 · ${escapeHtml(displayNodeName)}<br>${escapeHtml(ipLine)}</div>${ipWarn}`,
+        section("IP解锁详情", renderMediaList(media)),
+        '<div style="font-size:9px;line-height:9px">&nbsp;</div>',
+        '<div style="color:#8e8e93;font-size:10px;line-height:1.45">各服务检测结果独立展示，不生成综合结论。Talkatone 为高概率判断，最终以 App 实测为准。</div>',
+        "</div>",
+    ].join("");
+
+    $done({
+        title: "节点解锁检测",
+        htmlMessage: html,
+    });
+}
+
+function renderMediaList(rows) {
+    if (!rows.length) return mutedLine("本次没有检测结果");
+    return rows.map((row) => {
+        const status = mediaStatus(row.status);
+        const icon = row.status === "yes" ? "✅" : row.status === "partial" ? "🟠" : "❌";
+        const summary = `${status.text}${row.region ? ` · [${row.region}]` : ""}`;
+        const detail = row.detail
+            ? `<div style="font-size:11px;color:#8e8e93;margin-top:1px">${escapeHtml(row.detail)}</div>`
+            : "";
+        return '<div style="margin-bottom:7px">'
+            + `<span>${icon}</span>&nbsp;<span style="font-weight:700">${escapeHtml(row.name)}</span>&nbsp;&nbsp;`
+            + `<span style="color:${status.color};font-weight:600">${escapeHtml(summary)}</span>${detail}`
+            + "</div>";
+    }).join("");
+}
+
+function mediaStatus(status) {
+    if (status === "yes") return { text: "解锁", color: "#00a67d" };
+    if (status === "partial") return { text: "部分可用", color: "#ff9500" };
+    if (status === "no") return { text: "不可用", color: "#ff3b30" };
+    return { text: "未确认", color: "#8e8e93" };
+}
+
+function mediaResult(name, status, region, detail) {
+    return { name, status, region: region || "", detail: detail || "" };
+}
+
+function section(title, content) {
+    return '<div style="font-size:6px;line-height:6px">&nbsp;</div>'
+        + '<div>'
+        + `<div style="color:#0A84FF;font-weight:700;font-size:14px;margin-bottom:6px">▌${escapeHtml(title)}</div>`
+        + `${content}</div>`;
+}
+
+function mutedLine(value) {
+    return `<div style="color:#8e8e93;font-size:11px;margin:5px 0;line-height:1.45">${escapeHtml(value)}</div>`;
+}
+
+function browserHeaders() {
+    return {
+        Accept: "text/html,application/xhtml+xml,application/json;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+        "User-Agent": USER_AGENT,
+    };
+}
+
+function requestJson(url, options) {
+    const config = options || {};
+    return request(config.method || "GET", url, config).then((response) => {
+        try {
+            return JSON.parse(response.body);
+        } catch (_) {
+            throw new Error("JSON 响应解析失败");
+        }
+    });
+}
+
+function request(method, url, options) {
+    const config = options || {};
+    const targetPolicy = typeof config.node !== "undefined" ? String(config.node || "").trim() : nodeName;
+    const requestOptions = {
+        url,
+        method: String(method || config.method || "GET").toUpperCase(),
+        headers: config.headers || browserHeaders(),
+        opts: {},
+    };
+    if (targetPolicy && targetPolicy.toUpperCase() !== "DIRECT") {
+        requestOptions.opts.policy = targetPolicy;
+    }
+    // 默认 10s 超时：不设超时在 QX 中会挂起，导致同一节点多次检测结果不一致
+    requestOptions.timeout = typeof config.timeout !== "undefined" ? Number(config.timeout) : 10;
+    if (typeof config.body !== "undefined") requestOptions.body = config.body;
+    if (typeof config.redirection !== "undefined") requestOptions.opts.redirection = config.redirection;
+    if (typeof config.verify !== "undefined") requestOptions.verify = config.verify;
+    if (typeof config.ciphers !== "undefined") requestOptions.ciphers = config.ciphers;
+    return $task.fetch(requestOptions).then((response) => {
+        const status = Number(response && response.statusCode);
+        if (!config.allowHttpErrors && (!Number.isFinite(status) || status < 200 || status >= 300)) {
+            throw new Error(`HTTP ${status || "?"}`);
+        }
+        return { status, body: String((response && response.body) || ""), response: response || {} };
+    }, (reason) => {
+        throw new Error(errorMessage(reason && reason.error ? reason.error : reason));
+    });
+}
+
+function capture(promise) {
+    return Promise.resolve(promise).then(
+        (value) => ({ ok: true, value }),
+        (error) => ({ ok: false, error: errorMessage(error) })
+    );
+}
+
+function truncateText(value, maxLength) {
+    const text = String(value || "");
+    const limit = Number(maxLength) || 0;
+    return limit > 1 && text.length > limit
+        ? `${text.slice(0, limit - 1)}…`
+        : text;
+}
+
+function firstMatch(text, patterns) {
+    for (let i = 0; i < patterns.length; i += 1) {
+        const match = String(text || "").match(patterns[i]);
+        if (match && match[1]) return String(match[1]).toUpperCase();
+    }
+    return "";
+}
+
+function escapeHtml(value) {
+    return String(value === null || typeof value === "undefined" ? "" : value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+
+function errorMessage(error) {
+    return error && error.message ? String(error.message) : String(error);
+}
+
+function finishError(message) {
+    $done({
+        title: "节点解锁检测",
+        content: message,
+    });
+}
