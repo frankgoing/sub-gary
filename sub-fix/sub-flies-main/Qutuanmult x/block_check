@@ -1,7 +1,6 @@
 /**
  * 节点连通性检测 · Quantumult X event-interaction
  * 来源：https://github.com/RavelloH
- * 修改：修复IPv6解析、优化样式
  *
  * [task_local]
  * event-interaction https://raw.githubusercontent.com/frankgoing/sub-gary/refs/heads/main/sub-fix/sub-flies-main/Qutuanmult%20x/block_check, tag=节点阻断检测, img-url=bolt.horizontal.icloud.fill.system, enabled=true
@@ -154,52 +153,52 @@ function render(tag, node, direct, remote, gpData) {
   var nOk = node && node.ok;
   var dOk = direct && direct.ok;
 
-  // Node
+  // 节点代理
   var nodeHtml = "";
   if (nOk && node.data) {
     var d = node.data;
     var loc = [d.country, d.regionName, d.city].filter(Boolean).join(" - ");
-    nodeHtml = '<div style=\"border-radius:8px;padding:10px;margin-bottom:8px\">'
-      + '<div style=\"font-weight:600;font-size:15px;color:#0F172A\">\u2705 \u8282\u70B9\u4EE3\u7406 \u6B63\u5E38</div>'
-      + '<div style=\"color:#64748B;font-size:12px;margin-top:3px\">' + esc(d.query) + ' \u00B7 ' + esc(loc) + '</div>'
-      + (d.isp ? '<div style=\"color:#94A3B8;font-size:11px;margin-top:2px\">' + esc(d.isp) + '</div>' : "")
+    nodeHtml = '<div style="padding:8px 0;border-bottom:1px solid #E2E8F0">'
+      + '<div style="font-weight:600;font-size:15px">\u2705 \u8282\u70B9\u4EE3\u7406 \u6B63\u5E38</div>'
+      + '<div style="color:#64748B;font-size:12px;margin-top:2px">' + esc(d.query) + ' \u00B7 ' + esc(loc) + '</div>'
+      + (d.isp ? '<div style="color:#94A3B8;font-size:11px;margin-top:1px">' + esc(d.isp) + '</div>' : "")
       + '</div>';
   } else {
-    nodeHtml = '<div style=\"border-radius:8px;padding:10px;margin-bottom:8px\">'
-      + '<div style=\"font-weight:600;color:#EF4444\">\u274C \u8282\u70B9\u4EE3\u7406 \u4E0D\u53EF\u8FBE</div>'
+    nodeHtml = '<div style="padding:8px 0;border-bottom:1px solid #E2E8F0">'
+      + '<div style="font-weight:600;color:#EF4444">\u274C \u8282\u70B9\u4EE3\u7406 \u4E0D\u53EF\u8FBE</div>'
       + '</div>';
   }
 
-  // Direct
-  var directHtml = '<div style=\"border-radius:8px;padding:10px;margin-bottom:8px\">'
-    + '<div style=\"font-weight:600;font-size:15px;color:#0F172A\">'
+  // 本机直连
+  var directHtml = '<div style="padding:8px 0;border-bottom:1px solid #E2E8F0">'
+    + '<div style="font-weight:600;font-size:15px">'
     + (dOk ? "\u2705 \u672C\u673A\u7F51\u7EDC \u6B63\u5E38" : "\u274C \u672C\u673A\u7F51\u7EDC \u5F02\u5E38")
     + '</div>';
   if (dOk && direct.data) {
-    directHtml += '<div style=\"color:#64748B;font-size:12px;margin-top:3px\">' + esc(direct.data.query) + ' \u00B7 ' + esc(direct.data.isp || "") + '</div>';
+    directHtml += '<div style="color:#64748B;font-size:12px;margin-top:2px">' + esc(direct.data.query) + ' \u00B7 ' + esc(direct.data.isp || "") + '</div>';
   }
   directHtml += '</div>';
 
-  // Remote check
-  var remoteHtml = '<div style=\"border-radius:8px;padding:10px;margin-bottom:8px\">'
-    + '<div style=\"font-weight:600;margin-bottom:4px;color:#0F172A\">\uD83D\uDD0D \u8FDC\u7AEF\u63A2\u6D4B</div>';
+  // 远端探测
+  var remoteHtml = '<div style="padding:8px 0;border-bottom:1px solid #E2E8F0">'
+    + '<div style="font-weight:600;margin-bottom:4px">\uD83D\uDD0D \u8FDC\u7AEF\u63A2\u6D4B</div>';
   if (remote && remote.ok && remote.data && remote.data.length > 0) {
     for (var i = 0; i < remote.data.length; i += 2) {
       var left = remote.data[i];
       var right = i + 1 < remote.data.length ? remote.data[i + 1] : null;
-      remoteHtml += '<div style=\"display:flex;justify-content:space-between;font-size:13px;padding:2px 0\">'
+      remoteHtml += '<div style="display:flex;justify-content:space-between;font-size:13px;padding:2px 0">'
         + '<span>' + left.flag + ' ' + left.ms + '</span>';
       if (right) remoteHtml += '<span>' + right.flag + ' ' + right.ms + '</span>';
       remoteHtml += '</div>';
     }
   } else if (remote && remote.error) {
-    remoteHtml += '<div style=\"color:#EF4444;font-size:12px\">\u26A0\uFE0F ' + esc(remote.error) + '</div>';
+    remoteHtml += '<div style="color:#EF4444;font-size:12px">\u26A0\uFE0F ' + esc(remote.error) + '</div>';
   } else {
-    remoteHtml += '<div style=\"color:#94A3B8;font-size:12px\">-- \u8FDC\u7AEF\u63A2\u6D4B\u672A\u6267\u884C</div>';
+    remoteHtml += '<div style="color:#94A3B8;font-size:12px">-- \u8FDC\u7AEF\u63A2\u6D4B\u672A\u6267\u884C</div>';
   }
   remoteHtml += '</div>';
 
-  // GPS blocking analysis
+  // 国内探测
   var gpHtml = "";
   if (gpData && gpData.results) {
     var analysis = analyzeBlockSource(gpData);
@@ -221,31 +220,31 @@ function render(tag, node, direct, remote, gpData) {
       }
 
       var domesticReachable = allProbes.some(function(p) { return p.ok; });
-      gpHtml = '<div style=\"border-radius:8px;padding:10px;margin-bottom:8px\">'
-        + '<div style=\"font-weight:600;margin-bottom:4px;color:#0F172A\">\uD83C\uDF0D \u56FD\u5185\u63A2\u6D4B</div>'
-        + '<div style=\"font-weight:600;font-size:14px;margin-bottom:6px\">'
+      gpHtml = '<div style="padding:8px 0;border-bottom:1px solid #E2E8F0">'
+        + '<div style="font-weight:600;margin-bottom:4px">\uD83C\uDF0D \u56FD\u5185\u63A2\u6D4B</div>'
+        + '<div style="font-weight:600;font-size:14px;margin-bottom:6px">'
         + (domesticReachable ? "\u2705 \u53EF\u8FBE" : "\u274C \u4E0D\u53EF\u8FBE")
         + '</div>';
       for (var i2 = 0; i2 < allProbes.length; i2 += 2) {
         var l = allProbes[i2];
         var r = i2 + 1 < allProbes.length ? allProbes[i2 + 1] : null;
         var lc = l.ok ? "#10B981" : "#EF4444";
-        gpHtml += '<div style=\"display:flex;justify-content:space-between;font-size:12px;padding:2px 0\">'
+        gpHtml += '<div style="display:flex;justify-content:space-between;font-size:12px;padding:2px 0">'
           + '<span>' + esc(l.label) + '</span>'
-          + '<span style=\"font-family:Menlo,monospace;color:' + lc + '\">' + l.ms + '</span>';
+          + '<span style="font-family:Menlo,monospace;color:' + lc + '">' + l.ms + '</span>';
         if (r) {
           var rc = r.ok ? "#10B981" : "#EF4444";
           gpHtml += '<span>' + esc(r.label) + '</span>'
-            + '<span style=\"font-family:Menlo,monospace;color:' + rc + '\">' + r.ms + '</span>';
+            + '<span style="font-family:Menlo,monospace;color:' + rc + '">' + r.ms + '</span>';
         }
         gpHtml += '</div>';
       }
-      gpHtml += '<div style=\"margin-top:6px;font-size:13px;font-weight:600;color:#0F172A\">' + esc(analysis.conclusion) + '</div>';
+      gpHtml += '<div style="margin-top:6px;font-size:13px;font-weight:600">' + esc(analysis.conclusion) + '</div>';
       gpHtml += '</div>';
     }
   }
 
-  // Conclusion
+  // 结论
   var conclusion = "", conclusionColor = "#64748B";
   if (!dOk) {
     conclusion = "\u26A0\uFE0F \u672C\u673A\u7F51\u7EDC\u5F02\u5E38\uFF0C\u8BF7\u68C0\u67E5\u7F51\u7EDC\u8FDE\u63A5";
@@ -254,36 +253,35 @@ function render(tag, node, direct, remote, gpData) {
     conclusion = "\u2705 \u8282\u70B9\u6B63\u5E38\uFF0C\u53EF\u6B63\u5E38\u8FDE\u63A5";
     conclusionColor = "#10B981";
   } else if (!nOk && dOk && remote && remote.ok) {
-    conclusion = "\u26A0\uFE0F \u8282\u70B9\u65E0\u6CD5\u8FDE\u63A5\uFF0C\u4F46\u5916\u7F51\u53EF\u8FBE \u2014 \u53EF\u80FD\u88AB\u963B\u65AD";
+    conclusion = "\u26A0\uFE0F \u8282\u70B9\u65E0\u6CD5\u8FDE\u63A5\uFF0C\u4F46\u5916\u7F51\u53EF\u8FBE -- \u53EF\u80FD\u88AB\u963B\u65AD";
     conclusionColor = "#F59E0B";
-  } else if (!nOk && dOk && gpData && gpData.results) {
-    var a2 = analyzeBlockSource(gpData);
-    if (a2) {
-      conclusion = a2.conclusion;
-      conclusionColor = a2.conclusion.indexOf("\u274C") === 0 ? "#EF4444" : "#F59E0B";
-    }
-  } else {
+  } else if (!nOk && dOk) {
     conclusion = "\u274C \u8282\u70B9\u79BB\u7EBF\u6216\u88AB\u963B\u65AD";
     conclusionColor = "#EF4444";
+  } else {
+    conclusion = "\u2753 \u6570\u636E\u4E0D\u5B8C\u6574";
   }
 
-  var html = '<div style=\"font-family:-apple-system,BlinkMacSystemFont;font-size:14px;line-height:1.5;padding:4px 0\">'
+  var html = '<div style="font-family:-apple-system,BlinkMacSystemFont;font-size:14px;line-height:1.5">'
+    + '<div style="font-size:18px;font-weight:700">' + esc(tag) + '</div>'
+    + '<div style="color:#94A3B8;font-size:11px;margin-bottom:8px">\u8282\u70B9\u963B\u65AD\u68C0\u6D4B</div>'
     + nodeHtml + directHtml + remoteHtml + gpHtml
-    + '<div style=\"border-radius:8px;padding:10px\">'
-    + '<div style=\"font-weight:600;font-size:14px;color:#0F172A;margin-bottom:4px\">\uD83D\uDCCB \u8BCA\u65AD\u7ED3\u8BBA</div>'
-    + '<div style=\"font-weight:600;font-size:14px;color:' + conclusionColor + '\">' + conclusion + '</div>'
-    + '</div></div>';
+    + '<div style="padding:8px 0">'
+    + '<div style="font-weight:600;font-size:14px;margin-bottom:4px">\uD83D\uDCCB \u8BCA\u65AD\u7ED3\u8BBA</div>'
+    + '<div style="font-weight:600;font-size:14px;color:' + conclusionColor + '">' + conclusion + '</div>'
+    + '</div>'
+    + '</div>';
 
   $done({
-    title: "\u8282\u70B9\u963B\u65AD\u68C0\u6D4B",
+    title: "\u200B",
     htmlMessage: html
   });
 }
 
 function done(msg) {
   $done({
-    title: "\u8282\u70B9\u963B\u65AD\u68C0\u6D4B",
-    htmlMessage: '<div style=\"font-family:-apple-system,BlinkMacSystemFont;font-size:14px;padding:12px 0\"><span style=\"font-weight:600;color:#EF4444\">\u26A0\uFE0F ' + esc(msg) + '</span></div>'
+    title: "\u200B",
+    htmlMessage: '<div style="font-family:-apple-system,BlinkMacSystemFont;font-size:14px"><span style="font-weight:600;color:#EF4444">\u26A0\uFE0F ' + esc(msg) + '</span></div>'
   });
 }
 
@@ -307,7 +305,7 @@ function esc(s) {
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
+    .replace(/\"/g, "&quot;")
     .replace(/'/g, "&#39;");
 }
 
