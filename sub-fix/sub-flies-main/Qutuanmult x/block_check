@@ -264,7 +264,6 @@ function render(tag, node, direct, remote, gpData) {
 
   var html = '<div style="font-family:-apple-system,BlinkMacSystemFont;font-size:14px;line-height:1.5">'
     + '<div style="font-size:18px;font-weight:700">' + esc(tag) + '</div>'
-    + '<div style="color:#94A3B8;font-size:11px;margin-bottom:8px">\u8282\u70B9\u963B\u65AD\u68C0\u6D4B</div>'
     + nodeHtml + directHtml + remoteHtml + gpHtml
     + '<div style="padding:8px 0">'
     + '<div style="font-weight:600;font-size:14px;margin-bottom:4px">\uD83D\uDCCB \u8BCA\u65AD\u7ED3\u8BBA</div>'
