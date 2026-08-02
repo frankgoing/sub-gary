@@ -46,28 +46,15 @@ if (!nodeName) {
 }
 
 async function run() {
-    // 全局超时 25 秒，到期强制输出（防止 QX 弹窗因等待过久空白）
-    let timer = null;
-    const timeout = new Promise((_, reject) => {
-        timer = setTimeout(() => reject(new Error("检测超时(>25s)")), 25000);
-    });
-    try {
-        const [media, ipResult] = await Promise.race([
-            Promise.all([
-                collectMedia(),
-                capture(getEgressIpInfo()),
-            ]),
-            timeout,
-        ]);
-        clearTimeout(timer);
-        const ipResult2 = await capture(getEgressIpInfo());
-        const ipChanged = !!(ipResult.ok && ipResult2.ok
-            && ipResult.value.query && ipResult.value.query !== ipResult2.value.query);
-        render(media, ipResult.ok ? ipResult.value : null, ipChanged ? (ipResult2.ok ? ipResult2.value : null) : null);
-    } catch (e) {
-        clearTimeout(timer);
-        finishError(`⏱️ ${e.message || String(e)}`);
-    }
+    const [media, ipResult] = await Promise.all([
+        collectMedia(),
+        capture(getEgressIpInfo()),
+    ]);
+    // 检测窗口结束后再查一次出口 IP：若两次不同，说明检测期间出口 IP 在轮换（结果跳变的根源）
+    const ipResult2 = await capture(getEgressIpInfo());
+    const ipChanged = !!(ipResult.ok && ipResult2.ok
+        && ipResult.value.query && ipResult.value.query !== ipResult2.value.query);
+    render(media, ipResult.ok ? ipResult.value : null, ipChanged ? (ipResult2.ok ? ipResult2.value : null) : null);
 }
 
 async function collectMedia() {
@@ -83,23 +70,33 @@ async function collectMedia() {
         ["Paramount+", () => testParamountPlus()],
         ["Talkatone", () => testTalkatone()],
     ];
-    // 单轮检测：并行执行 + 失败自动重试一次（移除第二轮复检以大幅缩短耗时，避免 QX 超时空白）
-    const settled = await Promise.all(tests.map((item) => capture(item[1]())));
-    for (let i = 0; i < tests.length; i += 1) {
-        if (!settled[i].ok) {
-            console.log(`[RETRY] ${tests[i][0]} 首次请求失败，重试一次`);
-            settled[i] = await capture(tests[i][1]());
+    // 单轮检测：并行执行 + 网络失败（超时/连接错误）自动重试一次
+    const runOnce = async () => {
+        const settled = await Promise.all(tests.map((item) => capture(item[1]())));
+        for (let i = 0; i < tests.length; i += 1) {
+            if (!settled[i].ok) {
+                console.log(`[RETRY] ${tests[i][0]} 首次请求失败，重试一次`);
+                settled[i] = await capture(tests[i][1]());
+            }
         }
-    }
+        return settled;
+    };
+    // 两轮检测：网络波动/出口IP轮换时两次结果可能不同，两轮一致才是稳定结论
+    const settled = await runOnce();
+    console.log("[INFO] 第二轮复检（稳定性确认）");
+    const settled2 = await runOnce();
     return tests.map((item, index) => {
-        if (!settled[index].ok) {
-            return mediaResult(item[0], "unknown", "", "请求失败");
+        const v1 = settled[index].ok ? settled[index].value : mediaResult(item[0], "unknown", "", "请求失败");
+        const v2 = settled2[index].ok ? settled2[index].value : mediaResult(item[0], "unknown", "", "请求失败");
+        if (v1.status !== v2.status) {
+            console.log(`[WARN] ${item[0]} 两轮不一致: ${v1.status}↔${v2.status}`);
+            const detail = `⚠️ 两轮不一致(${statusText(v1.status)}↔${statusText(v2.status)})，以第二轮为准`;
+            return mediaResult(item[0], v2.status === "unknown" ? "no" : v2.status, v2.region || v1.region, detail);
         }
-        const v = settled[index].value;
-        if (v.status === "unknown") {
-            return mediaResult(item[0], "no", v.region, v.detail || "未识别到解锁信号");
+        if (v2.status === "unknown") {
+            return mediaResult(item[0], "no", v2.region, v2.detail || "未识别到解锁信号");
         }
-        return v;
+        return v2;
     });
 }
 
@@ -282,29 +279,56 @@ async function testReddit() {
 
 async function testChatGPT() {
     const tasks = await Promise.all([
-        capture(request("GET", "https://chatgpt.com/", {
+        capture(request("GET", "https://api.openai.com/compliance/cookie_requirements", {
+            allowHttpErrors: true,
+            headers: Object.assign(browserHeaders(), {
+                Accept: "*/*",
+                Authorization: "Bearer null",
+                "Content-Type": "application/json",
+                Origin: "https://platform.openai.com",
+                Referer: "https://platform.openai.com/",
+            }),
+        })),
+        capture(request("GET", "https://ios.chat.openai.com/", {
             allowHttpErrors: true,
             headers: browserHeaders(),
-            timeout: 10,
         })),
         capture(request("GET", "https://chatgpt.com/cdn-cgi/trace", {
             allowHttpErrors: true,
             headers: browserHeaders(),
-            timeout: 8,
         })),
     ]);
-    const main = tasks[0].ok ? tasks[0].value : null;
-    const trace = tasks[1].ok ? tasks[1].value : null;
+    const web = tasks[0].ok ? tasks[0].value : null;
+    const app = tasks[1].ok ? tasks[1].value : null;
+    const trace = tasks[2].ok ? tasks[2].value : null;
     const region = trace ? firstMatch(trace.body, [/^loc=([A-Z]{2})$/im]) : "";
+    const webState = classifyChatGPTWeb(web);
+    const appState = classifyChatGPTApp(app);
 
-    // 403 = Cloudflare 地区封锁 = 不可用
-    if (!main) return mediaResult("ChatGPT", "no", region, "主页面请求失败");
-    if (main.status === 403) return mediaResult("ChatGPT", "no", region, "HTTP 403 地区封锁");
-    // 正文含 unsupported_country = OpenAI 明确屏蔽
-    if (/unsupported_country/i.test(main.body)) return mediaResult("ChatGPT", "no", region, "unsupported_country");
-    // 200 + 正常 HTML = 可用
-    if (main.status === 200) return mediaResult("ChatGPT", "yes", region, "主页面可访问");
-    return mediaResult("ChatGPT", "unknown", region, `HTTP ${main.status || "?"}`);
+    if (!web && !app) return mediaResult("ChatGPT", "unknown", region, "请求失败");
+    if (webState === "available" && appState === "available") {
+        return mediaResult("ChatGPT", "yes", region, "Web/App 均通过");
+    }
+    if (webState === "available" && appState === "blocked") {
+        return mediaResult("ChatGPT", "partial", region, `仅 Web；App HTTP ${app.status}`);
+    }
+    if (appState === "available" && webState === "blocked") {
+        return mediaResult("ChatGPT", "partial", region, `仅 App；Web HTTP ${web.status}`);
+    }
+    if (webState === "blocked" && appState === "blocked") {
+        return mediaResult("ChatGPT", "no", region, "Web/App 均受限");
+    }
+    if (webState === "available") {
+        return mediaResult("ChatGPT", "partial", region, "Web 通过；App 未确认");
+    }
+    if (appState === "available") {
+        return mediaResult("ChatGPT", "partial", region, "App 通过；Web 未确认");
+    }
+    const details = [];
+    if (webState === "blocked") details.push("Web 受限");
+    if (appState === "blocked") details.push("App 受限");
+    return mediaResult("ChatGPT", "unknown", region,
+        details.length ? `${details.join("；")}；另一端未确认` : "响应不足以确认");
 }
 
 async function testDazn() {
@@ -347,7 +371,31 @@ function normalizeAsn(value) {
     return match ? `AS${match[1]}` : "";
 }
 
+function classifyChatGPTWeb(response) {
+    if (!response) return "unknown";
+    const body = String(response.body || "");
+    if (/unsupported_country/i.test(body)
+        || /sorry,\s*you have been blocked|access denied|cf-error/i.test(body)) {
+        return "blocked";
+    }
+    if (/cookie_consent_required/i.test(body)) return "available";
+    if (response.status >= 200 && response.status < 300) return "available";
+    return "unknown";
+}
 
+function classifyChatGPTApp(response) {
+    if (!response) return "unknown";
+    const body = String(response.body || "");
+    if (/request is not allowed\.\s*please try again later\./i.test(body)) {
+        return "available";
+    }
+    if (/you may be connected to a disallowed isp|\bVPN\b|unsupported_country/i.test(body)
+        || /sorry,\s*you have been blocked|access denied|cf-error/i.test(body)) {
+        return "blocked";
+    }
+    if (response.status >= 200 && response.status < 400) return "available";
+    return "unknown";
+}
 
 function render(media, ipInfo, ipInfo2) {
     const displayNodeName = truncateText(nodeName, 30);
@@ -370,7 +418,7 @@ function render(media, ipInfo, ipInfo2) {
     ].join("");
 
     $done({
-        title: "节点解锁检测",
+        title: "\u200B",
         htmlMessage: html,
     });
 }
@@ -503,5 +551,3 @@ function finishError(message) {
         content: message,
     });
 }
-
-run();
