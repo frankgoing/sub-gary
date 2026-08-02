@@ -566,73 +566,114 @@ function parseIpregistry(payload) {
 }
 
 function buildFactors(data) {
-    const ipapi = data.ipapi;
-    const ipwhois = data.ipwhois && data.ipwhois.success !== false ? data.ipwhois : null;
-    const ipregistry = parseIpregistry(data.ipregistry);
     const ipinfo = data.ipinfo && data.ipinfo.data ? data.ipinfo.data : null;
-    const ip2 = data.ip2location ? parseIp2location(data.ip2location) : null;
-    const proxycheckRec = proxycheckRecord(data.proxycheck) || {};
+    const ipregistry = parseIpregistry(data.ipregistry);
+    const ipapi = data.ipapi;
+    const ip2 = getIp2location(data);
+    const dbip = parseDbip(data.dbip);
+    const ip2Proxy = ip2 && ip2.proxy ? ip2.proxy : {};
+    const ipqs = data.ipqs && data.ipqs.success !== false ? data.ipqs : null;
+    const scamRoot = data.scamalytics;
+    const scam = scamRoot && scamRoot.scamalytics ? scamRoot.scamalytics : null;
+    const ipdata = data.ipdata;
 
     return [
+        factorSource("IP2Location", ip2 ? {
+            country: ip2.country_code,
+            checks: {
+                代理: anyTrue([ip2.is_proxy, ip2Proxy.is_public_proxy, ip2Proxy.is_web_proxy]),
+                Tor: ip2Proxy.is_tor,
+                VPN: ip2Proxy.is_vpn,
+                机房: ip2Proxy.is_data_center,
+                滥用: ip2Proxy.is_spammer,
+                机器人: anyTrue([ip2Proxy.is_web_crawler, ip2Proxy.is_scanner, ip2Proxy.is_botnet]),
+            },
+        } : null),
         factorSource("ipapi", ipapi ? {
             country: valueAt(ipapi, "location.country_code"),
             checks: {
                 VPN: ipapi.is_vpn,
-                proxy: ipapi.is_proxy,
+                代理: ipapi.is_proxy,
                 Tor: ipapi.is_tor,
-                datacenter: ipapi.is_datacenter,
-                abuse: ipapi.is_abuser,
-                crawler: ipapi.is_crawler,
+                机房: ipapi.is_datacenter,
+                滥用: ipapi.is_abuser,
+                爬虫: ipapi.is_crawler,
             },
         } : null),
-        factorSource("ipwhois", ipwhois ? {
-            country: ipwhois.country_code,
+        factorSource("ipregistry", ipregistry ? {
+            country: ipregistry.country,
             checks: {
-                proxy: ipwhois.is_proxy,
-                vpn: ipwhois.is_vpn,
-                tor: ipwhois.is_tor,
-                datacenter: ipwhois.is_datacenter,
-                mobile: ipwhois.is_mobile,
-                crawler: ipwhois.is_crawler,
+                VPN: ipregistry.vpn,
+                代理: ipregistry.proxy,
+                Tor: ipregistry.tor,
+                中继: ipregistry.relay,
+                机房: ipregistry.server,
+                滥用: ipregistry.abuser,
+                匿名: ipregistry.anonymous,
+                威胁: ipregistry.threat,
             },
         } : null),
-        factorSource("IP2Location", ip2 ? {
-            country: ip2.countryCode,
+        factorSource("IPQS", ipqs ? {
+            country: ipqs.country_code,
             checks: {
-                proxy: ip2.proxy,
-                Tor: null,
-                VPN: null,
-                datacenter: null,
-                spam: null,
+                代理: ipqs.proxy,
+                Tor: ipqs.tor,
+                VPN: ipqs.vpn,
+                机房: null,
+                滥用: ipqs.recent_abuse,
+                机器人: ipqs.bot_status,
             },
         } : null),
-        factorSource("proxycheck", proxycheckRec.proxy !== undefined ? {
-            country: proxycheckRec.isocode,
+        factorSource("Scamalytics", scam ? {
+            country: valueAt(scamRoot, "external_datasources.maxmind_geolite2.ip_country_code"),
             checks: {
-                proxy: proxycheckRec.proxy === "yes" ? true : (proxycheckRec.proxy === "no" ? false : null),
-                type: proxycheckRec.type || null,
+                代理: valueAt(scamRoot, "external_datasources.firehol.is_proxy"),
+                Tor: valueAt(scamRoot, "external_datasources.x4bnet.is_tor"),
+                VPN: valueAt(scam, "scamalytics_proxy.is_vpn"),
+                机房: valueAt(scam, "scamalytics_proxy.is_datacenter"),
+                滥用: scam.is_blacklisted_external,
+                机器人: anyTrue([
+                    valueAt(scamRoot, "external_datasources.x4bnet.is_blacklisted_spambot"),
+                    valueAt(scamRoot, "external_datasources.x4bnet.is_bot_operamini"),
+                    valueAt(scamRoot, "external_datasources.x4bnet.is_bot_semrush"),
+                ]),
             },
         } : null),
-        factorSource("ipregistry", data.ipregistry ? {
-            country: valueAt(data.ipregistry, "location.country_code"),
+        factorSource("ipdata", ipdata ? {
+            country: ipdata.country_code,
             checks: {
-                VPN: valueAt(data.ipregistry, "security.is_vpn"),
-                proxy: valueAt(data.ipregistry, "security.is_proxy"),
-                Tor: valueAt(data.ipregistry, "security.is_tor"),
-                datacenter: valueAt(data.ipregistry, "connection.type") === "hosting" ? true : null,
+                代理: valueAt(ipdata, "threat.is_proxy"),
+                Tor: valueAt(ipdata, "threat.is_tor"),
+                机房: valueAt(ipdata, "threat.is_datacenter"),
+                滥用: anyTrue([
+                    valueAt(ipdata, "threat.is_threat"),
+                    valueAt(ipdata, "threat.is_known_abuser"),
+                    valueAt(ipdata, "threat.is_known_attacker"),
+                ]),
+                匿名: valueAt(ipdata, "threat.is_anonymous"),
             },
         } : null),
         factorSource("IPinfo", ipinfo ? {
             country: ipinfo.country,
             checks: {
                 VPN: valueAt(ipinfo, "privacy.vpn"),
-                proxy: valueAt(ipinfo, "privacy.proxy"),
+                代理: valueAt(ipinfo, "privacy.proxy"),
                 Tor: valueAt(ipinfo, "privacy.tor"),
-                hosting: valueAt(ipinfo, "privacy.hosting"),
+                中继: valueAt(ipinfo, "privacy.relay"),
+                机房: valueAt(ipinfo, "privacy.hosting"),
+            },
+        } : null),
+        factorSource("DB-IP", dbip ? {
+            country: dbip.country,
+            checks: {
+                代理: dbip.proxy,
+                爬虫: dbip.robot,
+                攻击源: dbip.abuser,
             },
         } : null),
     ].filter((source) => source.available);
 }
+
 function factorSource(name, values) {
     const source = Object.assign({
         name,
@@ -647,16 +688,40 @@ function factorSource(name, values) {
 }
 
 function buildRisks(data) {
+    const ippureScore = numberOrNull(data.ippure && data.ippure.fraudScore);
+    const ippureMismatch = !!(data.ippure && data.ippure._egressMismatch);
     const ipapiText = data.ipapi && data.ipapi.company
         ? data.ipapi.company.abuser_score
         : "";
     const ipapiMatch = String(ipapiText || "").match(/([0-9.]+)\s*\(([^)]+)\)/);
     const ipapiRatio = ipapiMatch ? Number(ipapiMatch[1]) : NaN;
     const ipapiLevel = ipapiMatch ? ipapiMatch[2] : "";
-    const proxycheckRec = proxycheckRecord(data.proxycheck) || {};
-    const proxycheckRisk = numberOrNull(proxycheckRec.risk);
+    const ip2 = getIp2location(data);
+    const ip2Score = numberOrNull(ip2 && ip2.fraud_score);
+    const scam = data.scamalytics && data.scamalytics.scamalytics
+        ? data.scamalytics.scamalytics
+        : null;
+    const scamScore = numberOrNull(scam && scam.scamalytics_score);
+    const abuseScore = numberOrNull(valueAt(data, "abuseipdb.data.abuseConfidenceScore"));
+    const ipqsScore = numberOrNull(data.ipqs && data.ipqs.success !== false
+        ? data.ipqs.fraud_score
+        : null);
+    const ipqsSkipped = ipqsUpstreamUnavailable(data);
+    const dbipRisk = parseDbipRisk(data.dbip);
+
+    const ippureRisk = scoreRisk(ippureMismatch ? "IPPure（分流出口）" : "IPPure（补充）", ippureScore, [
+            [80, 4, "极高风险"],
+            [70, 3, "高风险"],
+            [40, 2, "中风险"],
+            [0, 0, "低风险"],
+        ]);
+    if (ippureRisk.available && ippureMismatch) {
+        ippureRisk.detail = `${ippureRisk.detail} · ${maskIPAddress(data.ippure.ip)}`;
+        ippureRisk.affectsReport = false;
+    }
 
     return [
+        ippureRisk,
         ipapiMatch && Number.isFinite(ipapiRatio)
             ? {
                 name: "ipapi",
@@ -666,16 +731,40 @@ function buildRisks(data) {
                 detail: `${round(ipapiRatio * 100, 2)}%`,
             }
             : unavailableRisk("ipapi"),
-        proxycheckRisk !== null
-            ? scoreRisk("proxycheck", proxycheckRisk, [
-                [80, 4, "高风险"],
-                [50, 3, "中风险"],
-                [25, 2, "可疑"],
-                [0, 0, "低风险"],
-              ])
-            : unavailableRisk("proxycheck"),
+        scoreRisk("IP2Location", ip2Score, [
+            [66, 3, "高风险"],
+            [33, 2, "中风险"],
+            [0, 0, "低风险"],
+        ]),
+        scoreRisk("Scamalytics", scamScore, [
+            [90, 4, "极高风险"],
+            [60, 3, "高风险"],
+            [20, 2, "中风险"],
+            [0, 0, "低风险"],
+        ]),
+        scoreRisk("AbuseIPDB", abuseScore, [
+            [75, 4, "建议封禁"],
+            [25, 3, "高风险"],
+            [0, 0, "低风险"],
+        ]),
+        ipqsSkipped ? null : scoreRisk("IPQS", ipqsScore, [
+            [90, 4, "高风险"],
+            [85, 3, "存在风险"],
+            [75, 2, "可疑"],
+            [0, 0, "低风险"],
+        ]),
+        dbipRisk
+            ? {
+                name: "DB-IP",
+                available: true,
+                severity: dbipRisk === "high" ? 3 : dbipRisk === "medium" ? 2 : 0,
+                label: dbipRisk === "high" ? "高风险" : dbipRisk === "medium" ? "中风险" : "低风险",
+                detail: dbipRisk,
+            }
+            : unavailableRisk("DB-IP"),
     ].filter(Boolean);
 }
+
 function parseIp2location(html) {
     if (!html) return null;
     const text = String(html);
