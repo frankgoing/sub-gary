@@ -163,6 +163,67 @@ function request(url, headers) {
   });
 }
 
+// 2026 年油价调整日历（调整时间为当日 24 时）
+const ADJUST_CALENDAR = [
+  [ 1,  6, "不作调整"],
+  [ 1, 20, "上调"],
+  [ 2,  3, "上调"],
+  [ 2, 24, "上调"],
+  [ 3,  9, "上调"],
+  [ 3, 23, "上调"],
+  [ 4,  7, "上调"],
+  [ 4, 21, "下调"],
+  [ 5,  8, "上调"],
+  [ 5, 21, "上调"],
+  [ 6,  4, "下调"],
+  [ 6, 18, "下调"],
+  [ 7,  3, "下调"],
+  [ 7, 17, "上调"],
+  [ 7, 31, "上调"],
+  [ 8, 14, "待公布"],
+  [ 8, 28, "待公布"],
+  [ 9, 11, "待公布"],
+  [ 9, 24, "待公布"],
+  [10, 15, "待公布"],
+  [10, 29, "待公布"],
+  [11, 12, "待公布"],
+  [11, 26, "待公布"],
+  [12, 10, "待公布"],
+  [12, 24, "待公布"],
+];
+
+function getAdjustInfo() {
+  const now = new Date();
+  const curYear = now.getFullYear();
+  const curMonth = now.getMonth() + 1;
+  const curDay = now.getDate();
+  const curTs = now.getTime();
+
+  let last = null;
+  let next = null;
+
+  for (const [m, d, status] of ADJUST_CALENDAR) {
+    // 构造该调价日的 Date 对象（默认当日 24 时 = 次日 0 时）
+    const date = new Date(curYear, m - 1, d + 1); // +1 天 = 当日 24 时
+    const ts = date.getTime();
+
+    if (ts <= curTs) {
+      last = { month: m, day: d, status };
+    } else if (!next) {
+      next = { month: m, day: d, status };
+      break;
+    }
+  }
+
+  // 跨年：如果当前日期在年内最早调价日之前，上一年最后一次调价为最近一次
+  if (!last && ADJUST_CALENDAR.length) {
+    const lastEntry = ADJUST_CALENDAR[ADJUST_CALENDAR.length - 1];
+    last = { month: lastEntry[0], day: lastEntry[1], status: lastEntry[2] };
+  }
+
+  return { last, next };
+}
+
 const FUEL_META = [
   ["92号汽油", "⛽", "#10B981", "p92"],
   ["95号汽油", "⛽", "#F59E0B", "p95"],
@@ -174,19 +235,28 @@ function render(results) {
   const okResults = results.filter((result) => result.ok);
   const displayTime = okResults.length ? String(okResults[0].data.time || "") : "";
   const failCount = results.length - okResults.length;
+  const adj = getAdjustInfo();
+
+  const adjColor = (s) => {
+    if (s === "上调") return "#EF4444";
+    if (s === "下调") return "#10B981";
+    return "#94A3B8";
+  };
 
   const html = [
     '<div style="font-family:-apple-system,BlinkMacSystemFont;font-size:14px;line-height:1.5;text-align:left;overflow-wrap:anywhere;background:#F8FAFC;padding:16px;border-radius:12px">',
 
-    // 头部
-    '<div style="display:flex;align-items:center;margin-bottom:4px">',
-    '<span style="font-size:22px;margin-right:8px">⛽</span>',
-    '<span style="font-size:20px;font-weight:700;color:#0F172A">油价查询</span>',
-    '</div>',
+    // 调价时间
+    adj.last
+      ? `<div style="font-size:12px;color:#64748B;margin-bottom:3px">上次调价 <span style="font-weight:600;color:${adjColor(adj.last.status)}">${adj.last.month}月${adj.last.day}日 ${adj.last.status}</span></div>`
+      : "",
+    adj.next
+      ? `<div style="font-size:12px;color:#64748B;margin-bottom:10px">下次调价 <span style="font-weight:600;color:${adjColor(adj.next.status)}">${adj.next.month}月${adj.next.day}日 ${adj.next.status}</span></div>`
+      : '<div style="margin-bottom:10px"></div>',
 
     displayTime
-      ? `<div style="color:#94A3B8;font-size:11px;margin-bottom:14px;padding-left:2px">更新时间 ${escapeHtml(displayTime)}</div>`
-      : '<div style="margin-bottom:10px"></div>',
+      ? `<div style="color:#94A3B8;font-size:11px;margin-bottom:12px">数据更新 ${escapeHtml(displayTime)}</div>`
+      : "",
 
     // 各省卡片
     results.map((result) => renderProvinceCard(result)).join(""),
