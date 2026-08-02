@@ -299,7 +299,7 @@ function renderProvinceCard(result) {
       return '<div style="padding:10px 0;border-bottom:1px solid #F1F5F9;white-space:nowrap;overflow:hidden">'
         + `<span style="font-size:13px;display:inline-block;width:26px">${icon}</span>`
         + `<span style="font-size:13px;font-weight:500;color:#334155;display:inline-block;width:80px">${escapeHtml(label)}</span>`
-        + `<span style="font-size:18px;font-weight:700;color:${color};margin-left:14px">¥${escapeHtml(data[key])}</span>`
+        + `<span style="font-size:13px;font-weight:700;color:${color};margin-left:12px">¥${escapeHtml(data[key])}</span>`
         + '</div>';
     })
     .join("");
