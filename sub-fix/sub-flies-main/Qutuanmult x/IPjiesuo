@@ -342,31 +342,26 @@ async function testParamountPlus() {
 }
 
 async function testDiscoveryPlus() {
-    // 简化检测：直接请求 discoveryplus.com 首页，根据 HTTP 状态码和页面内容判断
     return request("GET", "https://www.discoveryplus.com/", {
         allowHttpErrors: true,
         headers: browserHeaders(),
         timeout: 10,
     }).then((response) => {
         const status = response.status;
-        const body = response.body || "";
-        // 403 = Cloudflare 地区封锁（明确不可用）
+        const text = response.body || "";
         if (status === 403) {
             return mediaResult("Discovery+", "no", "", "HTTP 403 地区封锁");
         }
-        // 页面含"not available"或"coming soon" = 不可用
-        if (/not (available|offered|accessible)|coming soon|unavailable|isn't available here yet/i.test(body)) {
-            const region = firstMatch(body, [/contentRegion[^A-Z]{0,12}([A-Z]{2})/i]);
-            return mediaResult("Discovery+", "no", region, "页面明确显示不可用");
+        if (/not (available|offered|accessible)|coming soon|unavailable|isn.t available here yet/i.test(text)) {
+            const region = firstMatch(text, [/contentRegion[^A-Z]{0,12}([A-Z]{2})/i]);
+            return mediaResult("Discovery+", "no", region, "页面显示不可用");
         }
-        // 200 + 正常页面内容 = 可用
-        if (status === 200 && /discovery|discoveryplus/i.test(body)) {
-            const region = firstMatch(body, [/contentRegion[^A-Z]{0,12}([A-Z]{2})/i]);
+        if (status === 200 && /discovery|discoveryplus/i.test(text)) {
+            const region = firstMatch(text, [/contentRegion[^A-Z]{0,12}([A-Z]{2})/i]);
             return mediaResult("Discovery+", "yes", region, "主页可访问");
         }
-        // 其他情况（302 重定向等）判未知
-        return mediaResult("Discovery+", "unknown", "", `HTTP ${status || "?"}`);
+        return mediaResult("Discovery+", "unknown", "", "HTTP " + (status || "?"));
     }, (reason) => {
-        return mediaResult("Discovery+", "unknown", "", `请求失败: ${errorMessage(reason)}`);
+        return mediaResult("Discovery+", "unknown", "", "请求失败");
     });
 }
