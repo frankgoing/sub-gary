@@ -226,10 +226,10 @@ function renderProvinceCard(result) {
   const fuelLines = FUEL_META
     .filter(([, , , key]) => data[key] !== undefined && data[key] !== null && data[key] !== "")
     .map(([label, icon, color, key]) => {
-      return '<div style="padding:5px 0;border-bottom:1px solid #F1F5F9;white-space:nowrap;overflow:hidden">'
-        + `<span style="font-size:13px;display:inline-block;width:20px">${icon}</span>`
-        + `<span style="font-size:13px;font-weight:500;color:#334155;display:inline-block;width:70px">${escapeHtml(label)}</span>`
-        + `<span style="font-size:16px;font-weight:700;color:${color};margin-left:6px">¥${escapeHtml(data[key])}</span>`
+      return '<div style="padding:10px 0;border-bottom:1px solid #F1F5F9;white-space:nowrap;overflow:hidden">'
+        + `<span style="font-size:13px;display:inline-block;width:26px">${icon}</span>`
+        + `<span style="font-size:13px;font-weight:500;color:#334155;display:inline-block;width:80px">${escapeHtml(label)}</span>`
+        + `<span style="font-size:18px;font-weight:700;color:${color};margin-left:14px">¥${escapeHtml(data[key])}</span>`
         + '</div>';
     })
     .join("");
