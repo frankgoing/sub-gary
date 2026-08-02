@@ -553,6 +553,24 @@ function buildBasic(ip, data) {
     };
 }
 
+function parseIpregistry(payload) {
+    if (!payload || typeof payload !== "object") return null;
+    const security = payload.security || {};
+    const connection = payload.connection || {};
+    return {
+        country: cleanValue(valueAt(payload, "location.country_code"))
+            || cleanValue(valueAt(payload, "location.country.code")),
+        proxy: booleanOrNull(security.is_proxy),
+        tor: anyTrue([security.is_tor, security.is_tor_exit]),
+        vpn: booleanOrNull(security.is_vpn),
+        server: connection.type === "hosting" ? true : (connection.type ? false : null),
+        abuser: booleanOrNull(security.is_abuser),
+        relay: null,
+        anonymous: null,
+        threat: null,
+    };
+}
+
 function buildFactors(data) {
     const ipinfo = data.ipinfo && data.ipinfo.data ? data.ipinfo.data : {};
     const ipregistry = parseIpregistry(data.ipregistry);
@@ -569,58 +587,58 @@ function buildFactors(data) {
         factorSource("IP2Location", ip2 ? {
             country: ip2.country_code,
             checks: {
-                代理: anyTrue([ip2.is_proxy, ip2Proxy.is_public_proxy, ip2Proxy.is_web_proxy]),
+                proxy: anyTrue([ip2.is_proxy, ip2Proxy.is_public_proxy, ip2Proxy.is_web_proxy]),
                 Tor: ip2Proxy.is_tor,
                 VPN: ip2Proxy.is_vpn,
-                机房: ip2Proxy.is_data_center,
-                滥用: ip2Proxy.is_spammer,
-                爬虫: anyTrue([ip2Proxy.is_web_crawler, ip2Proxy.is_scanner, ip2Proxy.is_botnet]),
+                datacenter: ip2Proxy.is_data_center,
+                spam: ip2Proxy.is_spammer,
+                bot: anyTrue([ip2Proxy.is_web_crawler, ip2Proxy.is_scanner, ip2Proxy.is_botnet]),
             },
         } : null),
         factorSource("ipapi", ipapi ? {
             country: valueAt(ipapi, "location.country_code"),
             checks: {
                 VPN: ipapi.is_vpn,
-                代理: ipapi.is_proxy,
+                proxy: ipapi.is_proxy,
                 Tor: ipapi.is_tor,
-                机房: ipapi.is_datacenter,
-                滥用: ipapi.is_abuser,
-                爬虫: ipapi.is_crawler,
+                datacenter: ipapi.is_datacenter,
+                abuse: ipapi.is_abuser,
+                crawler: ipapi.is_crawler,
             },
         } : null),
         factorSource("ipregistry", ipregistry ? {
             country: ipregistry.country,
             checks: {
                 VPN: ipregistry.vpn,
-                代理: ipregistry.proxy,
+                proxy: ipregistry.proxy,
                 Tor: ipregistry.tor,
-                中继: ipregistry.relay,
-                机房: ipregistry.server,
-                滥用: ipregistry.abuser,
-                匿名: ipregistry.anonymous,
-                威胁: ipregistry.threat,
+                relay: ipregistry.relay,
+                server: ipregistry.server,
+                abuse: ipregistry.abuser,
+                anonymous: ipregistry.anonymous,
+                threat: ipregistry.threat,
             },
         } : null),
         factorSource("IPQS", ipqs ? {
             country: ipqs.country_code,
             checks: {
-                代理: ipqs.proxy,
+                proxy: ipqs.proxy,
                 Tor: ipqs.tor,
                 VPN: ipqs.vpn,
-                机房: null,
-                滥用: ipqs.recent_abuse,
-                爬虫: ipqs.bot_status,
+                datacenter: null,
+                abuse: ipqs.recent_abuse,
+                bot: ipqs.bot_status,
             },
         } : null),
         factorSource("Scamalytics", scam ? {
             country: valueAt(scamRoot, "external_datasources.maxmind_geolite2.ip_country_code"),
             checks: {
-                代理: valueAt(scamRoot, "external_datasources.firehol.is_proxy"),
+                proxy: valueAt(scamRoot, "external_datasources.firehol.is_proxy"),
                 Tor: valueAt(scamRoot, "external_datasources.x4bnet.is_tor"),
                 VPN: valueAt(scam, "scamalytics_proxy.is_vpn"),
-                机房: valueAt(scam, "scamalytics_proxy.is_datacenter"),
-                滥用: scam.is_blacklisted_external,
-                爬虫: anyTrue([
+                datacenter: valueAt(scam, "scamalytics_proxy.is_datacenter"),
+                abuse: scam.is_blacklisted_external,
+                bot: anyTrue([
                     valueAt(scamRoot, "external_datasources.x4bnet.is_blacklisted_spambot"),
                     valueAt(scamRoot, "external_datasources.x4bnet.is_bot_operamini"),
                     valueAt(scamRoot, "external_datasources.x4bnet.is_bot_semrush"),
@@ -630,33 +648,33 @@ function buildFactors(data) {
         factorSource("ipdata", ipdata ? {
             country: ipdata.country_code,
             checks: {
-                代理: valueAt(ipdata, "threat.is_proxy"),
+                proxy: valueAt(ipdata, "threat.is_proxy"),
                 Tor: valueAt(ipdata, "threat.is_tor"),
-                机房: valueAt(ipdata, "threat.is_datacenter"),
-                滥用: anyTrue([
+                datacenter: valueAt(ipdata, "threat.is_datacenter"),
+                abuse: anyTrue([
                     valueAt(ipdata, "threat.is_threat"),
                     valueAt(ipdata, "threat.is_known_abuser"),
                     valueAt(ipdata, "threat.is_known_attacker"),
                 ]),
-                匿名: valueAt(ipdata, "threat.is_anonymous"),
+                anonymous: valueAt(ipdata, "threat.is_anonymous"),
             },
         } : null),
         factorSource("IPinfo", ipinfo ? {
             country: ipinfo.country,
             checks: {
                 VPN: valueAt(ipinfo, "privacy.vpn"),
-                代理: valueAt(ipinfo, "privacy.proxy"),
+                proxy: valueAt(ipinfo, "privacy.proxy"),
                 Tor: valueAt(ipinfo, "privacy.tor"),
-                中继: valueAt(ipinfo, "privacy.relay"),
-                机房: valueAt(ipinfo, "privacy.hosting"),
+                relay: valueAt(ipinfo, "privacy.relay"),
+                hosting: valueAt(ipinfo, "privacy.hosting"),
             },
         } : null),
         factorSource("DB-IP", dbip ? {
             country: dbip.country,
             checks: {
-                代理: dbip.proxy,
-                爬虫: dbip.robot,
-                滥用: dbip.abuser,
+                proxy: dbip.proxy,
+                robot: dbip.robot,
+                abuser: dbip.abuser,
             },
         } : null),
     ].filter((source) => source.available);
