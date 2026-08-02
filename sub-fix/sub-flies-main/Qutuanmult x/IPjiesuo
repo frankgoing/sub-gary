@@ -503,3 +503,5 @@ function finishError(message) {
         content: message,
     });
 }
+
+run();
