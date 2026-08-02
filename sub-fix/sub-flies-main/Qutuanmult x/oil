@@ -244,7 +244,7 @@ function render(results) {
   };
 
   const html = [
-    '<div style="font-family:-apple-system,BlinkMacSystemFont;font-size:14px;line-height:1.5;text-align:left;overflow-wrap:anywhere;background:#F8FAFC;padding:16px;border-radius:12px">',
+    '<div style="font-family:-apple-system,BlinkMacSystemFont;font-size:14px;line-height:1.5;text-align:left;overflow-wrap:anywhere;padding:16px">',
 
     // 调价时间
     adj.last
