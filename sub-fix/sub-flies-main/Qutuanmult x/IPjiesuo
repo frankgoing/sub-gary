@@ -595,7 +595,7 @@ function render(media, ipInfo, ipInfo2) {
     ].join("");
 
     $done({
-        title: "\u200B",
+        title: "节点解锁检测",
         htmlMessage: html,
     });
 }
