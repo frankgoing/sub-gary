@@ -364,7 +364,6 @@ async function testParamountPlus() {
     return mediaResult("Paramount+", "unknown", "", `HTTP ${response.status || "?"}`);
 }
 
-async 
 function normalizeAsn(value) {
     const text = String(value === null || typeof value === "undefined" ? "" : value).trim();
     const match = text.match(/AS?\s*(\d+)/i);
