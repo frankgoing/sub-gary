@@ -3,8 +3,6 @@ vless=104.18.39.209:2096, method=none, password=845b136b-a537-441a-9218-f9064c9e
 vless=104.18.39.209:2096, method=none, password=86de080d-e4fc-4351-9190-c03dd56a1187, obfs=wss, obfs-host=sg.666014.xyz, obfs-uri=/, fast-open=true, udp-relay=false, tag=新加坡 NAT
 vless=dmit.666014.xyz:52615, method=none, password=5c120388-0af8-4e80-8f90-908f8e894c63, obfs=over-tls, obfs-host=apple.com, reality-base64-pubkey=Q-OYallTb8qaXMzd1HdKCzMzYajbdvQ980tFLZioPRU, reality-hex-shortid=24f9b48a6e, vless-flow=xtls-rprx-vision, fast-open=false, udp-relay=true, tag=洛杉矶 DMIT
 vless=104.18.39.209:2096, method=none, password=dad02cb7-7dad-4a42-abd6-6b2d9790528c, obfs=wss, obfs-host=sui.666014.xyz, obfs-uri=/, fast-open=true, udp-relay=false, tag=洛杉矶 RN2
-vless://dad02cb7-7dad-4a42-abd6-6b2d9790528c@yx1.frankgo.eu.cc:2053?encryption=none&security=tls&sni=sui.666014.xyz&insecure=0&allowInsecure=0&type=ws&host=argorn2.666014.xyz&path=%2Frn2#%E6%B4%9B%E6%9D%89%E7%9F%B6%20rn2s
 vless=104.18.39.209:2096, method=none, password=ae4ccb0a-8f7c-413d-8ed9-480e7fba562d, obfs=wss, obfs-host=dc03.666014.xyz, obfs-uri=/, fast-open=true, udp-relay=false, tag=洛杉矶 RN3
-vless://3f2614f3-716b-4085-aacf-9f4abd50ce24@yx1.frankgo.eu.cc:8443?encryption=none&security=tls&sni=dc03.666014.xyz&insecure=0&allowInsecure=0&type=ws&host=argo.666014.xyz&path=%2F#%E6%B4%9B%E6%9D%89%E7%9F%B6%20rn3s
 vless=104.18.39.209:2096, method=none, password=789852e0-7006-4032-8e58-93875c5e4a41, obfs=wss, obfs-host=nats.666014.xyz, obfs-uri=/, fast-open=true, udp-relay=false, tag=洛杉矶 NAT
 vless=104.18.39.209:2096, method=none, password=6a50fe55-f703-45ea-a813-d6bd9d075614, obfs=wss, obfs-host=eus.666014.xyz, obfs-uri=/, fast-open=true, udp-relay=false, tag=德国 EU
