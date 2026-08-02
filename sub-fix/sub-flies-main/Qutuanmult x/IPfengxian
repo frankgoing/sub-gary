@@ -346,7 +346,7 @@ function render(ip, data) {
 
     postMapNotification(basic, displayNodeName);
     $done({
-        title: "\u200B",
+        title: "IP风险检测",
         htmlMessage: html,
     });
 }
