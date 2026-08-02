@@ -283,7 +283,7 @@ function render(results) {
 function renderProvinceCard(result) {
   if (!result.ok) {
     return [
-      '<div style="background:#FFFFFF;border-radius:10px;padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,0.06)">',
+      '<div style="padding:8px 0;margin-bottom:4px">',
       `<div style="font-size:15px;font-weight:700;color:#0F172A;margin-bottom:6px">📍 ${escapeHtml(result.prov)}</div>`,
       `<div style="color:#EF4444;font-size:12px">⚠️ ${escapeHtml(result.error)}</div>`,
       '</div>',
@@ -305,7 +305,7 @@ function renderProvinceCard(result) {
     .join("");
 
   return [
-    '<div style="background:#FFFFFF;border-radius:10px;padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,0.06)">',
+    '<div style="padding:8px 0;margin-bottom:4px">',
     `<div style="font-size:15px;font-weight:700;color:#0F172A;margin-bottom:8px">📍 ${escapeHtml(provName)}</div>`,
     fuelLines,
     '</div>',
