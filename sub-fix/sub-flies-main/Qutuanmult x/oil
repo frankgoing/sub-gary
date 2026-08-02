@@ -164,88 +164,86 @@ function request(url, headers) {
 }
 
 const FUEL_META = [
-  ["92号汽油", "🟢", "p92"],
-  ["95号汽油", "🟡", "p95"],
-  ["98号汽油", "🔴", "p98"],
-  ["0号柴油", "⚫", "p0"],
+  ["92号汽油", "⛽", "#10B981", "p92"],
+  ["95号汽油", "⛽", "#F59E0B", "p95"],
+  ["98号汽油", "⛽", "#EF4444", "p98"],
+  ["0号柴油", "🛢", "#6366F1", "p0"],
 ];
 
 function render(results) {
   const okResults = results.filter((result) => result.ok);
   const displayTime = okResults.length ? String(okResults[0].data.time || "") : "";
+  const failCount = results.length - okResults.length;
 
   const html = [
-    '<div style="font-family:-apple-system,BlinkMacSystemFont;font-size:14px;line-height:1.5;text-align:left;overflow-wrap:anywhere">',
-    '<div style="font-size:18px;line-height:18px">&nbsp;</div>',
-    '<div style="font-size:20px;font-weight:700;line-height:1.25;margin-bottom:16px">油价查询</div>',
+    '<div style="font-family:-apple-system,BlinkMacSystemFont;font-size:14px;line-height:1.5;text-align:left;overflow-wrap:anywhere;background:#F8FAFC;padding:16px;border-radius:12px">',
+
+    // 头部
+    '<div style="display:flex;align-items:center;margin-bottom:4px">',
+    '<span style="font-size:22px;margin-right:8px">⛽</span>',
+    '<span style="font-size:20px;font-weight:700;color:#0F172A">油价查询</span>',
+    '</div>',
+
     displayTime
-      ? `<div style="color:#8e8e93;font-size:11px;margin-bottom:10px">更新时间 · ${escapeHtml(displayTime)}</div>`
+      ? `<div style="color:#94A3B8;font-size:11px;margin-bottom:14px;padding-left:2px">更新时间 ${escapeHtml(displayTime)}</div>`
+      : '<div style="margin-bottom:10px"></div>',
+
+    // 各省卡片
+    results.map((result) => renderProvinceCard(result)).join(""),
+
+    // 底部
+    '<div style="margin-top:12px;padding-top:10px;border-top:1px solid #E2E8F0">',
+    '<div style="color:#94A3B8;font-size:10px;line-height:1.5">',
+    failCount > 0
+      ? `⚠️ ${failCount} 个省数据获取失败 · `
       : "",
-    summaryCard(okResults),
-    results.map((result) => renderProvince(result)).join(""),
-    '<div style="font-size:9px;line-height:9px">&nbsp;</div>',
-    '<div style="color:#8e8e93;font-size:10px;line-height:1.45">数据来自天行数据 oilprice 接口，多 Key 自动切换重试；各省数据独立请求，互不影响。</div>',
-    '<div style="font-size:14px;line-height:14px">&nbsp;</div>',
+    '数据源：mxnzp → 天行数据 → 小熊油耗（自动降级）',
+    '</div>',
+    '</div>',
+
     "</div>",
   ].join("");
 
   $done({
-    title: "\u200B",
+    title: "油价查询",
     htmlMessage: html,
   });
 }
 
-function summaryCard(okResults) {
-  if (!okResults.length) return "";
-  const lines = okResults
-    .filter((result) => result.data.p92 !== undefined && result.data.p92 !== null && result.data.p92 !== "")
-    .map((result) => {
-      return '<div style="margin-bottom:6px;line-height:1.2">'
-        + `<span style="font-size:24px;font-weight:800;letter-spacing:0.2px">¥${escapeHtml(result.data.p92)}</span>`
-        + `<span style="color:#8e8e93;font-size:12px;font-weight:600">&nbsp;&nbsp;${escapeHtml(result.data.prov || result.prov)} · 92号汽油</span>`
-        + "</div>";
+function renderProvinceCard(result) {
+  if (!result.ok) {
+    return [
+      '<div style="background:#FFFFFF;border-radius:10px;padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,0.06)">',
+      `<div style="font-size:15px;font-weight:700;color:#0F172A;margin-bottom:6px">📍 ${escapeHtml(result.prov)}</div>`,
+      `<div style="color:#EF4444;font-size:12px">⚠️ ${escapeHtml(result.error)}</div>`,
+      '</div>',
+    ].join("");
+  }
+
+  const data = result.data;
+  const provName = data.prov || result.prov;
+
+  const fuelLines = FUEL_META
+    .filter(([, , , key]) => data[key] !== undefined && data[key] !== null && data[key] !== "")
+    .map(([label, icon, color, key]) => {
+      return [
+        '<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid #F1F5F9">',
+        '<div style="display:flex;align-items:center;gap:6px">',
+        `<span style="font-size:13px">${icon}</span>`,
+        `<span style="font-size:13px;font-weight:500;color:#334155">${escapeHtml(label)}</span>`,
+        '</div>',
+        `<span style="font-size:16px;font-weight:700;color:${color}">¥${escapeHtml(data[key])}</span>`,
+        '</div>',
+      ].join("");
     })
     .join("");
-  return lines ? `<div style="margin-bottom:16px">${lines}</div>` : "";
-}
 
-function renderProvince(result) {
-  if (!result.ok) {
-    return section(`📍 ${result.prov}`, mutedLine(`查询失败：${escapeHtml(result.error)}`));
-  }
-  const data = result.data;
-  const body = FUEL_META
-    .filter(([, , key]) => data[key] !== undefined && data[key] !== null && data[key] !== "")
-    .map(([label, icon, key]) => priceLine(icon, label, `¥${data[key]}`))
-    .join("");
-  return section(`📍 ${data.prov || result.prov}`, body);
-}
-
-function section(title, content) {
-  return '<div style="font-size:8px;line-height:8px">&nbsp;</div>'
-    + '<div>'
-    + `<div style="color:#0A84FF;font-weight:700;font-size:15px;margin-bottom:9px">▌${escapeHtml(title)}</div>`
-    + `${content}</div>`;
-}
-
-function priceLine(icon, label, value) {
-  // QX htmlMessage 对 display:flex 支持不稳定（会导致价格数字换行），改用 inline-block + nowrap
-  return '<div style="margin-bottom:11px;line-height:1.3;white-space:nowrap">'
-    + `<span style="font-size:15px;display:inline-block;width:22px">${icon}</span>`
-    + `<span style="font-weight:600;color:#3a3a3c;display:inline-block;width:72px">${escapeHtml(label)}</span>`
-    + `<span style="font-weight:800;color:#000000;margin-left:8px">${escapeHtml(value)}</span>`
-    + "</div>";
-}
-
-function infoLine(label, value) {
-  return '<div style="margin-bottom:8px;line-height:1.4">'
-    + `<span style="color:#8e8e93;font-size:12px">${escapeHtml(label)}</span>&nbsp;&nbsp;`
-    + `<span style="font-weight:600">${escapeHtml(value)}</span>`
-    + "</div>";
-}
-
-function mutedLine(value) {
-  return `<div style="color:#8e8e93;font-size:11px;margin:5px 0;line-height:1.45">${escapeHtml(value)}</div>`;
+  return [
+    '<div style="background:#FFFFFF;border-radius:10px;padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,0.06)">',
+    `<div style="font-size:15px;font-weight:700;color:#0F172A;margin-bottom:8px">📍 ${escapeHtml(provName)}</div>`,
+    fuelLines,
+    '</div>',
+  ].join("");
 }
 
 function escapeHtml(value) {
