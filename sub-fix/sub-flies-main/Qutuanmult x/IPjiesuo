@@ -364,6 +364,183 @@ async function testParamountPlus() {
     return mediaResult("Paramount+", "unknown", "", `HTTP ${response.status || "?"}`);
 }
 
+async function testDiscoveryPlus() {
+    // 沿用 KOP-XIAO/QuantumultX 原脚本的检测方式：先拿短期 token，再带一段固定的分析用 Cookie
+    // 查询 currentLocationTerritory。这段 Cookie 是原脚本里写死的老值（非登录态凭证，只是分析用途），
+    // Discovery+ 后端接口一旦调整这项就可能失效，属于这三项里最容易先失灵的一个。
+    const tokenUrl = "https://us1-prod-direct.discoveryplus.com/token?deviceId=d1a4a5d25212400d1e6985984604d740&realm=go&shortlived=true";
+    let tokenResp;
+    try {
+        tokenResp = await requestJson(tokenUrl, {
+            headers: { "User-Agent": USER_AGENT },
+            verify: false,
+        });
+    } catch (error) {
+        return mediaResult("Discovery+", "unknown", "", `Token 获取失败: ${errorMessage(error)}`);
+    }
+    const token = tokenResp && tokenResp.data && tokenResp.data.attributes
+        ? tokenResp.data.attributes.token
+        : "";
+    if (!token) return mediaResult("Discovery+", "unknown", "", "Token 字段缺失");
+
+    const cookie = "_gcl_au=1.1.858579665.1632206782; _rdt_uuid=1632206782474.6a9ad4f2-8ef7-4a49-9d60-e071bce45e88;"
+        + " _scid=d154b864-8b7e-4f46-90e0-8b56cff67d05; _pin_unauth=dWlkPU1qWTRNR1ZoTlRBdE1tSXdNaTAwTW1Nd0xUbGxORFV0WWpZMU0yVXdPV1l6WldFeQ;"
+        + " _sctr=1|1632153600000; aam_fw=aam%3D9354365%3Baam%3D9040990; aam_uuid=24382050115125439381416006538140778858;"
+        + ` st=${token}; gi_ls=0; _uetvid=a25161a01aa711ec92d47775379d5e4d;`
+        + " AMCV_BC501253513148ED0A490D45%40AdobeOrg=-1124106680%7CMCIDTS%7C18894%7CMCMID%7C24223296309793747161435877577673078228%7CMCAAMLH-1633011393%7C9%7CMCAAMB-1633011393%7CRKhpRz8krg2tLO6pguXWp5olkAcUniQYPHaMWWgdJ3xzPWQmdj0y%7CMCOPTOUT-1632413793s%7CNONE%7CvVersion%7C5.2.0;"
+        + " ass=19ef15da-95d6-4b1d-8fa2-e9e099c9cc38.1632408400.1632406594";
+
+    let meResp;
+    try {
+        meResp = await requestJson("https://us1-prod-direct.discoveryplus.com/users/me", {
+            headers: {
+                "User-Agent": USER_AGENT,
+                Cookie: cookie,
+            },
+            verify: false,
+            ciphers: "DEFAULT@SECLEVEL=1",
+            allowHttpErrors: true,
+        });
+    } catch (error) {
+        return mediaResult("Discovery+", "unknown", "", `查询失败: ${errorMessage(error)}`);
+    }
+    const territory = meResp && meResp.data && meResp.data.attributes
+        ? meResp.data.attributes.currentLocationTerritory
+        : "";
+    if (!territory) return mediaResult("Discovery+", "unknown", "", "字段缺失");
+    return territory.toLowerCase() === "us"
+        ? mediaResult("Discovery+", "yes", territory.toUpperCase(), "currentLocationTerritory")
+        : mediaResult("Discovery+", "no", territory.toUpperCase(), "currentLocationTerritory");
+}
+
+async function testTalkatone() {
+    // Talkatone 电话解锁可用性检测：出口 IP 地区 + IP 属性（代理/机房/移动）+ Talkatone 相关域名连通性。
+    // 只能给出高概率结论，Talkatone 有服务端账号/设备/IP 风控，最终以 App 实测为准。
+    try {
+        const ip = await getEgressIpInfo();
+        const countryCode = String((ip && ip.countryCode) || "").toUpperCase();
+        const geoOk = countryCode === "US" || countryCode === "CA";
+        const isProxy = !!(ip && ip.proxy);
+        const isHosting = !!(ip && ip.hosting);
+        const isMobile = !!(ip && ip.mobile);
+        const asn = String((ip && ip.asn) || "").toUpperCase();
+        const blockedAsn = TALKATONE_BLOCKED_ASNS.indexOf(asn) !== -1;
+
+        // 302/403/404 均视为"已到达服务器"；网络超时/DNS 失败/5xx 视为不通
+        const probeUrls = [
+            "https://tktn.be/",
+            "https://www.talkatone.com/",
+            "https://vm.talkatone.com/",
+        ];
+        const probes = await Promise.all(probeUrls.map((url) => capture(request("GET", url, {
+            allowHttpErrors: true,
+            headers: browserHeaders(),
+            timeout: 8,
+        }))));
+        let reachable = 0;
+        const probeInfo = [];
+        probes.forEach((p, index) => {
+            const domain = probeUrls[index].replace(/^https?:\/\//, "");
+            if (p.ok && Number.isFinite(p.value.status) && p.value.status >= 200 && p.value.status < 500) {
+                reachable += 1;
+                probeInfo.push(`${domain}=${p.value.status}`);
+            } else {
+                probeInfo.push(`${domain}=不通`);
+            }
+        });
+
+        const flags = [];
+        if (isProxy) flags.push("代理IP");
+        if (isHosting) flags.push("机房IP");
+        if (isMobile) flags.push("移动IP");
+
+        // 二值判定：只有 ✅ 可用 / ❌ 不可用，具体原因放 detail
+        // 实测反馈：机房 IP（如 DMIT）实际可解锁，不再判死；公开代理才是高概率被风控
+        let status;
+        let detail;
+        if (!ip || !ip.countryCode) {
+            status = "no";
+            detail = "出口 IP 信息获取失败";
+        } else if (!geoOk) {
+            status = "no";
+            detail = `非 US/CA（${countryCode}）`;
+        } else if (reachable < 2) {
+            status = "no";
+            detail = `探测仅 ${reachable}/3 通`;
+        } else if (isProxy) {
+            status = "no";
+            detail = "公开代理IP，风控风险高";
+        } else if (blockedAsn) {
+            status = "no";
+            detail = `${asn} 实测风控段`;
+        } else if (isHosting) {
+            status = "yes";
+            detail = "机房IP，实测为准";
+        } else {
+            status = "yes";
+            detail = "高概率可用";
+        }
+
+        // 详细数据只进日志，弹窗保持与其他检测项一致的简洁格式
+        const location = [ip && ip.city, ip && ip.regionName].filter(Boolean).join(" · ");
+        const identity = [ip && (ip.isp || ip.org || ""), asn].filter(Boolean).join(" · ");
+        console.log(`[Talkatone] 出口IP ${ip ? ip.query : "获取失败"} · ${location} · ${identity} · 属性 ${flags.join("/") || "正常"} · 探测 ${probeInfo.join(" ")}`);
+        return mediaResult("Talkatone", status, countryCode, detail);
+    } catch (error) {
+        return mediaResult("Talkatone", "unknown", "", `检测异常: ${errorMessage(error)}`);
+    }
+}
+
+async function getEgressIpInfo() {
+    // 主源 ip-api.com：免费版仅支持 HTTP（HTTPS 需付费 key），返回 proxy/hosting/mobile 属性
+    // 备用源 ipwho.is：HTTPS 可用，但不提供代理/机房标记，失败时降级使用
+    const targets = [
+        "http://ip-api.com/json/?fields=status,message,country,countryCode,regionName,city,isp,org,as,query,proxy,hosting,mobile",
+        "https://ipwho.is/",
+    ];
+    for (const url of targets) {
+        const result = await capture(request("GET", url, {
+            allowHttpErrors: true,
+            headers: { "User-Agent": USER_AGENT, Accept: "application/json" },
+            timeout: 8,
+        }));
+        if (!result.ok) continue;
+        try {
+            const data = JSON.parse(result.value.body) || {};
+            if (url.indexOf("ip-api.com") !== -1) {
+                if (data.status === "success") {
+                    return {
+                        query: data.query,
+                        countryCode: data.countryCode,
+                        regionName: data.regionName,
+                        city: data.city,
+                        isp: data.isp,
+                        org: data.org,
+                        asn: normalizeAsn(data.as),
+                        proxy: data.proxy === true || data.proxy === "true",
+                        hosting: data.hosting === true || data.hosting === "true",
+                        mobile: data.mobile === true || data.mobile === "true",
+                    };
+                }
+            } else if (data.success === true) {
+                return {
+                    query: data.ip,
+                    countryCode: data.country_code,
+                    regionName: data.region,
+                    city: data.city,
+                    isp: data.connection && data.connection.isp,
+                    org: data.connection && data.connection.org,
+                    asn: normalizeAsn(data.connection && data.connection.asn),
+                    proxy: false,
+                    hosting: false,
+                    mobile: false,
+                };
+            }
+        } catch (_) { /* 解析失败则尝试下一个源 */ }
+    }
+    return null;
+}
+
 function normalizeAsn(value) {
     const text = String(value === null || typeof value === "undefined" ? "" : value).trim();
     const match = text.match(/AS?\s*(\d+)/i);
