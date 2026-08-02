@@ -46,15 +46,28 @@ if (!nodeName) {
 }
 
 async function run() {
-    const [media, ipResult] = await Promise.all([
-        collectMedia(),
-        capture(getEgressIpInfo()),
-    ]);
-    // 检测窗口结束后再查一次出口 IP：若两次不同，说明检测期间出口 IP 在轮换（结果跳变的根源）
-    const ipResult2 = await capture(getEgressIpInfo());
-    const ipChanged = !!(ipResult.ok && ipResult2.ok
-        && ipResult.value.query && ipResult.value.query !== ipResult2.value.query);
-    render(media, ipResult.ok ? ipResult.value : null, ipChanged ? (ipResult2.ok ? ipResult2.value : null) : null);
+    // 全局超时 25 秒，到期强制输出（防止 QX 弹窗因等待过久空白）
+    let timer = null;
+    const timeout = new Promise((_, reject) => {
+        timer = setTimeout(() => reject(new Error("检测超时(>25s)")), 25000);
+    });
+    try {
+        const [media, ipResult] = await Promise.race([
+            Promise.all([
+                collectMedia(),
+                capture(getEgressIpInfo()),
+            ]),
+            timeout,
+        ]);
+        clearTimeout(timer);
+        const ipResult2 = await capture(getEgressIpInfo());
+        const ipChanged = !!(ipResult.ok && ipResult2.ok
+            && ipResult.value.query && ipResult.value.query !== ipResult2.value.query);
+        render(media, ipResult.ok ? ipResult.value : null, ipChanged ? (ipResult2.ok ? ipResult2.value : null) : null);
+    } catch (e) {
+        clearTimeout(timer);
+        finishError(`⏱️ ${e.message || String(e)}`);
+    }
 }
 
 async function collectMedia() {
@@ -71,33 +84,23 @@ async function collectMedia() {
         ["Discovery+", () => testDiscoveryPlus()],
         ["Talkatone", () => testTalkatone()],
     ];
-    // 单轮检测：并行执行 + 网络失败（超时/连接错误）自动重试一次
-    const runOnce = async () => {
-        const settled = await Promise.all(tests.map((item) => capture(item[1]())));
-        for (let i = 0; i < tests.length; i += 1) {
-            if (!settled[i].ok) {
-                console.log(`[RETRY] ${tests[i][0]} 首次请求失败，重试一次`);
-                settled[i] = await capture(tests[i][1]());
-            }
+    // 单轮检测：并行执行 + 失败自动重试一次（移除第二轮复检以大幅缩短耗时，避免 QX 超时空白）
+    const settled = await Promise.all(tests.map((item) => capture(item[1]())));
+    for (let i = 0; i < tests.length; i += 1) {
+        if (!settled[i].ok) {
+            console.log(`[RETRY] ${tests[i][0]} 首次请求失败，重试一次`);
+            settled[i] = await capture(tests[i][1]());
         }
-        return settled;
-    };
-    // 两轮检测：网络波动/出口IP轮换时两次结果可能不同，两轮一致才是稳定结论
-    const settled = await runOnce();
-    console.log("[INFO] 第二轮复检（稳定性确认）");
-    const settled2 = await runOnce();
+    }
     return tests.map((item, index) => {
-        const v1 = settled[index].ok ? settled[index].value : mediaResult(item[0], "unknown", "", "请求失败");
-        const v2 = settled2[index].ok ? settled2[index].value : mediaResult(item[0], "unknown", "", "请求失败");
-        if (v1.status !== v2.status) {
-            console.log(`[WARN] ${item[0]} 两轮不一致: ${v1.status}↔${v2.status}`);
-            const detail = `⚠️ 两轮不一致(${statusText(v1.status)}↔${statusText(v2.status)})，以第二轮为准`;
-            return mediaResult(item[0], v2.status === "unknown" ? "no" : v2.status, v2.region || v1.region, detail);
+        if (!settled[index].ok) {
+            return mediaResult(item[0], "unknown", "", "请求失败");
         }
-        if (v2.status === "unknown") {
-            return mediaResult(item[0], "no", v2.region, v2.detail || "未识别到解锁信号");
+        const v = settled[index].value;
+        if (v.status === "unknown") {
+            return mediaResult(item[0], "no", v.region, v.detail || "未识别到解锁信号");
         }
-        return v2;
+        return v;
     });
 }
 
