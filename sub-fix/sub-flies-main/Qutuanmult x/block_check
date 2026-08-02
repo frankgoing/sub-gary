@@ -1,0 +1,239 @@
+/**
+ * 节点连通性检测脚本
+ * 来源：RavelloH (https://github.com/RavelloH)
+ * 修改：修复IPv6解析、优化界面样式
+ *
+ * 配置 (Quantumult X):
+ *   [task_local]
+ *   event-interaction https://raw.githubusercontent.com/frankgoing/sub-gary/refs/heads/main/sub-fix/sub-flies-main/Qutuanmult%20x/block_check, tag=节点阻断检测, img-url=bolt.horizontal.icloud.fill.system, enabled=true
+ *
+ * 使用：长按节点 → 执行脚本
+ */
+
+const IP_API = "http://ip-api.com/json?lang=zh-CN";
+const CHECK_HOST = "https://check-host.net";
+const GP_API = "https://api.globalping.io/v1/measurements";
+const TIMEOUT = 8000;
+
+function run() {
+  const tag = $environment.params;
+  if (!tag) return done("未获取到节点名称");
+
+  $configuration.sendMessage({
+    action: "get_server_description",
+    content: tag
+  }).then(function(resolve) {
+    var host = null, port = null;
+    if (resolve.ret && resolve.ret[tag]) {
+      var desc = resolve.ret[tag];
+      var eq = desc.indexOf("=");
+      if (eq !== -1) {
+        var afterEq = desc.substring(eq + 1);
+        var comma = afterEq.indexOf(",");
+        var hp = comma === -1 ? afterEq : afterEq.substring(0, comma);
+        // 支持 IPv6: 最后一个 : 之后才是端口
+        var colon = hp.lastIndexOf(":");
+        var bracket = hp.lastIndexOf("]");
+        if (colon !== -1 && colon > bracket) {
+          host = hp.substring(0, colon);
+          port = hp.substring(colon + 1);
+        } else if (colon !== -1 && bracket !== -1 && bracket > colon) {
+          // IPv6 无端口: [::1]
+          host = hp;
+        }
+      }
+    }
+    startChecks(tag, host, port);
+  }, function() {
+    startChecks(tag, null, null);
+  });
+}
+
+function startChecks(tag, host, port) {
+  var opts = { policy: $environment.params };
+
+  var pA = $task.fetch({ url: IP_API, opts: opts, timeout: TIMEOUT })
+    .then(function(r) { return { src: "node", ok: true, data: JSON.parse(r.body) }; })
+    .catch(function() { return { src: "node", ok: false }; });
+
+  var pB = $task.fetch({ url: IP_API, timeout: TIMEOUT })
+    .then(function(r) { return { src: "direct", ok: true, data: JSON.parse(r.body) }; })
+    .catch(function() { return { src: "direct", ok: false }; });
+
+  var pC;
+  if (host && port) {
+    var target = host + ":" + port;
+    var checkUrl = CHECK_HOST + "/check-tcp?host=" + encodeURIComponent(target) + "&max_nodes=10";
+    pC = $task.fetch({ url: checkUrl, headers: { "Accept": "application/json" }, timeout: TIMEOUT })
+      .then(function(r) {
+        var d = JSON.parse(r.body);
+        if (!d.ok || !d.request_id) return { src: "remote", ok: false, error: "提交失败" };
+        var rid = d.request_id;
+        var nodes = d.nodes || {};
+        var names = Object.keys(nodes);
+        var countryMap = {};
+        names.forEach(function(n) {
+          var info = nodes[n];
+          if (info && info.length >= 1) countryMap[n] = info[0];
+        });
+        return new Promise(function(resolve) {
+          setTimeout(function() {
+            $task.fetch({ url: CHECK_HOST + "/check-result/" + rid, headers: { "Accept": "application/json" }, timeout: TIMEOUT })
+              .then(function(r2) {
+                var res = JSON.parse(r2.body);
+                var reachable = false;
+                var items = [];
+                names.forEach(function(n) {
+                  var cc = countryMap[n] || "";
+                  var flag = cc ? getFlag(cc) : "\uD83C\uDF0D";
+                  var nr = res[n];
+                  var ms = '<span style="font-family:Menlo,monospace;font-size:12px;color:#94A3B8">--.--ms</span>';
+                  if (nr && Array.isArray(nr) && nr.length > 0 && nr[0].time !== undefined) {
+                    reachable = true;
+                    ms = '<span style="font-family:Menlo,monospace;font-size:12px;color:#10B981">' + formatMs(nr[0].time * 1000) + '</span>';
+                  }
+                  items.push({ flag: flag, ms: ms });
+                });
+                resolve({ src: "remote", ok: reachable, data: items });
+              }, function() {
+                resolve({ src: "remote", ok: false, error: "查询失败" });
+              });
+          }, 3500);
+        });
+      })
+      .catch(function() { return { src: "remote", ok: false, error: "请求失败" }; });
+  } else {
+    pC = Promise.resolve({ src: "remote", ok: false, error: "无地址信息" });
+  }
+
+  Promise.allSettled([pA, pB, pC]).then(function(results) {
+    render(tag, results[0].value, results[1].value, results[2].value, null);
+  });
+}
+
+function render(tag, node, direct, remote) {
+  var nOk = node && node.ok;
+  var dOk = direct && direct.ok;
+
+  // 节点代理 IP
+  var nodeInfo = "";
+  if (nOk && node.data) {
+    var d = node.data;
+    nodeInfo = '<div style="color:#64748B;font-size:12px;margin-top:2px">'
+      + esc(d.query) + ' · ' + [d.country, d.regionName, d.city].filter(Boolean).join(" ")
+      + (d.isp ? ' · <span style="color:#94A3B8">' + esc(d.isp) + "</span>" : "")
+      + "</div>";
+  }
+
+  var nodeStatus = '<span style="font-size:15px;font-weight:600">' + (nOk ? "\u2705 \u8282\u70B9\u6B63\u5E38" : "\u274C \u8282\u70B9\u4E0D\u53EF\u8FBE") + "</span>";
+
+  var directStatus = '<span style="font-size:15px;font-weight:600">' + (dOk ? "\u2705 \u672C\u673A\u7F51\u7EDC\u6B63\u5E38" : "\u274C \u672C\u673A\u7F51\u7EDC\u5F02\u5E38") + "</span>";
+
+  var remoteStr = "";
+  if (remote && remote.ok && remote.data && remote.data.length > 0) {
+    var items = remote.data;
+    remoteStr = '<div style="margin-top:8px">';
+    for (var i = 0; i < items.length; i += 2) {
+      var left = items[i];
+      var right = i + 1 < items.length ? items[i + 1] : null;
+      remoteStr += '<div style="display:flex;justify-content:space-between;padding:2px 0;font-size:13px">'
+        + '<span>' + left.flag + ' ' + left.ms + '</span>';
+      if (right) {
+        remoteStr += '<span>' + right.flag + ' ' + right.ms + '</span>';
+      }
+      remoteStr += "</div>";
+    }
+    remoteStr += "</div>";
+  } else if (remote && remote.error) {
+    remoteStr = '<div style="color:#EF4444;font-size:12px;margin-top:4px">\u26A0\uFE0F ' + esc(remote.error) + "</div>";
+  } else {
+    remoteStr = '<div style="color:#94A3B8;font-size:12px;margin-top:4px">\u2014 \u8FDC\u7AEF\u63A2\u6D4B\u672A\u6267\u884C</div>";
+  }
+
+  // 结论
+  var conclusion = "";
+  var conclusionColor = "#64748B";
+  if (!dOk) {
+    conclusion = "\u26A0\uFE0F \u672C\u673A\u7F51\u7EDC\u5F02\u5E38\uFF0C\u8BF7\u68C0\u67E5\u7F51\u7EDC\u8FDE\u63A5";
+    conclusionColor = "#EF4444";
+  } else if (nOk) {
+    conclusion = "\u2705 \u8282\u70B9\u6B63\u5E38\uFF0C\u53EF\u6B63\u5E38\u8FDE\u63A5";
+    conclusionColor = "#10B981";
+  } else if (!nOk && dOk) {
+    if (remote && remote.ok) {
+      conclusion = "\u26A0\uFE0F \u8282\u70B9\u65E0\u6CD5\u8FDE\u63A5\uFF0C\u4F46\u5916\u7F51\u53EF\u8FBE \u2014 \u53EF\u80FD\u88AB\u963B\u65AD";
+      conclusionColor = "#F59E0B";
+    } else if (remote && !remote.ok && remote.data) {
+      conclusion = "\u274C \u8282\u70B9\u79BB\u7EBF\u6216\u88AB\u963B\u65AD";
+      conclusionColor = "#EF4444";
+    } else if (!remote) {
+      conclusion = "\u274C \u8282\u70B9\u65E0\u6CD5\u8FDE\u63A5\uFF0C\u65E0\u8FDC\u7AEF\u6570\u636E";
+      conclusionColor = "#EF4444";
+    }
+  } else {
+    conclusion = "\u2753 \u6570\u636E\u4E0D\u5B8C\u6574";
+    conclusionColor = "#64748B";
+  }
+
+  var html = '<div style="font-family:-apple-system,BlinkMacSystemFont;font-size:14px;line-height:1.6;padding:12px 0">'
+    + '<div style="font-size:18px;font-weight:700;color:#0F172A;margin-bottom:8px">\uD83C\uDF10 \u8282\u70B9\u963B\u65AD\u68C0\u6D4B</div>'
+    + '<div style="color:#94A3B8;font-size:11px;margin-bottom:12px">\u8282\u70B9 \xB7 ' + esc(tag || "") + "</div>"
+
+    + '<div style="background:#F8FAFC;border-radius:8px;padding:10px;margin-bottom:8px">'
+    + nodeStatus + nodeInfo
+    + "</div>"
+
+    + '<div style="background:#F8FAFC;border-radius:8px;padding:10px;margin-bottom:8px">'
+    + directStatus
+    + "</div>"
+
+    + '<div style="background:#F8FAFC;border-radius:8px;padding:10px;margin-bottom:8px">'
+    + '<div style="font-weight:600;margin-bottom:4px;color:#0F172A">\uD83D\uDD0D \u8FDC\u7AEF\u63A2\u6D4B</div>'
+    + remoteStr
+    + "</div>"
+
+    + '<div style="background:#F8FAFC;border-radius:8px;padding:10px">'
+    + '<div style="font-weight:600;margin-bottom:4px;color:#0F172A">\uD83D\uDCCB \u8BCA\u65AD\u7ED3\u8BBA</div>'
+    + '<div style="color:' + conclusionColor + ';font-weight:600;font-size:14px">' + conclusion + "</div>"
+    + "</div>"
+
+    + "</div>";
+
+  $done({
+    title: "\uD83C\uDF10 \u8282\u70B9\u963B\u65AD\u68C0\u6D4B",
+    htmlMessage: html
+  });
+}
+
+function done(msg) {
+  $done({
+    title: "\uD83C\uDF10 \u8282\u70B9\u963B\u65AD\u68C0\u6D4B",
+    htmlMessage: '<div style="font-family:-apple-system,BlinkMacSystemFont;font-size:14px;padding:12px 0"><span style="font-weight:600;color:#EF4444">\u26A0\uFE0F ' + esc(msg) + "</span></div>"
+  });
+}
+
+function getFlag(cc) {
+  if (!cc || cc.length !== 2) return "\uD83C\uDF0D";
+  var cp = cc.toUpperCase().split("").map(function(c) { return 127397 + c.charCodeAt(); });
+  return String.fromCodePoint.apply(null, cp);
+}
+
+function formatMs(ms) {
+  if (ms <= 0) return "0.00ms";
+  if (ms >= 10000) return Math.floor(ms) + "ms";
+  if (ms >= 1000) return Math.floor(ms).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "ms";
+  if (ms >= 100) return ms.toFixed(1) + "ms";
+  if (ms >= 10) return ms.toFixed(2) + "ms";
+  return ms.toFixed(3) + "ms";
+}
+
+function esc(s) {
+  return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+run();
