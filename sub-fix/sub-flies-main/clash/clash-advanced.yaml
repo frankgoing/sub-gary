@@ -1,12 +1,12 @@
 # 锚点区
 # Proxy_first：代理优先，节点列表首位插入直连供备用
-Proxy_first: &Proxy_first {type: select, include-all: true, proxies: [全球直连], exclude-filter: "(?i)(🟢 直连)"}
+Proxy_first: &Proxy_first {type: select, include-all: true, proxies: [节点选择, 全球直连], exclude-filter: "(?i)(🟢 直连)"}
 
 # Direct_first：直连优先，节点列表末尾可选代理节点
-Direct_first: &Direct_first {type: select, include-all: true, proxies: [全球直连], exclude-filter: "(?i)(🟢 直连)"}
+Direct_first: &Direct_first {type: select, include-all: true, proxies: [全球直连, 节点选择], exclude-filter: "(?i)(🟢 直连)"}
 
 # Include_all：纯节点列表，不套娃任何分组
-Include_all: &Include_all {type: select, include-all: true, proxies: [全球直连], exclude-filter: "(?i)(🟢 直连)"}
+Include_all: &Include_all {type: select, include-all: true, exclude-filter: "(?i)(🟢 直连)"}
 
 PProviders: &PProviders {type: http, interval: 86400, health-check: {enable: true, url: 'https://edge.microsoft.com/captiveportal/generate_204', interval: 300}, filter: '^(?!.*(拒绝|直连|群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|提示|特别|访问|支持|教程|关注|更新|作者|加入|USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author|traffic))'}
 
@@ -23,22 +23,6 @@ proxy-providers:
       additional-prefix: '[gary]'
       skip-cert-verify: true
       udp: true
-  Airport_02:
-    <<: *PProviders
-    proxy: "🟢 直连"
-    url: "此处粘贴机场订阅链接地址（clash订阅链接）"
-    override:
-      additional-prefix: '[机场名字]'
-      skip-cert-verify: true
-      udp: true
-  Airport_03:
-    <<: *PProviders
-    proxy: "🔗 代理"
-    url: "此处粘贴机场订阅链接地址（clash订阅链接）"
-    override:
-      additional-prefix: '[机场名字]'
-      skip-cert-verify: true
-      udp: true
 
 ##############################################
 
@@ -53,9 +37,8 @@ allow-lan: true
 unified-delay: true
 tcp-concurrent: true
 # interface-name: eth0  （路由器下根据情况指定出站接口）
-authentication:
-#  密码设置选项默认无
-- ""
+# 若需要认证，填写为 ["用户名:密码"]；未使用时保持空列表。
+authentication: []
 skip-auth-prefixes:
 - 127.0.0.1/8
 - ::1/128
@@ -72,7 +55,8 @@ geox-url:
   asn: "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/GeoLite2-ASN.mmdb"
 
 # 控制面板
-external-controller: 0.0.0.0:9090
+external-controller: 127.0.0.1:9090
+# 如需从局域网管理，请改回 0.0.0.0:9090，并为 secret 设置高强度随机密码。
 secret: ""
 #  密码设置选项默认无
 external-ui: ui
@@ -143,7 +127,7 @@ dns:
   # 黑名单模式表示如果匹配成功则不返回 Fake-IP, 白名单模式时只有匹配成功才返回 Fake-IP
   fake-ip-filter-mode: blacklist
   fake-ip-filter:
-    - "rule-set:fakeip_fitter_domain,game_cn_domain,bank_cn_domain,wechat_domain,ai_cn_domain,NetEaseMusic_domain,fcm_domain,alibaba_domain,fcm_domain,media_cn_domain,xiaomi_domain,steam_cn_domain,pt_cn_domain,public-tracker_domain,115_domain,aliyun_domain,direct_domain,apple_cn_domain,apple_firmware_domain,iptv_domain,private_domain,cn_domain"
+    - "rule-set:fakeip_fitter_domain,game_cn_domain,bank_cn_domain,wechat_domain,ai_cn_domain,NetEaseMusic_domain,fcm_domain,alibaba_domain,media_cn_domain,xiaomi_domain,steam_cn_domain,pt_cn_domain,public-tracker_domain,115_domain,aliyun_domain,direct_domain,apple_cn_domain,apple_firmware_domain,iptv_domain,private_domain,cn_domain"
   default-nameserver:
     - 223.5.5.5
     - 119.29.29.29
