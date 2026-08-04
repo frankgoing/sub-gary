@@ -573,14 +573,12 @@ function classifyChatGPTApp(response) {
     return "unknown";
 }
 
-function render(media, ipInfo, ipInfo2) {
+function render(media, ipInfo) {
     const displayNodeName = truncateText(nodeName, 30);
     const ipLine = ipInfo && ipInfo.query
         ? `出口IP · ${ipInfo.query} · ${ipInfo.countryCode || ""}${ipInfo.regionName ? " · " + ipInfo.regionName : ""}`
         : "出口IP · 获取失败";
-    const ipWarn = ipInfo2 && ipInfo2.query
-        ? `<div style="color:#ff9500;font-size:11px;margin:4px 0">⚠️ 检测期间出口IP变化：${escapeHtml(ipInfo.query)} → ${escapeHtml(ipInfo2.query)}，各服务结果可能来自不同IP</div>`
-        : "";
+    const ipWarn = "";
 
     const html = [
         '<div style="font-family:-apple-system,BlinkMacSystemFont;font-size:14px;line-height:1.5;text-align:left;overflow-wrap:anywhere">',
