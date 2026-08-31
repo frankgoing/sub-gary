@@ -1,268 +1,130 @@
-mixed-port: 7890
-allow-lan: false
-mode: rule
-log-level: info
-external-controller: 127.0.0.1:9090
-
-dns:
-  enable: true
-  ipv6: true
-  nameserver:
-    - 8.8.8.8
-    - 1.1.1.1
-  enhanced-mode: fake-ip
-  fake-ip-range: 198.18.0.1/16
-
 proxies:
-  # 1. 香港 CF (VLESS+WS+TLS via Cloudflare)
-  - name: "香港 CF"
+  # 1. 香港 DR (VLESS + WS + TLS / Cloudflare 优选 IP)
+  - name: "香港 DR"
     type: vless
     server: 104.18.39.209
-    port: 443
-    uuid: 79a95971-a99c-4f4c-b2c8-d67bafc09a5b
+    port: 2096
+    uuid: 845b136b-a537-441a-9218-f9064c9ee99b
+    udp: true
+    tls: true
+    servername: cfs.drzp.qzz.io
+    client-fingerprint: random
     network: ws
+    ws-opts:
+      path: "/?ed=2560"
+      headers:
+        Host: cfs.drzp.qzz.io
+
+  # 2. 香港 GT (VLESS + WS + TLS / Cloudflare 优选 IP)
+  - name: "香港 GT"
+    type: vless
+    server: 104.18.39.209
+    port: 8443
+    uuid: 79a95971-a99c-4f4c-b2c8-d67bafc09a5b
+    udp: true
     tls: true
     servername: csgo.666014.xyz
+    client-fingerprint: random
+    network: ws
     ws-opts:
+      path: "/?ed=2560"
       headers:
         Host: csgo.666014.xyz
-      path: "/?ed=2560"
-    skip-cert-verify: true
-    icon: "https://flagcdn.com/hk.svg"
 
-  # 2. 香港 reality (VLESS+TCP+Reality)
-  - name: "香港 reality"
+  # 3. 台湾 GCP (VLESS + TCP + REALITY + Vision)
+  - name: "台湾 GCP"
     type: vless
-    server: 35.215.166.174
-    port: 27228
-    uuid: ff30b519-5bf8-4e9b-86cd-07aee7f7ae6e
-    network: tcp
-    tls: true
+    server: tw.666014.xyz
+    port: 26058
+    uuid: cc4aa689-5272-41b8-9c2a-1a17f9708739
     udp: true
     flow: xtls-rprx-vision
-    servername: apple.com
-    client-fingerprint: chrome
+    tls: true
     reality-opts:
-      public-key: XIRTeds3UyKMiHJ4rpOzJ4fORiKlOcrpyhN4Mvb6SCI
-      short-id: 238732
-    icon: "https://flagcdn.com/hk.svg"
+      public-key: VGjlY00_jEif52zQK78rnIg3wGujRDfaL23o1A0AKhM
+      short-id: "9ccf3861b92c"
+    servername: www.cloudflare.com
+    client-fingerprint: chrome
 
-  # 3. 洛杉矶 NAT (VLESS+WS+TLS via Cloudflare)
-  - name: "洛杉矶 NAT"
-    type: vless
-    server: 104.18.39.209
-    port: 2096
-    uuid: 789852e0-7006-4032-8e58-93875c5e4a41
-    network: ws
-    tls: true
-    servername: nats.666014.xyz
-    ws-opts:
-      headers:
-        Host: nats.666014.xyz
-      path: "/"
-    skip-cert-verify: true
-    icon: "https://flagcdn.com/us.svg"
-
-  # 4. 洛杉矶 NAT TUIC
-  - name: "洛杉矶 NAT TUIC"
-    type: tuic
-    server: nats.666014.xyz
-    port: 44019
-    uuid: 789852e0-7006-4032-8e58-93875c5e4a41
-    password: ge3BK5FaQK
-    alpn:
-      - h3
-    congestion-controller: bbr
-    sni: nats.666014.xyz
-    skip-cert-verify: true
-    icon: "https://flagcdn.com/us.svg"
-
-  # 5. 洛杉矶 DC02 (VLESS+WS+TLS via Cloudflare)
-  - name: "洛杉矶 DC02"
-    type: vless
-    server: 104.18.39.209
-    port: 2096
-    uuid: a4068593-5d3a-460a-b046-0bddf002a629
-    network: ws
-    tls: true
-    servername: sui.666014.xyz
-    ws-opts:
-      headers:
-        Host: sui.666014.xyz
-      path: "/"
-    skip-cert-verify: true
-    icon: "https://flagcdn.com/us.svg"
-
-  # 6. 洛杉矶 DC02 TUIC
-  - name: "洛杉矶 DC02 TUIC"
-    type: tuic
-    server: sui.666014.xyz
-    port: 42432
-    uuid: 72f12990-7e43-4e2e-b732-ee77ded7917e
-    password: 72f12990-7e43-4e2e-b732-ee77ded7917e
-    alpn:
-      - h3
-    sni: www.bing.com
-    skip-cert-verify: true
-    icon: "https://flagcdn.com/us.svg"
-
-  # 7. 洛杉矶 DC03 (VLESS+WS+TLS via Cloudflare)
-  - name: "洛杉矶 DC03"
-    type: vless
-    server: 104.18.39.209
-    port: 2096
-    uuid: ae4ccb0a-8f7c-413d-8ed9-480e7fba562d
-    network: ws
-    tls: true
-    servername: dc03.666014.xyz
-    ws-opts:
-      headers:
-        Host: dc03.666014.xyz
-      path: "/"
-    skip-cert-verify: true
-    icon: "https://flagcdn.com/us.svg"
-
-  # 8. 洛杉矶 DC03 TUIC
-  - name: "洛杉矶 DC03 TUIC"
-    type: tuic
-    server: dc03.666014.xyz
-    port: 46248
-    uuid: ae4ccb0a-8f7c-413d-8ed9-480e7fba562d
-    password: ae4ccb0a-8f7c-413d-8ed9-480e7fba562d
-    alpn:
-      - h3
-    sni: www.bing.com
-    skip-cert-verify: true
-    icon: "https://flagcdn.com/us.svg"
-
-  # 9. 新加坡 NAT (VLESS+WS+TLS via Cloudflare)
+  # 4. 新加坡 NAT (VLESS + WS + TLS)
   - name: "新加坡 NAT"
     type: vless
     server: 104.18.39.209
     port: 2096
     uuid: 86de080d-e4fc-4351-9190-c03dd56a1187
-    network: ws
+    udp: true
     tls: true
     servername: sg.666014.xyz
+    network: ws
     ws-opts:
+      path: "/"
       headers:
         Host: sg.666014.xyz
-      path: "/"
-    skip-cert-verify: true
-    icon: "https://flagcdn.com/sg.svg"
 
-  # 10. 新加坡 TUIC
-  - name: "新加坡 TUIC"
-    type: tuic
-    server: sg.666014.xyz
-    port: 40213
-    uuid: 86de080d-e4fc-4351-9190-c03dd56a1187
-    password: 86de080d-e4fc-4351-9190-c03dd56a1187
-    alpn:
-      - h3
-    sni: sg.666014.xyz
-    skip-cert-verify: false
-    icon: "https://flagcdn.com/sg.svg"
+  # 5. 洛杉矶dmit (VLESS + TCP + REALITY + Vision)
+  - name: "洛杉矶dmit"
+    type: vless
+    server: dmit.666014.xyz
+    port: 52615
+    uuid: 5c120388-0af8-4e80-8f90-908f8e894c63
+    udp: true
+    flow: xtls-rprx-vision
+    tls: true
+    reality-opts:
+      public-key: Q-OYallTb8qaXMzd1HdKCzMzYajbdvQ980tFLZioPRU
+      short-id: "510a5f04494703"
+    servername: apple.com
+    client-fingerprint: chrome
 
-  # 11. 德国 EUserv (VLESS+WS+TLS via Cloudflare)
-  - name: "德国 EUserv"
+  # 6. 洛杉矶 xhttp (VLESS + XHTTP + REALITY + PQ/ML-KEM)
+  - name: "洛杉矶 xhttp"
+    type: vless
+    server: dmit.666014.xyz
+    port: 48366
+    uuid: 5c120388-0af8-4e80-8f90-908f8e894c63
+    udp: true
+    flow: xtls-rprx-vision
+    network: xhttp
+    xhttp-opts:
+      mode: auto
+      path: /
+      extra:
+        mode: auto
+        xPaddingBytes: "100-1000"
+    tls: true
+    reality-opts:
+      public-key: wyYvI2wS6f6EOhwO5ihNnWr7-YbFbXp4faIzZbUvfiY
+      short-id: "bf5c0f39ca39f4a6"
+    servername: aws.amazon.com
+    client-fingerprint: chrome
+    encryption: mlkem768x25519plus.native.0rtt.HDQeywqq3m5fressQs6k6vuDUKaIcutnoBDDzflwkWU
+
+  # 7. 洛杉矶 rn2s (VLESS + WS + TLS / Cloudflare CDN)
+  - name: "洛杉矶 rn2s"
+    type: vless
+    server: yx1.frankgo.eu.cc
+    port: 2053
+    uuid: dad02cb7-7dad-4a42-abd6-6b2d9790528c
+    udp: true
+    tls: true
+    servername: sui.666014.xyz
+    network: ws
+    ws-opts:
+      path: "/rn2"
+      headers:
+        Host: argorn2.666014.xyz
+
+  # 8. 德国 EU (VLESS + WS + TLS)
+  - name: "德国 EU"
     type: vless
     server: 104.18.39.209
     port: 2096
     uuid: 6a50fe55-f703-45ea-a813-d6bd9d075614
-    network: ws
+    udp: true
     tls: true
     servername: eus.666014.xyz
+    network: ws
     ws-opts:
+      path: "/"
       headers:
         Host: eus.666014.xyz
-      path: "/"
-    skip-cert-verify: true
-    icon: "https://flagcdn.com/de.svg"
-
-  # 12. 德国 EUserv TUIC
-  - name: "德国 EUserv TUIC"
-    type: tuic
-    server: eus.666014.xyz
-    port: 17782
-    uuid: 6a50fe55-f703-45ea-a813-d6bd9d075614
-    password: 6a50fe55-f703-45ea-a813-d6bd9d075614
-    alpn:
-      - h3
-    sni: www.bing.com
-    skip-cert-verify: true
-    icon: "https://flagcdn.com/de.svg"
-
-proxy-groups:
-  - name: "🚀 节点选择"
-    type: select
-    icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/adjust.svg"
-    proxies:
-      - "♻️ 自动选择"
-      - "🔯 故障转移"
-      - "香港 CF"
-      - "香港 reality"
-      - "洛杉矶 NAT"
-      - "洛杉矶 NAT TUIC"
-      - "洛杉矶 DC02"
-      - "洛杉矶 DC02 TUIC"
-      - "洛杉矶 DC03"
-      - "洛杉矶 DC03 TUIC"
-      - "新加坡 NAT"
-      - "新加坡 TUIC"
-      - "德国 EUserv"
-      - "德国 EUserv TUIC"
-      - "DIRECT"
-
-  - name: "♻️ 自动选择"
-    type: url-test
-    icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/speed.svg"
-    proxies:
-      - "香港 CF"
-      - "香港 reality"
-      - "洛杉矶 NAT"
-      - "洛杉矶 NAT TUIC"
-      - "洛杉矶 DC02"
-      - "洛杉矶 DC02 TUIC"
-      - "洛杉矶 DC03"
-      - "洛杉矶 DC03 TUIC"
-      - "新加坡 NAT"
-      - "新加坡 TUIC"
-      - "德国 EUserv"
-      - "德国 EUserv TUIC"
-    url: "http://www.gstatic.com/generate_204"
-    interval: 300
-    tolerance: 50
-
-  - name: "🔯 故障转移"
-    type: fallback
-    icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/ambulance.svg"
-    proxies:
-      - "香港 reality"
-      - "洛杉矶 DC02 TUIC"
-      - "洛杉矶 DC03 TUIC"
-      - "洛杉矶 NAT TUIC"
-      - "新加坡 TUIC"
-      - "德国 EUserv TUIC"
-    url: "http://www.gstatic.com/generate_204"
-    interval: 300
-
-  - name: "🎯 全球直连"
-    type: select
-    icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/link.svg"
-    proxies:
-      - "DIRECT"
-      - "🚀 节点选择"
-
-  - name: "🛑 全球拦截"
-    type: select
-    icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/block.svg"
-    proxies:
-      - "REJECT"
-      - "DIRECT"
-
-rules:
-  - GEOIP,CN,🎯 全球直连
-  - GEOIP,LAN,🎯 全球直连
-  - DOMAIN-SUFFIX,cn,🎯 全球直连
-  - MATCH,🚀 节点选择
