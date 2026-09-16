@@ -1,0 +1,101 @@
+proxies:
+  - name: "香港 GT"
+    type: vless
+    server: yx1.frankgo.eu.cc
+    port: 8443
+    uuid: 79a95971-a99c-4f4c-b2c8-d67bafc09a5b
+    network: ws
+    tls: true
+    udp: true
+    servername: csgo.666014.xyz
+    client-fingerprint: random
+    ws-opts:
+      path: "/?ed=2560"
+      headers:
+        Host: csgo.666014.xyz
+
+  - name: "香港 DR"
+    type: vless
+    server: yx1.frankgo.eu.cc
+    port: 2096
+    uuid: 845b136b-a537-441a-9218-f9064c9ee99b
+    network: ws
+    tls: true
+    udp: true
+    servername: cfs.drzp.qzz.io
+    client-fingerprint: random
+    ws-opts:
+      path: "/?ed=2560"
+      headers:
+        Host: cfs.drzp.qzz.io
+
+  - name: "台湾 GCP"
+    type: vless
+    server: tw.666014.xyz
+    port: 26058
+    uuid: cc4aa689-5272-41b8-9c2a-1a17f9708739
+    network: tcp
+    tls: true
+    udp: true
+    flow: xtls-rprx-vision
+    servername: products.amd.com
+    client-fingerprint: chrome
+    reality-opts:
+      public-key: VGjlY00_jEif52zQK78rnIg3wGujRDfaL23o1A0AKhM
+      short-id: 62f33e2b
+
+  - name: "新加坡 NAT"
+    type: vless
+    server: yx1.frankgo.eu.cc
+    port: 2096
+    uuid: 86de080d-e4fc-4351-9190-c03dd56a1187
+    network: ws
+    tls: true
+    udp: true
+    servername: sg.666014.xyz
+    ws-opts:
+      path: "/"
+      headers:
+        Host: sg.666014.xyz
+
+  - name: "洛杉矶 RN"
+    type: vless
+    server: yx1.frankgo.eu.cc
+    port: 2096
+    uuid: dad02cb7-7dad-4a42-abd6-6b2d9790528c
+    network: ws
+    tls: true
+    udp: true
+    servername: sui.666014.xyz
+    ws-opts:
+      path: "/"
+      headers:
+        Host: sui.666014.xyz
+
+  - name: "洛杉矶 NAT"
+    type: vless
+    server: yx1.frankgo.eu.cc
+    port: 2096
+    uuid: 789852e0-7006-4032-8e58-93875c5e4a41
+    network: ws
+    tls: true
+    udp: true
+    servername: nats.666014.xyz
+    ws-opts:
+      path: "/"
+      headers:
+        Host: nats.666014.xyz
+
+  - name: "德国 EU"
+    type: vless
+    server: yx1.frankgo.eu.cc
+    port: 2096
+    uuid: 6a50fe55-f703-45ea-a813-d6bd9d075614
+    network: ws
+    tls: true
+    udp: true
+    servername: eus.666014.xyz
+    ws-opts:
+      path: "/"
+      headers:
+        Host: eus.666014.xyz
