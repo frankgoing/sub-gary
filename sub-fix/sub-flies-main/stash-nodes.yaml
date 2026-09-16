@@ -29,20 +29,6 @@ proxies:
       headers:
         Host: cfs.drzp.qzz.io
 
-  - name: "台湾 GCP"
-    type: vless
-    server: tw.666014.xyz
-    port: 26058
-    uuid: cc4aa689-5272-41b8-9c2a-1a17f9708739
-    network: tcp
-    tls: true
-    udp: true
-    flow: xtls-rprx-vision
-    servername: products.amd.com
-    client-fingerprint: chrome
-    reality-opts:
-      public-key: VGjlY00_jEif52zQK78rnIg3wGujRDfaL23o1A0AKhM
-      short-id: 62f33e2b
 
   - name: "新加坡 NAT"
     type: vless
