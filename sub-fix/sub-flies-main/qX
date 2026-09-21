@@ -2,6 +2,7 @@ vless://79a95971-a99c-4f4c-b2c8-d67bafc09a5b@yx1.frankgo.eu.cc:8443?encryption=n
 vless://845b136b-a537-441a-9218-f9064c9ee99b@yx1.frankgo.eu.cc:2096?encryption=none&security=tls&sni=cfs.drzp.qzz.io&fp=random&type=ws&host=cfs.drzp.qzz.io&path=%2F%3Fed%3D2560#%E9%A6%99%E6%B8%AF%20DR
 vless://86de080d-e4fc-4351-9190-c03dd56a1187@yx1.frankgo.eu.cc:2096?encryption=none&security=tls&sni=sg.666014.xyz&type=ws&host=sg.666014.xyz&path=%2F#%E6%96%B0%E5%8A%A0%E5%9D%A1%20NAT
 vless://3027d27b-7189-4586-aa26-0188c277ef9e@dc03.666014.xyz:49456?encryption=none&flow=xtls-rprx-vision&security=reality&sni=timeline.www.cloudflare.com&fp=chrome&pbk=PbzQAqCfbufP_n-YsrayU_Qd8mGSNnFydU8De8mlvgk&sid=4fd6&spx=%2F54724e6635da654&type=tcp&headerType=none#%E6%B4%9B%E6%9D%89%E7%9F%B6%20RN3
+vless://fedca3fb-0bb1-4b74-8f2b-8e06fc401bff@104.18.39.209:2096?encryption=none&security=tls&sni=dc03.666014.xyz&alpn=http%2F1.1&type=ws&host=dc03.666014.xyz&path=%2F9f3k2mZq#%E6%B4%9B%E6%9D%89%E7%9F%B6%20CDN
 vless://dad02cb7-7dad-4a42-abd6-6b2d9790528c@yx1.frankgo.eu.cc:2096?encryption=none&security=tls&sni=sui.666014.xyz&type=ws&host=sui.666014.xyz&path=%2F#%E6%B4%9B%E6%9D%89%E7%9F%B6%20RN
 vless://789852e0-7006-4032-8e58-93875c5e4a41@yx1.frankgo.eu.cc:2096?encryption=none&security=tls&sni=nats.666014.xyz&type=ws&host=nats.666014.xyz&path=%2F#%E6%B4%9B%E6%9D%89%E7%9F%B6%20NAT
 vless://6a50fe55-f703-45ea-a813-d6bd9d075614@yx1.frankgo.eu.cc:2096?encryption=none&security=tls&sni=eus.666014.xyz&type=ws&host=eus.666014.xyz&path=%2F#%E5%BE%B7%E5%9B%BD%20EU
