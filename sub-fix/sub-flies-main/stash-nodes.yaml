@@ -44,20 +44,23 @@ proxies:
       headers:
         Host: sg.666014.xyz
 
-  - name: "洛杉矶 DM-Gary"
+  - name: "s2h1tkdinz"
     type: vless
     server: dmit.666014.xyz
-    port: 443
-    uuid: dfe010bc-628e-4e3e-9f47-d0b0d3e4bd55
+    port: 53577
+    uuid: 078eee87-e4b9-4503-b8b6-cedc0796005f
+    encryption: mlkem768x25519plus.native.0rtt.5XsGpCggWnjxmTpq7r65fkAU8tV1uKwNivDz-0N3BRM
     flow: xtls-rprx-vision
     tls: true
-    sni: mena-images.shop.samsung.com
+    servername: huddles.amazon.com
     client-fingerprint: chrome
     reality-opts:
-      public-key: "-CDHSLvJqJ9kTpWWnglEd2VNx_oA3XpqGYxsmtCy8Wc"
-      short-id: 7342ee0afe
-    network: tcp
-    udp: true
+      public-key: g4V4Yhy4PREDnkDtlc1oUq3iJlMcs6l-aYUTVyc9qmc
+      short-id: 3369bf23bf
+    network: xhttp
+    xhttp-opts:
+      path: /
+      mode: auto
 
   - name: "洛杉矶 RN"
     type: vless
