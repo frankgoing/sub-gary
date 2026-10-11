@@ -57,7 +57,7 @@ proxies:
     reality-opts:
       public-key: g4V4Yhy4PREDnkDtlc1oUq3iJlMcs6l-aYUTVyc9qmc
       short-id: 3369bf23bf
-      spider-x: /8fe174e47d79d6c
+      spider-x: /VdOThj4QpT28yNa
     network: xhttp
     xhttp-opts:
       mode: auto
