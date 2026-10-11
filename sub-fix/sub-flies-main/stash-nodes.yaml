@@ -44,7 +44,7 @@ proxies:
       headers:
         Host: sg.666014.xyz
 
- - name: "DMIT"
+  - name: "DMIT"
     type: vless
     server: dmit.666014.xyz
     port: 53577
