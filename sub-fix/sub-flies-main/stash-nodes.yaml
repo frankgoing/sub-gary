@@ -54,7 +54,7 @@ proxies:
     sni: huddles.amazon.com
     client-fingerprint: chrome
     flow: xtls-rprx-vision
-    encryption: 'mlkem768x25519plus.native.0rtt.5XsGpCggWnjxmTpq7r65fkAU8tV1uKwNivDz-0N3BRM'
+    encryption: 'mlkem768x25519plus.native.1rtt.5XsGpCggWnjxmTpq7r65fkAU8tV1uKwNivDz-0N3BRM'
     network: xhttp
     xhttp-opts:
       mode: packet-up
