@@ -44,9 +44,9 @@ proxies:
       headers:
         Host: sg.666014.xyz
 
-  - name: s2h1tkdinz
+  - name: 洛杉矶 dm
     type: vless
-    server: dmit.666014.xyz
+    server: 179.255.141.64
     port: 53577
     uuid: 078eee87-e4b9-4503-b8b6-cedc0796005f
     udp: true
