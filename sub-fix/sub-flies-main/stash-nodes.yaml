@@ -79,19 +79,39 @@ proxies:
       public-key: g4V4Yhy4PREDnkDtlc1oUq3iJlMcs6l-aYUTVyc9qmc
       short-id: 3369bf23bf
 
-  - name: "洛杉矶 RN"
+  - name: "洛杉矶 RN2"
     type: vless
-    server: yx1.frankgo.eu.cc
+    server: 104.18.39.209
     port: 2096
-    uuid: dad02cb7-7dad-4a42-abd6-6b2d9790528c
-    network: ws
+    uuid: 247ac093-1ea9-4aa9-a308-41c15b695608
     tls: true
-    udp: true
-    servername: sui.666014.xyz
-    ws-opts:
-      path: "/"
-      headers:
-        Host: sui.666014.xyz
+    sni: 3xui.666014.xyz
+    alpn:
+      - h2
+      - http/1.1
+    network: xhttp
+    xhttp-opts:
+      mode: auto
+      host: 3xui.666014.xyz
+      path: /xhb5bd4c25cce7
+      x-padding-bytes: '100-1000'
+
+  - name: "洛杉矶 RN3"
+    type: vless
+    server: 104.18.39.209
+    port: 2096
+    uuid: 3d325d9f-111f-42e3-b45b-2298fa62e561
+    tls: true
+    sni: dc03.666014.xyz
+    alpn:
+      - h2
+      - http/1.1
+    network: xhttp
+    xhttp-opts:
+      mode: auto
+      path: /455fbe65bfca
+      host: dc03.666014.xyz
+      x-padding-bytes: '100-1000'
 
   - name: "洛杉矶 NAT"
     type: vless
